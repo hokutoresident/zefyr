@@ -449,7 +449,6 @@ class InsertEmbedsRule extends InsertRule {
     // We are only interested in embeddable objects.
     if (data is String) return null;
 
-    final dataMap = data as Map<String, dynamic>;
     final result = Delta()..retain(index + replaceLength);
     final iter = DeltaIterator(document);
     final previous = iter.skip(index);
@@ -465,7 +464,7 @@ class InsertEmbedsRule extends InsertRule {
 
     if (isOnEmptyLine) {
       // 画像が挿入された時は改行を追加
-      if (dataMap['_type'] == 'image') {
+      if (Map<String, dynamic>.from(data)['_type'] == 'image') {
         return result..insert(data)..insert('\n');
       }
       return result..insert(data);
@@ -481,7 +480,7 @@ class InsertEmbedsRule extends InsertRule {
       result.insert('\n');
     }
     // 画像が挿入された時は改行を追加
-    if (dataMap['_type'] == 'image') {
+    if (Map<String, dynamic>.from(data)['_type'] == 'image') {
       result.insert('\n');
     }
     return result;
