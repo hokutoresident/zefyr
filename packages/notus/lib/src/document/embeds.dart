@@ -112,7 +112,11 @@ class BlockEmbed extends EmbeddableObject {
   BlockEmbed(
     String type, {
     Map<String, dynamic> data = const {},
-  }) : super(type, inline: false, data: data);
+  }) : super(type, inline: false, data: data) {
+    if (type == "pdf") {
+      throw NotSupportedFormatException('This line has PDF. It is not a supported format');
+    }
+  }
 
   static final BlockEmbed horizontalRule = BlockEmbed('hr');
   static BlockEmbed image(String source) =>
