@@ -29,6 +29,11 @@ class InsertEmbedButton extends StatelessWidget {
       ),
       fillColor: fillColor,
       onPressed: () {
+        final style = controller.getSelectionStyle();
+        if (style.keys.contains(NotusAttribute.block.code.key)) {
+          return;
+        }
+
         final index = controller.selection.baseOffset;
         final length = controller.selection.extentOffset - index;
         controller.replaceText(index, length, BlockEmbed.horizontalRule);
