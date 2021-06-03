@@ -5,17 +5,54 @@ import 'controller.dart';
 
 const double kToolbarHeight = 56.0;
 
-class InsertEmbedButton extends StatelessWidget {
+class InsertEmbedButton extends StatefulWidget {
   final ZefyrController controller;
-  final Color fillColor;
   final IconData icon;
+  final BlockEmbed blockEmbed;
 
   const InsertEmbedButton({
     Key key,
     @required this.controller,
-    this.fillColor,
+    @required this.blockEmbed,
     @required this.icon,
   }) : super(key: key);
+
+  @override
+  _InsertEmbedButtonState createState() => _InsertEmbedButtonState();
+}
+
+class _InsertEmbedButtonState extends State<InsertEmbedButton> {
+  var _isDisable = false;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_didChangeSelection);
+  }
+
+  @override
+  void didUpdateWidget(covariant InsertEmbedButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      oldWidget.controller.removeListener(_didChangeSelection);
+      widget.controller.addListener(_didChangeSelection);
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.controller.removeListener(_didChangeSelection);
+  }
+
+  void _didChangeSelection() {
+    final isHr = widget.blockEmbed == BlockEmbed.horizontalRule;
+    final isInCodeBlock = widget.controller.getSelectionStyle().containsSame(NotusAttribute.block.code);
+    setState(() {
+      _isDisable = isHr && isInCodeBlock;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ZIconButton(
@@ -23,22 +60,22 @@ class InsertEmbedButton extends StatelessWidget {
       hoverElevation: 0,
       size: 32,
       icon: Icon(
-        icon,
+        widget.icon,
         size: 18,
-        color: Theme.of(context).iconTheme.color,
+        color: _isDisable
+            ? Theme.of(context).disabledColor
+            : Theme.of(context).iconTheme.color,
       ),
-      fillColor: fillColor,
-      onPressed: () {
-        final style = controller.getSelectionStyle();
-        if (style.keys.contains(NotusAttribute.block.code.key)) {
-          return;
-        }
-
-        final index = controller.selection.baseOffset;
-        final length = controller.selection.extentOffset - index;
-        controller.replaceText(index, length, BlockEmbed.horizontalRule);
-      },
+      onPressed: _isDisable
+          ? null
+          : _onPressed,
     );
+  }
+
+  void _onPressed() {
+    final index = widget.controller.selection.baseOffset;
+    final length = widget.controller.selection.extentOffset - index;
+    widget.controller.replaceText(index, length, BlockEmbed.horizontalRule);
   }
 }
 
@@ -502,6 +539,7 @@ class ZefyrToolbar extends StatefulWidget implements PreferredSizeWidget {
       Visibility(
         visible: !hideHorizontalRule,
         child: InsertEmbedButton(
+          blockEmbed: BlockEmbed.horizontalRule,
           controller: controller,
           icon: Icons.horizontal_rule,
         ),
