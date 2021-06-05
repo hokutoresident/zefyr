@@ -333,4 +333,20 @@ class NotusDocument {
       _root.remove(node);
     }
   }
+
+  bool isEmpty() {
+    if (root.children.length != 1) {
+      return false;
+    }
+
+    final node = root.children.first;
+    if (!node.isLast) {
+      return false;
+    }
+
+    final delta = node.toDelta();
+    return delta.length == 1 &&
+        delta.first.data == '\n' &&
+        delta.first.key == 'insert';
+  }
 }
