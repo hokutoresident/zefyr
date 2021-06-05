@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -538,6 +540,7 @@ class RawEditor extends StatefulWidget {
     Key key,
     @required this.controller,
     @required this.focusNode,
+    this.placeholder,
     this.scrollController,
     this.scrollable = true,
     this.scrollBottomInset = 0,
@@ -723,6 +726,9 @@ class RawEditor extends StatefulWidget {
   ///
   /// Defaults to [defaultZefyrEmbedBuilder].
   final ZefyrEmbedBuilder embedBuilder;
+
+  /// add by hokuto
+  final String placeholder;
 
   bool get selectionEnabled => enableInteractiveSelection;
 
@@ -1138,7 +1144,14 @@ class RawEditorState extends EditorState
   Widget build(BuildContext context) {
     assert(debugCheckHasMediaQuery(context));
     _focusAttachment.reparent();
+    var _doc = widget.controller.document;
     super.build(context); // See AutomaticKeepAliveClientMixin.
+    if (_doc.isEmpty() &&
+        !widget.focusNode.hasFocus &&
+        widget.placeholder != null) {
+      _doc = NotusDocument.fromJson(jsonDecode(
+          '[{"attributes":{"placeholder":true},"insert":"${widget.placeholder}\\n"}]'));
+    }
 
     Widget child = CompositedTransformTarget(
       link: _toolbarLayerLink,
