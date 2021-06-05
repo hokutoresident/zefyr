@@ -178,6 +178,9 @@ class ZefyrEditor extends StatefulWidget {
 
   final void Function(EmbeddableObject) onTapEmbedObject;
 
+  /// add by hokuto
+  final String placeholder;
+
   /// Builder function for embeddable objects.
   ///
   /// Defaults to [defaultZefyrEmbedBuilder].
@@ -197,6 +200,7 @@ class ZefyrEditor extends StatefulWidget {
   const ZefyrEditor({
     Key key,
     @required this.controller,
+    this.placeholder,
     this.focusNode,
     this.scrollController,
     this.scrollable = true,
@@ -351,6 +355,7 @@ class _ZefyrEditorState extends State<ZefyrEditor>
       key: _editorKey,
       controller: widget.controller,
       focusNode: widget.focusNode,
+      placeholder: widget.placeholder,
       scrollController: widget.scrollController,
       scrollable: widget.scrollable,
       scrollBottomInset: widget.scrollBottomInset,
