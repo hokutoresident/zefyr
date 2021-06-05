@@ -1154,8 +1154,8 @@ class RawEditorState extends EditorState
     if (_doc.isEmpty() &&
         !widget.focusNode.hasFocus &&
         widget.placeholder != null) {
-      _doc = NotusDocument.fromJson(jsonDecode(
-          '[{"attributes":{"placeholder":true},"insert":"${widget.placeholder}\\n"}]'));
+      _doc = NotusDocument.fromJson(
+          jsonDecode('[{"insert":"${widget.placeholder}\\n"}]'));
     }
 
     Widget child = CompositedTransformTarget(
