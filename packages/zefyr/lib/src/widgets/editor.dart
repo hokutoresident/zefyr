@@ -1204,6 +1204,7 @@ class RawEditorState extends EditorState
               (block == NotusAttribute.block.code) ? EdgeInsets.all(8.0) : null,
           embedBuilder: widget.embedBuilder,
           inputtingTextRange: _inputtingTextRange(lookup),
+          controller: widget.controller,
         ));
       } else {
         throw StateError('Unreachable.');

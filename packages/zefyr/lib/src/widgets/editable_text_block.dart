@@ -39,9 +39,10 @@ class EditableTextBlock extends StatelessWidget {
     this.contentPadding,
     @required this.embedBuilder,
     this.inputtingTextRange,
-    this.controller,
+    @required this.controller,
   })  : assert(hasFocus != null),
         assert(embedBuilder != null),
+        assert(controller != null),
         super(key: key);
 
   @override

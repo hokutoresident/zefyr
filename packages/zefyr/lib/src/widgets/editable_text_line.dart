@@ -99,6 +99,7 @@ class EditableTextLine extends RenderObjectWidget {
     renderObject.enableInteractiveSelection = enableInteractiveSelection;
     renderObject.hasFocus = hasFocus;
     renderObject.devicePixelRatio = devicePixelRatio;
+    renderObject.controller = controller;
   }
 }
 

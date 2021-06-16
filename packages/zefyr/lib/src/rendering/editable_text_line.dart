@@ -146,7 +146,11 @@ class RenderEditableTextLine extends RenderEditableBox {
 
   /// カーソル位置を特定するために追加
   ZefyrController get controller => _controller;
-  final ZefyrController _controller;
+  ZefyrController _controller;
+  set controller(ZefyrController value) {
+    if (controller == value) return;
+    _controller = value;
+  }
 
   /// The pixel ratio of the current device.
   ///
