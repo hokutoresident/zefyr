@@ -31,6 +31,10 @@ class ZefyrController extends ChangeNotifier {
   NotusStyle get toggledStyles => _toggledStyles;
   NotusStyle _toggledStyles = NotusStyle();
 
+  /// カーソル位置
+  Offset get cursorOffset => _cursorOffset;
+  Offset _cursorOffset;
+
   /// Returns style of specified text range.
   ///
   /// If nothing is selected but we've toggled an attribute,
@@ -216,5 +220,9 @@ class ZefyrController extends ChangeNotifier {
         extentOffset: selection.baseOffset + 1,
       ),
     );
+  }
+
+  void updateCursorOffset(Offset offset) {
+    _cursorOffset = offset;
   }
 }
