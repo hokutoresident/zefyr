@@ -699,7 +699,6 @@ class RawEditorState extends EditorState
 
   // Cursors
   CursorController _cursorController;
-  FloatingCursorController _floatingCursorController;
 
   // Keyboard
   KeyboardListener _keyboardListener;
@@ -779,7 +778,6 @@ class RawEditorState extends EditorState
     _selectionOverlay?.updateForScroll();
   }
 
-  @override
   void userUpdateTextEditingValue(
       TextEditingValue value, SelectionChangedCause cause) {
     // TODO: implement userUpdateTextEditingValue
