@@ -33,7 +33,7 @@ class ZefyrController extends ChangeNotifier {
 
   /// カーソル位置
   Offset get cursorOffset => _cursorOffset;
-  Offset _cursorOffset;
+  Offset _cursorOffset = Offset(0.0, 0.0);
 
   /// Returns style of specified text range.
   ///
@@ -224,5 +224,6 @@ class ZefyrController extends ChangeNotifier {
 
   void updateCursorOffset(Offset offset) {
     _cursorOffset = offset;
+    notifyListeners();
   }
 }
