@@ -222,8 +222,7 @@ class ZefyrController extends ChangeNotifier {
     );
   }
 
-  void updateCursorOffset(Offset offset) {
+  void updateCursorOffsetSilent(Offset offset) {
     _cursorOffset = offset;
-    notifyListeners();
   }
 }
