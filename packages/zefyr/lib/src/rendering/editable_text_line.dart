@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:meta/meta.dart';
 import 'package:notus/notus.dart';
+import 'package:zefyr/src/widgets/controller.dart';
 
 import '../widgets/cursor.dart';
 import '../widgets/selection_utils.dart';
@@ -36,12 +37,14 @@ class RenderEditableTextLine extends RenderEditableBox {
         const EdgeInsets.fromLTRB(4, 4, 4, 5),
 //    TextRange promptRectRange,
 //    Color promptRectColor,
+    @required ZefyrController controller,
   })  : assert(node != null),
         assert(padding != null),
         assert(padding.isNonNegative),
         assert(cursorController != null),
         assert(devicePixelRatio != null),
         assert(hasFocus != null),
+        assert(controller != null),
         _textDirection = textDirection,
         _padding = padding,
         _node = node,
@@ -50,9 +53,8 @@ class RenderEditableTextLine extends RenderEditableBox {
         _selectionColor = selectionColor,
         _enableInteractiveSelection = enableInteractiveSelection,
         _devicePixelRatio = devicePixelRatio,
-        _hasFocus = hasFocus;
-
-  //
+        _hasFocus = hasFocus,
+        _controller = controller;
 
   // Start selection implementation
 
@@ -141,6 +143,10 @@ class RenderEditableTextLine extends RenderEditableBox {
     }
     _hasFocus = value;
   }
+
+  /// カーソル位置を特定するために追加
+  ZefyrController get controller => _controller;
+  final ZefyrController _controller;
 
   /// The pixel ratio of the current device.
   ///
@@ -658,6 +664,7 @@ class RenderEditableTextLine extends RenderEditableBox {
           _cursorController.showCursor.value &&
           containsCursor &&
           _cursorController.style.paintAboveText) {
+        _controller.updateCursorOffset(effectiveOffset);
         _paintCursor(context, effectiveOffset);
       }
     }

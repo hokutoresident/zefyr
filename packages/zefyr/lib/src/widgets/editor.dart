@@ -1187,6 +1187,7 @@ class RawEditorState extends EditorState
           ),
           hasFocus: _hasFocus,
           devicePixelRatio: MediaQuery.of(context).devicePixelRatio,
+          controller: widget.controller,
         ));
       } else if (node is BlockNode) {
         final block = node.style.get(NotusAttribute.block);

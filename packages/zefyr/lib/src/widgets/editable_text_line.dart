@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notus/notus.dart';
+import 'package:zefyr/src/widgets/controller.dart';
 
 import '../rendering/editable_text_line.dart';
 import 'cursor.dart';
@@ -33,6 +34,9 @@ class EditableTextLine extends RenderObjectWidget {
   final bool hasFocus;
   final double devicePixelRatio;
 
+  /// カーソル位置を特定するために追加
+  final ZefyrController controller;
+
   /// Creates an editable line of text.
   EditableTextLine({
     Key key,
@@ -48,6 +52,7 @@ class EditableTextLine extends RenderObjectWidget {
     @required this.enableInteractiveSelection,
     @required this.hasFocus,
     @required this.devicePixelRatio,
+    @required this.controller,
   })  : assert(node != null),
         assert(indentWidth != null),
         assert(cursorController != null),
@@ -78,6 +83,7 @@ class EditableTextLine extends RenderObjectWidget {
       enableInteractiveSelection: enableInteractiveSelection,
       hasFocus: hasFocus,
       devicePixelRatio: devicePixelRatio,
+      controller: controller,
     );
   }
 

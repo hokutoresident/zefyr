@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notus/notus.dart';
+import 'package:zefyr/src/widgets/controller.dart';
 
 import '../rendering/editable_text_block.dart';
 import 'cursor.dart';
@@ -22,6 +23,9 @@ class EditableTextBlock extends StatelessWidget {
   final ZefyrEmbedBuilder embedBuilder;
   final TextRange Function(Node node) inputtingTextRange;
 
+  /// カーソル位置を特定するために追加
+  final ZefyrController controller;
+
   EditableTextBlock({
     Key key,
     @required this.node,
@@ -35,6 +39,7 @@ class EditableTextBlock extends StatelessWidget {
     this.contentPadding,
     @required this.embedBuilder,
     this.inputtingTextRange,
+    this.controller,
   })  : assert(hasFocus != null),
         assert(embedBuilder != null),
         super(key: key);
@@ -79,6 +84,7 @@ class EditableTextBlock extends StatelessWidget {
         selectionColor: selectionColor,
         enableInteractiveSelection: enableInteractiveSelection,
         hasFocus: hasFocus,
+        controller: controller,
       ));
     }
     return children.toList(growable: false);
