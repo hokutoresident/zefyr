@@ -144,7 +144,7 @@ class RenderEditableTextLine extends RenderEditableBox {
     _hasFocus = value;
   }
 
-  /// カーソル位置を特定するために追加
+  /// カーソル位置やカーソルが当たっている文章のサイズを特定するために追加
   ZefyrController get controller => _controller;
   ZefyrController _controller;
   set controller(ZefyrController value) {
@@ -669,6 +669,7 @@ class RenderEditableTextLine extends RenderEditableBox {
           containsCursor &&
           _cursorController.style.paintAboveText) {
         _controller.updateCursorPositionSilent(effectiveOffset);
+        _controller.updateCursorSentenceSizeSilent(body.size);
         _paintCursor(context, effectiveOffset);
       }
     }

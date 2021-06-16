@@ -35,6 +35,10 @@ class ZefyrController extends ChangeNotifier {
   Offset get cursorPosition => _cursorPosition;
   Offset _cursorPosition = Offset(0.0, 0.0);
 
+  /// カーソルが当たっている文章のサイズ
+  Size get cursorSentenceSize => _cursorSentenceSize;
+  Size _cursorSentenceSize = Size(0.0, 0.0);
+
   /// Returns style of specified text range.
   ///
   /// If nothing is selected but we've toggled an attribute,
@@ -225,6 +229,12 @@ class ZefyrController extends ChangeNotifier {
   void updateCursorPositionSilent(Offset offset) {
     if (_cursorPosition != offset) {
       _cursorPosition = offset;
+    }
+  }
+
+  void updateCursorSentenceSizeSilent(Size size) {
+    if (_cursorSentenceSize != size) {
+      _cursorSentenceSize = size;
     }
   }
 }

@@ -23,7 +23,7 @@ class EditableTextBlock extends StatelessWidget {
   final ZefyrEmbedBuilder embedBuilder;
   final TextRange Function(Node node) inputtingTextRange;
 
-  /// カーソル位置を特定するために追加
+  /// カーソル位置やカーソルが当たっている文章のサイズを特定するために追加
   final ZefyrController controller;
 
   EditableTextBlock({

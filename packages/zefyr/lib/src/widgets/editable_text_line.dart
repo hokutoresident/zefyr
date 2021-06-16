@@ -34,7 +34,7 @@ class EditableTextLine extends RenderObjectWidget {
   final bool hasFocus;
   final double devicePixelRatio;
 
-  /// カーソル位置を特定するために追加
+  /// カーソル位置やカーソルが当たっている文章のサイズを特定するために追加
   final ZefyrController controller;
 
   /// Creates an editable line of text.
