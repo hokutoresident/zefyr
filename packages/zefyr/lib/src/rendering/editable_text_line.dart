@@ -668,7 +668,7 @@ class RenderEditableTextLine extends RenderEditableBox {
           _cursorController.showCursor.value &&
           containsCursor &&
           _cursorController.style.paintAboveText) {
-        _controller.updateCursorOffsetSilent(effectiveOffset);
+        _controller.updateCursorPositionSilent(effectiveOffset);
         _paintCursor(context, effectiveOffset);
       }
     }
