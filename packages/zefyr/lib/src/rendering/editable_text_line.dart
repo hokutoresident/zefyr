@@ -632,8 +632,10 @@ class RenderEditableTextLine extends RenderEditableBox {
 
     if (bottom != null) {
       final bottomConstraints = innerConstraints.copyWith(
-        minWidth: body.size.width + _resolvedPadding.right + _resolvedPadding.left,
-        maxWidth: body.size.width + _resolvedPadding.right + _resolvedPadding.left,
+        minWidth:
+            body.size.width + _resolvedPadding.right + _resolvedPadding.left,
+        maxWidth:
+            body.size.width + _resolvedPadding.right + _resolvedPadding.left,
         maxHeight: body.size.height,
       );
       bottom.layout(bottomConstraints, parentUsesSize: true);
