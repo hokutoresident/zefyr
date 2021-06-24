@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 import 'dart:async';
 
+import 'package:notus/notus.dart';
 import 'package:quill_delta/quill_delta.dart';
 
 import 'document/attributes.dart';
@@ -250,7 +251,7 @@ class NotusDocument {
     _delta = _delta.compose(change);
 
     if (_delta != _root.toDelta()) {
-      throw StateError('Compose produced inconsistent results. '
+      throw InconsistentDeltaException('Compose produced inconsistent results. '
           'This is likely due to a bug in the library. Tried to compose change $change from $source.');
     }
     _controller.add(NotusChange(before, change, source));
