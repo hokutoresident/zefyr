@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
-import 'package:notus/src/exceptions/unsupported_format.dart';
+import 'package:notus/src/exceptions/exceptions.dart';
 import 'package:quiver_hashcode/hashcode.dart';
 
 const _dataEquality = DeepCollectionEquality();

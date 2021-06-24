@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:notus/src/exceptions/unsupported_format.dart';
+import 'package:notus/src/exceptions/exceptions.dart';
 
 import 'package:example/src/read_only_view.dart';
 import 'package:file/local.dart';
