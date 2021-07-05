@@ -284,7 +284,7 @@ Widget defaultToggleStyleButtonBuilder(
 class SelectHeadingStyleButton extends StatefulWidget {
   final ZefyrController controller;
 
-  const SelectHeadingStyleButton({Key key, @required this.controller}) 
+  const SelectHeadingStyleButton({Key key, @required this.controller})
       : super(key: key);
 
   @override
@@ -522,7 +522,8 @@ class ZefyrToolbar extends StatefulWidget implements PreferredSizeWidget {
               indent: 16, endIndent: 16, color: Colors.grey.shade400)),
       Visibility(
           visible: !hideLink, child: LinkStyleButton(controller: controller)),
-      Visibility(visible: !hideLink, child: LinkStyleButton(controller: controller)),
+      Visibility(
+          visible: !hideLink, child: LinkStyleButton(controller: controller)),
       Visibility(
         visible: !hideHorizontalRule,
         child: InsertEmbedButton(
@@ -545,15 +546,13 @@ class _ZefyrToolbarState extends State<ZefyrToolbar> {
   Widget build(BuildContext context) {
     return Container(
       constraints: BoxConstraints.tightFor(height: widget.preferredSize.height),
-      child: SingleChildScrollView(
+      child: ListView(
         scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            const SizedBox(width: 8),
-            ...widget.children,
-            const SizedBox(width: 8),
-          ],
-        ),
+        children: [
+          const SizedBox(width: 8),
+          ...widget.children,
+          const SizedBox(width: 8),
+        ],
       ),
     );
   }
