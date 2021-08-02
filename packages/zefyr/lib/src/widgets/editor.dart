@@ -1150,7 +1150,7 @@ class RawEditorState extends EditorState
         result.add(EditableTextLine(
           node: node,
           textDirection: _textDirection,
-          indentWidth: _indentWidth(node),
+          indentWidth: _indentWidth(node, _themeData),
           spacing: _getSpacingForLine(node, _themeData),
           cursorController: _cursorController,
           selection: widget.controller.selection,
@@ -1227,9 +1227,9 @@ class RawEditorState extends EditorState
     }
   }
 
-  double _indentWidth(StyledNode node) {
+  double _indentWidth(StyledNode node, ZefyrThemeData theme) {
     final indentValue = node.style.get(NotusAttribute.indent)?.value ?? 0.0;
-    return 28.0 * indentValue;
+    return theme.indentWidth * indentValue;
   }
 }
 

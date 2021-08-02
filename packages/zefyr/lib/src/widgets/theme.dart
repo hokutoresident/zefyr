@@ -110,6 +110,8 @@ class ZefyrThemeData {
 
   final TextBlockTheme middleHeading;
 
+  final double indentWidth;
+
   ZefyrThemeData({
     this.bold,
     this.italic,
@@ -128,6 +130,7 @@ class ZefyrThemeData {
     this.code,
     this.largeHeading,
     this.middleHeading,
+    this.indentWidth,
   });
 
   factory ZefyrThemeData.fallback(BuildContext context) {
@@ -260,6 +263,7 @@ class ZefyrThemeData {
         spacing: VerticalSpacing(top: 24, bottom: 0),
         lineSpacing: VerticalSpacing(top: 0, bottom: 15),
       ),
+      indentWidth: 28,
     );
   }
 
@@ -278,6 +282,7 @@ class ZefyrThemeData {
     TextBlockTheme lists,
     TextBlockTheme quote,
     TextBlockTheme code,
+    double indentWidth,
   }) {
     return ZefyrThemeData(
       bold: bold ?? this.bold,
@@ -294,6 +299,7 @@ class ZefyrThemeData {
       lists: lists ?? this.lists,
       quote: quote ?? this.quote,
       code: code ?? this.code,
+      indentWidth: indentWidth ?? this.indentWidth,
     );
   }
 
@@ -313,6 +319,7 @@ class ZefyrThemeData {
       lists: other.lists,
       quote: other.quote,
       code: other.code,
+      indentWidth: other.indentWidth,
     );
   }
 }
