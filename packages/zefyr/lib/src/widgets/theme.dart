@@ -156,10 +156,10 @@ class ZefyrThemeData {
         style: TextStyle(
           fontSize: 16.0,
           color: Colors.black,
-          height: 1.3,
+          height: 1.5,
           fontWeight: FontWeight.w400,
         ),
-        spacing: VerticalSpacing(top: 16.0, bottom: 0),
+        spacing: VerticalSpacing(top: 8.0, bottom: 0),
         // lineSpacing is not relevant for paragraphs since they consist of one line
       ),
       heading1: TextBlockTheme(
@@ -201,11 +201,11 @@ class ZefyrThemeData {
         style: TextStyle(
           fontSize: 16.0,
           color: Colors.black,
-          height: 1.3,
+          height: 1.5,
           fontWeight: FontWeight.w400,
         ),
-        spacing: VerticalSpacing(top: 16.0, bottom: 0),
-        lineSpacing: VerticalSpacing(bottom: 6),
+        spacing: VerticalSpacing(top: 8.0, bottom: 0),
+        lineSpacing: VerticalSpacing(bottom: 8),
       ),
       quote: TextBlockTheme(
         style: TextStyle(
