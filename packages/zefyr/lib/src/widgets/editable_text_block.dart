@@ -71,7 +71,7 @@ class EditableTextBlock extends StatelessWidget {
         spacing: _getSpacingForLine(line, index, count, theme),
         leading: _buildLeading(context, line, index, count, indentLevelCounts),
         bottom: _buildBottom(context, line),
-        indentWidth: _styleIndentWidth() + _userIndentWidth(line),
+        indentWidth: _styleIndentWidth() + _userIndentWidth(context, line),
         devicePixelRatio: MediaQuery.of(context).devicePixelRatio,
         body: TextLine(
           node: line,
@@ -101,14 +101,14 @@ class EditableTextBlock extends StatelessWidget {
         index: index,
         indent: indent,
         style: theme.paragraph.style,
-        width: 25.0,
+        width: theme.indentWidth,
         padding: 8.0,
         indentLevelCounts: indentLevelCounts,
       );
     } else if (block == NotusAttribute.block.bulletList) {
       return _BulletPoint(
         style: theme.paragraph.style.copyWith(fontWeight: FontWeight.bold),
-        width: 24,
+        width: theme.indentWidth,
       );
     } else if (block == NotusAttribute.largeHeading) {
       return Row(
@@ -138,11 +138,12 @@ class EditableTextBlock extends StatelessWidget {
     return null;
   }
 
-  double _userIndentWidth(LineNode node) {
+  double _userIndentWidth(BuildContext context, LineNode node) {
+    final theme = ZefyrTheme.of(context);
     final block = node.style.get(NotusAttribute.block);
     if (block == NotusAttribute.block.bulletList || block == NotusAttribute.block.numberList) {
       final indentValue = node.style.get(NotusAttribute.indent)?.value ?? 0.0;
-      return 24.0 * indentValue;
+      return theme.indentWidth * indentValue;
     } else {
       return 0.0;
     }
