@@ -174,7 +174,7 @@ class ZefyrEditor extends StatefulWidget {
   /// Callback to invoke when user wants to launch a URL.
   final ValueChanged<String> onLaunchUrl;
 
-  final void Function(EmbeddableObject) onTapEmbedObject;
+  final void Function(EmbeddableObject, {@required bool readOnly}) onTapEmbedObject;
 
   /// Builder function for embeddable objects.
   ///
@@ -383,7 +383,7 @@ class _ZefyrEditorSelectionGestureDetectorBuilder
     final line = result.node as LineNode;
     if (line.hasEmbed) {
       final embed = line.children.single as EmbedNode;
-      editor.widget.onTapEmbedObject(embed.value);
+      editor.widget.onTapEmbedObject(embed.value, readOnly: _state.widget.readOnly);
     }
     final segmentResult = line.lookup(result.offset);
     if (segmentResult.node == null) return;
@@ -534,7 +534,7 @@ class RawEditor extends StatefulWidget {
   /// a link in the document.
   final ValueChanged<String> onLaunchUrl;
 
-  final void Function(EmbeddableObject) onTapEmbedObject;
+  final void Function(EmbeddableObject, {@required bool readOnly}) onTapEmbedObject;
 
   /// Configuration of toolbar options.
   ///
