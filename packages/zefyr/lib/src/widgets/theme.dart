@@ -195,7 +195,7 @@ class ZefyrThemeData {
           color: Color(0xFF999999),
           height: 1.25,
         ),
-        spacing: VerticalSpacing(top: 8.0, bottom: 0.0),
+        spacing: VerticalSpacing(top: 4.0, bottom: 0.0),
       ),
       lists: TextBlockTheme(
         style: TextStyle(
@@ -247,7 +247,7 @@ class ZefyrThemeData {
           fontSize: 20.0,
           height: 2,
         ),
-        spacing: VerticalSpacing(top: 32, bottom: 8),
+        spacing: VerticalSpacing(top: 32, bottom: 4),
         lineSpacing: VerticalSpacing(top: 0, bottom: 0),
         decoration: BoxDecoration(
           color: Color(0xff0099dd).withAlpha(20),
@@ -260,7 +260,7 @@ class ZefyrThemeData {
           fontSize: 18.0,
           height: 1.5,
         ),
-        spacing: VerticalSpacing(top: 24, bottom: 8),
+        spacing: VerticalSpacing(top: 20, bottom: 12),
         lineSpacing: VerticalSpacing(top: 0, bottom: 15),
       ),
       indentWidth: 28,
