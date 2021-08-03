@@ -311,7 +311,7 @@ class _NumberPoint extends StatelessWidget {
       indentLevelCounts.clear();
       return Container(
         width: width,
-        padding: EdgeInsets.only(right: 4),
+        padding: EdgeInsets.only(top: 2, right: 4),
         child: Text(
           withDot ? '$index.' : '$index',
           textAlign: TextAlign.right,
@@ -361,7 +361,7 @@ class _BulletPoint extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 8, right: 10),
+      padding: EdgeInsets.only(top: 10, right: 10),
       alignment: AlignmentDirectional.topEnd,
       width: width,
       child: Container(
