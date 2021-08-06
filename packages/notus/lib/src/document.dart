@@ -3,7 +3,9 @@
 // BSD-style license that can be found in the LICENSE file.
 import 'dart:async';
 
+import 'package:notus/src/history.dart';
 import 'package:quill_delta/quill_delta.dart';
+import 'package:tuple/tuple.dart';
 
 import 'document/attributes.dart';
 import 'document/block.dart';
@@ -73,6 +75,8 @@ class NotusDocument {
 
   final StreamController<NotusChange> _controller =
       StreamController.broadcast();
+
+  final History _history = History();
 
   Stream<void> get onDetectInconsistentDelta => _inconsistentDeltaController.stream;
 
@@ -258,7 +262,20 @@ class NotusDocument {
       _inconsistentDeltaController.add({});
     }
     _controller.add(NotusChange(before, change, source));
+    _history.handleDocChange(NotusChange(before, change, source));
   }
+
+  Tuple2 undo() {
+    return _history.undo(this);
+  }
+
+  Tuple2 redo() {
+    return _history.redo(this);
+  }
+
+  bool get hasUndo => _history.hasUndo;
+
+  bool get hasRedo => _history.hasRedo;
 
   //
   // Overridden members

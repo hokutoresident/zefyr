@@ -24,12 +24,12 @@ class History {
   /// max operation count for undo;
   final int maxStack;
 
-  void handleDocChange(Tuple3<Delta, Delta, ChangeSource> change) {
+  void handleDocChange(NotusChange change) {
         if (ignoreChange) return;
-    if (change.item3 == ChangeSource.local) {
-      record(change.item2, change.item1);
+    if (change.source == ChangeSource.local) {
+      record(change.change, change.before);
     } else {
-      transform(change.item2);
+      transform(change.change);
     }
   }
 

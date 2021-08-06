@@ -286,7 +286,6 @@ class ZefyrController extends ChangeNotifier {
   }
 
   void undo() {
-    
   }
 
   void _handleHistoryChange(int len) {
