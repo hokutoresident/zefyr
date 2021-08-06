@@ -6,6 +6,7 @@
 library notus;
 
 export 'src/document.dart';
+export 'src/history.dart';
 export 'src/document/attributes.dart';
 export 'src/document/block.dart';
 export 'src/document/embeds.dart';

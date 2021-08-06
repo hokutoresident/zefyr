@@ -29,8 +29,6 @@ dependencies:
   google_fonts: ^2.1.0
   file: ^6.1.1
   path_provider: ^2.0.0
-  zefyr:
-    path: ../
 
 dependency_overrides:
   notus:
