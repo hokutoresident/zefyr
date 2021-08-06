@@ -285,4 +285,18 @@ class ZefyrController extends ChangeNotifier {
     formatSelection(NotusAttribute.indent.fromInt(nextValue));
   }
 
+  void undo() {
+    
+  }
+
+  void _handleHistoryChange(int len) {
+    if(len != 0) {
+      updateSelection(
+        TextSelection.collapsed(offset: selection.baseOffset + len),
+        source: ChangeSource.local,
+      );
+    } else {
+      notifyListeners();
+    }
+  }
 }
