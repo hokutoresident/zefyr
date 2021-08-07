@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notus/notus.dart';
+import 'package:zefyr/src/widgets/history_button.dart';
 
 import 'controller.dart';
 
@@ -411,6 +412,18 @@ class ZefyrToolbar extends StatefulWidget implements PreferredSizeWidget {
       bool hideLink = false,
       bool hideHorizontalRule = false}) {
     return ZefyrToolbar(key: key, children: [
+      HistoryButton(
+        icon: Icons.redo, 
+        controller: controller, 
+        isEnabled: controller.hasRedo, 
+        isRedo: true,
+      ),
+      HistoryButton(
+        icon: Icons.undo, 
+        controller: controller, 
+        isEnabled: controller.hasUndo, 
+        isRedo: false,
+      ),
       Visibility(
         visible: !hideBoldButton,
         child: ToggleStyleButton(
