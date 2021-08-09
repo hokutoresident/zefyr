@@ -25,7 +25,7 @@ class History {
   final int maxStack;
 
   void handleDocChange(NotusChange change) {
-        if (ignoreChange) return;
+    if (ignoreChange) return;
     if (change.source == ChangeSource.local) {
       record(change.change, change.before);
     } else {
@@ -59,7 +59,7 @@ class History {
   }
 
   ///
-  ///It will override pre local undo delta,replaced by remote change
+  /// It will override pre local undo delta,replaced by remote change
   ///
   void transform(Delta delta) {
     transformStack(stack.undo, delta);
