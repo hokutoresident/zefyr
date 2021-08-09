@@ -2,6 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:notus/notus.dart';
 import 'package:notus/src/document/embeds.dart';
@@ -271,6 +272,14 @@ void main() {
       final doc = dartconfDoc();
       final style = doc.collectStyle(0, 10);
       expect(style, isNotNull);
+    });
+
+    test('document undo', () async{
+      final doc = dartconfDoc();
+      await Future.delayed(Duration(seconds: 1));
+      doc.insert(9, 'sample text');
+      doc.undo();
+      expect(doc.toPlainText(), dartconfDoc().toPlainText());
     });
 
     test('insert embed after line-break', () {

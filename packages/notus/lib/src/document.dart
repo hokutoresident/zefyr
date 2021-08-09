@@ -265,11 +265,11 @@ class NotusDocument {
     _history.handleDocChange(NotusChange(before, change, source));
   }
 
-  Tuple2 undo() {
+  Tuple2<bool, int> undo() {
     return _history.undo(this);
   }
 
-  Tuple2 redo() {
+  Tuple2<bool, int> redo() {
     return _history.redo(this);
   }
 

@@ -92,13 +92,13 @@ class History {
     final ops = delta.toList();
     
     // calculate cursor point
-    for (var i = 0; i < ops.length; i++) {
-      if (ops[i].key == Operation.insertKey) {
-        len = ops[i].length;
-      } else if (ops[i].key == Operation.deleteKey) {
-        len = ops[i].length * -1;
+    ops.forEach((op) {
+      if(op.key == Operation.insertKey) {
+        len = op.length;
+      } else if (op.key == Operation.deleteKey) {
+        len = op.length * -1;
       }
-    }
+    });
     final base = Delta.from(doc.toDelta());
     final inverseDelta = delta.invert(base);
     dest.add(inverseDelta);
@@ -109,11 +109,11 @@ class History {
     return Tuple2(true, len);
   }
 
-  Tuple2 undo(NotusDocument doc) {
+  Tuple2<bool, int> undo(NotusDocument doc) {
     return _change(doc, stack.undo, stack.redo);
   }
 
-  Tuple2 redo(NotusDocument doc) {
+  Tuple2<bool, int> redo(NotusDocument doc) {
     return _change(doc, stack.redo, stack.undo);
   }
 }
