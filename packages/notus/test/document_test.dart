@@ -353,7 +353,7 @@ void main() {
       expect(doc.root.children.elementAt(2).toPlainText(), 'text\n');
     });
 
-    group('[redo undo test]', () {
+    group('[undo test]', () {
       test('text change undo', () async {
         final doc = dartconfDoc();
         
@@ -391,6 +391,62 @@ void main() {
           jsonEncode(doc.toDelta()), 
           jsonEncode(dartconfDoc().toDelta()),
         );
+      });
+      test('hasUndo is false before change', () {
+        final doc = NotusDocument();
+        expect(doc.hasUndo, false);
+        doc.insert(0, 'DartConf\nLos Angeles');
+        expect(doc.hasUndo, true);
+        doc.undo();
+        expect(doc.hasUndo, false);
+      });
+    });
+
+    group('[redo test]', () {
+      test('text change undo => redo', () {
+        final doc = dartconfDoc();
+        doc.undo();
+        doc.redo();
+        expect(doc.toJson(), dartconfDoc().toJson());
+      });
+
+      test('style change undo => redo', () async {
+        final doc = dartconfDoc();
+
+        /// NOTE: for save interval;
+        await Future.delayed(Duration(milliseconds: 800));
+        doc.format(1, 1, NotusAttribute.bold);
+        doc.undo();
+        doc.redo();
+        final expected = dartconfDoc()..format(1, 1, NotusAttribute.bold);
+        expect(
+          doc.toJson(), 
+          expected.toJson(),
+        );
+      });
+      test('add embed undo => redo', () async {
+        final doc = dartconfDoc();
+
+        /// NOTE: for save interval;
+        await Future.delayed(Duration(milliseconds: 800));
+        doc.insert(9, BlockEmbed.horizontalRule);
+        doc.undo();
+        doc.redo();
+        final expected = dartconfDoc()..insert(9, BlockEmbed.horizontalRule);
+        expect(
+          jsonEncode(doc), 
+          jsonEncode(expected),
+        );
+      });
+      test('hasRedo is false before undo', () {
+        final doc = dartconfDoc();
+        expect(doc.hasRedo, false);
+      });
+      test('text change undo and change text then can\'t redo', () {
+        final doc = dartconfDoc();
+        doc.undo();
+        doc.insert(0, 'DartConf\nLos Angeles');
+        expect(doc.hasRedo, false);
       });
     });
     // TODO: 'DartConf\nLos Angeles'の4番目から4文字分を選択した後`horizontalRule`に置き換えると
