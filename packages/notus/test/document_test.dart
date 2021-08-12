@@ -407,7 +407,7 @@ void main() {
         final doc = dartconfDoc();
         doc.undo();
         doc.redo();
-        expect(doc.toJson(), dartconfDoc().toJson());
+        expect(jsonEncode(doc), jsonEncode(dartconfDoc()));
       });
 
       test('style change undo => redo', () async {
@@ -420,8 +420,8 @@ void main() {
         doc.redo();
         final expected = dartconfDoc()..format(1, 1, NotusAttribute.bold);
         expect(
-          doc.toJson(), 
-          expected.toJson(),
+          jsonEncode(doc), 
+          jsonEncode(expected),
         );
       });
       test('add embed undo => redo', () async {
