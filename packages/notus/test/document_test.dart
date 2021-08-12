@@ -274,14 +274,6 @@ void main() {
       expect(style, isNotNull);
     });
 
-    test('document undo', () async{
-      final doc = dartconfDoc();
-      await Future.delayed(Duration(seconds: 1));
-      doc.insert(9, 'sample text');
-      doc.undo();
-      expect(doc.toPlainText(), dartconfDoc().toPlainText());
-    });
-
     test('insert embed after line-break', () {
       final doc = dartconfDoc();
       doc.insert(9, BlockEmbed.horizontalRule);
@@ -361,6 +353,46 @@ void main() {
       expect(doc.root.children.elementAt(2).toPlainText(), 'text\n');
     });
 
+    group('[redo undo test]', () {
+      test('text change undo', () async {
+        final doc = dartconfDoc();
+        
+        /// NOTE: for save interval;
+        await Future.delayed(Duration(milliseconds: 800));
+        doc.insert(9, 'sample text');
+        doc.undo();
+        expect(
+          doc.toPlainText(), 
+          dartconfDoc().toPlainText(),
+        );
+      });
+
+      test('style change undo', () async {
+        final doc = dartconfDoc();
+
+        /// NOTE: for save interval;
+        await Future.delayed(Duration(milliseconds: 800));
+        doc.format(1, 1, NotusAttribute.bold);
+        doc.undo();
+        expect(
+          jsonEncode(doc.toDelta()), 
+          jsonEncode(dartconfDoc().toDelta()),
+        );
+      });
+
+      test('add embed then undo', () async {
+        final doc = dartconfDoc();
+
+        /// NOTE: for save interval;
+        await Future.delayed(Duration(milliseconds: 800));
+        doc.insert(9, BlockEmbed.horizontalRule);
+        doc.undo();
+        expect(
+          jsonEncode(doc.toDelta()), 
+          jsonEncode(dartconfDoc().toDelta()),
+        );
+      });
+    });
     // TODO: 'DartConf\nLos Angeles'の4番目から4文字分を選択した後`horizontalRule`に置き換えると
     // TODO: `horizontalRule`の後に余分に改行ができる問題がありテストが落ちるので実装の方を修正
     // test('replace text with embed', () {
