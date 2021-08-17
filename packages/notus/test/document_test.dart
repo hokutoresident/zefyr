@@ -2,6 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:notus/notus.dart';
 import 'package:notus/src/document/embeds.dart';
@@ -352,6 +353,102 @@ void main() {
       expect(doc.root.children.elementAt(2).toPlainText(), 'text\n');
     });
 
+    group('[undo test]', () {
+      test('text change undo', () async {
+        final doc = dartconfDoc();
+        
+        /// NOTE: for save interval;
+        await Future.delayed(Duration(milliseconds: 800));
+        doc.insert(9, 'sample text');
+        doc.undo();
+        expect(
+          doc.toPlainText(), 
+          dartconfDoc().toPlainText(),
+        );
+      });
+
+      test('style change undo', () async {
+        final doc = dartconfDoc();
+
+        /// NOTE: for save interval;
+        await Future.delayed(Duration(milliseconds: 800));
+        doc.format(1, 1, NotusAttribute.bold);
+        doc.undo();
+        expect(
+          jsonEncode(doc.toDelta()), 
+          jsonEncode(dartconfDoc().toDelta()),
+        );
+      });
+
+      test('add embed then undo', () async {
+        final doc = dartconfDoc();
+
+        /// NOTE: for save interval;
+        await Future.delayed(Duration(milliseconds: 800));
+        doc.insert(9, BlockEmbed.horizontalRule);
+        doc.undo();
+        expect(
+          jsonEncode(doc.toDelta()), 
+          jsonEncode(dartconfDoc().toDelta()),
+        );
+      });
+      test('hasUndo is false before change', () {
+        final doc = NotusDocument();
+        expect(doc.hasUndo, false);
+        doc.insert(0, 'DartConf\nLos Angeles');
+        expect(doc.hasUndo, true);
+        doc.undo();
+        expect(doc.hasUndo, false);
+      });
+    });
+
+    group('[redo test]', () {
+      test('text change undo => redo', () {
+        final doc = dartconfDoc();
+        doc.undo();
+        doc.redo();
+        expect(jsonEncode(doc), jsonEncode(dartconfDoc()));
+      });
+
+      test('style change undo => redo', () async {
+        final doc = dartconfDoc();
+
+        /// NOTE: for save interval;
+        await Future.delayed(Duration(milliseconds: 800));
+        doc.format(1, 1, NotusAttribute.bold);
+        doc.undo();
+        doc.redo();
+        final expected = dartconfDoc()..format(1, 1, NotusAttribute.bold);
+        expect(
+          jsonEncode(doc), 
+          jsonEncode(expected),
+        );
+      });
+      test('add embed undo => redo', () async {
+        final doc = dartconfDoc();
+
+        /// NOTE: for save interval;
+        await Future.delayed(Duration(milliseconds: 800));
+        doc.insert(9, BlockEmbed.horizontalRule);
+        doc.undo();
+        doc.redo();
+        final expected = dartconfDoc()..insert(9, BlockEmbed.horizontalRule);
+        expect(
+          jsonEncode(doc), 
+          jsonEncode(expected),
+        );
+      });
+      test('hasRedo is false before undo', () {
+        final doc = dartconfDoc();
+        expect(doc.hasRedo, false);
+      });
+      test('text change undo and change text then can\'t redo', () {
+        final doc = dartconfDoc();
+        doc.undo();
+        doc.insert(0, 'DartConf\nLos Angeles');
+        expect(doc.hasRedo, false);
+      });
+    });
     // TODO: 'DartConf\nLos Angeles'の4番目から4文字分を選択した後`horizontalRule`に置き換えると
     // TODO: `horizontalRule`の後に余分に改行ができる問題がありテストが落ちるので実装の方を修正
     // test('replace text with embed', () {
