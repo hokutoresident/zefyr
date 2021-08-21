@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:meta/meta.dart';
 
 /// Applies a Zefyr editor theme to descendant widgets.
@@ -138,22 +139,22 @@ class ZefyrThemeData {
     final defaultStyle = DefaultTextStyle.of(context);
 
     return ZefyrThemeData(
-      bold: TextStyle(fontWeight: FontWeight.bold),
-      italic: TextStyle(fontStyle: FontStyle.italic),
-      underline: TextStyle(decoration: TextDecoration.underline),
-      strikethrough: TextStyle(decoration: TextDecoration.lineThrough),
-      textColor: TextStyle(color: Color(0xffFF5555)),
-      marker: TextStyle(
+      bold: GoogleFonts.notoSans(fontWeight: FontWeight.bold),
+      italic: GoogleFonts.notoSans(fontStyle: FontStyle.italic),
+      underline: GoogleFonts.notoSans(decoration: TextDecoration.underline),
+      strikethrough: GoogleFonts.notoSans(decoration: TextDecoration.lineThrough),
+      textColor: GoogleFonts.notoSans(color: Color(0xffFF5555)),
+      marker: GoogleFonts.notoSans(
         decoration: TextDecoration.underline,
         decorationColor: Color(0xff0099DD).withOpacity(0.15),
         decorationThickness: 10,
       ),
-      link: TextStyle(
+      link: GoogleFonts.notoSans(
         color: themeData.accentColor,
         decoration: TextDecoration.underline,
       ),
       paragraph: TextBlockTheme(
-        style: TextStyle(
+        style: GoogleFonts.notoSans(
           fontSize: 16.0,
           color: Colors.black,
           height: 1.5,
@@ -172,7 +173,7 @@ class ZefyrThemeData {
         spacing: VerticalSpacing(top: 40.0, bottom: 0.0),
       ),
       heading2: TextBlockTheme(
-        style: TextStyle(
+        style: GoogleFonts.notoSans(
           fontSize: 20.0,
           color: Colors.black,
           height: 1.15,
@@ -181,7 +182,7 @@ class ZefyrThemeData {
         spacing: VerticalSpacing(top: 32.0, bottom: 0.0),
       ),
       heading3: TextBlockTheme(
-        style: TextStyle(
+        style: GoogleFonts.notoSans(
           fontSize: 18.0,
           color: Colors.black,
           height: 1.25,
@@ -190,7 +191,7 @@ class ZefyrThemeData {
         spacing: VerticalSpacing(top: 24.0, bottom: 0.0),
       ),
       caption: TextBlockTheme(
-        style: TextStyle(
+        style: GoogleFonts.notoSans(
           fontSize: 12.0,
           color: Color(0xFF999999),
           height: 1.25,
@@ -198,7 +199,7 @@ class ZefyrThemeData {
         spacing: VerticalSpacing(top: 4.0, bottom: 0.0),
       ),
       lists: TextBlockTheme(
-        style: TextStyle(
+        style: GoogleFonts.notoSans(
           fontSize: 16.0,
           color: Colors.black,
           height: 1.5,
@@ -208,7 +209,7 @@ class ZefyrThemeData {
         lineSpacing: VerticalSpacing(bottom: 8),
       ),
       quote: TextBlockTheme(
-        style: TextStyle(
+        style: GoogleFonts.notoSans(
           fontWeight: FontWeight.w400,
           fontSize: 16.0,
           color: Color(0xff999999),
@@ -225,7 +226,7 @@ class ZefyrThemeData {
         ),
       ),
       code: TextBlockTheme(
-        style: TextStyle(
+        style: GoogleFonts.notoSans(
           color: Colors.black,
           fontWeight: FontWeight.w400,
           fontSize: 16.0,
@@ -241,7 +242,7 @@ class ZefyrThemeData {
         ),
       ),
       largeHeading: TextBlockTheme(
-        style: TextStyle(
+        style: GoogleFonts.notoSans(
           color: Colors.black,
           fontWeight: FontWeight.w700,
           fontSize: 20.0,
@@ -254,7 +255,7 @@ class ZefyrThemeData {
         ),
       ),
       middleHeading: TextBlockTheme(
-        style: TextStyle(
+        style: GoogleFonts.notoSans(
           color: Colors.black,
           fontWeight: FontWeight.w700,
           fontSize: 18.0,
