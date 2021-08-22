@@ -305,8 +305,9 @@ class ZefyrController extends ChangeNotifier {
 
   void _handleHistoryChange(int len) {
     if(len != 0) {
+      final selectionPosition = math.min(selection.baseOffset + len, document.length - 1);
       updateSelection(
-        TextSelection.collapsed(offset: selection.baseOffset + len),
+        TextSelection.collapsed(offset: selectionPosition),
         source: ChangeSource.local,
       );
     } else {
