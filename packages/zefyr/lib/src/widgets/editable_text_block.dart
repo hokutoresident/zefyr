@@ -109,6 +109,7 @@ class EditableTextBlock extends StatelessWidget {
       return _BulletPoint(
         style: theme.paragraph.style.copyWith(fontWeight: FontWeight.bold),
         width: theme.indentWidth,
+        indent: indent,
       );
     } else if (block == NotusAttribute.largeHeading) {
       return Row(
@@ -371,26 +372,73 @@ class _NumberPoint extends StatelessWidget {
 class _BulletPoint extends StatelessWidget {
   final TextStyle style;
   final double width;
+  final int indent;
 
   const _BulletPoint({
     Key key,
     @required this.style,
     @required this.width,
+    @required this.indent,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(top: 10, right: 10),
       alignment: AlignmentDirectional.topEnd,
       width: width,
-      child: Container(
-        height: 6,
-        width: 6,
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.black,
-        ),
-      ),
+      child: Builder(
+        builder: (context) {
+          // ●
+          if ([0, 3].contains(indent)) {
+            return Container(
+              height: 6,
+              width: 6,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.black,
+              ),
+            );
+          }
+
+          // -
+          if ([1, 4].contains(indent)) {
+            return Container(
+              // 視覚補正
+              margin: EdgeInsets.only(top: 2),
+              height: 2,
+              width: 8,
+              color: Colors.black,
+            );
+          }
+
+          // ○
+          if ([2, 5].contains(indent)) {
+            return Container(
+              height: 6,
+              width: 6,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+                border: Border.all(
+                  color: Colors.black,
+                  width: 1,
+                ),
+              ),
+            );
+          }
+
+          // ●
+          return Container(
+            height: 6,
+            width: 6,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.black,
+            ),
+          );
+        },
+      )
     );
   }
 }
