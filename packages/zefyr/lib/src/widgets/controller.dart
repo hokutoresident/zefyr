@@ -109,6 +109,11 @@ class ZefyrController extends ChangeNotifier {
             source: ChangeSource.local,
           );
         }
+        // selectionにlh, mh, bqが入っている　＆＆　最後が改行ならもう一個改行を足すことで、`AutoExitBlockRule`を適用させてstyleを抜ける
+        final isInMhLhBq = getSelectionStyle().containsAny([NotusAttribute.largeHeading, NotusAttribute.middleHeading, NotusAttribute.bq]);
+        if (isInMhLhBq && data == '\n') {
+          addNewlineAtSelectionEnd();
+        }
       }
     }
 //    _lastChangeSource = ChangeSource.local;
