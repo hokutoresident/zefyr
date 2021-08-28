@@ -439,10 +439,7 @@ class _ZefyrEditorSelectionGestureDetectorBuilder
       switch (Theme.of(_state.context).platform) {
         case TargetPlatform.iOS:
         case TargetPlatform.macOS:
-          renderEditor.selectPositionAt(
-            from: details.globalPosition,
-            cause: SelectionChangedCause.longPress,
-          );
+          renderEditor.selectWord(cause: SelectionChangedCause.longPress);
           break;
         case TargetPlatform.android:
         case TargetPlatform.fuchsia:
