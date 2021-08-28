@@ -1213,14 +1213,8 @@ class RawEditorState extends EditorState
     } else if (style == NotusAttribute.block.quote) {
       return theme.quote.spacing;
     } else if (style == NotusAttribute.largeHeading) {
-      if (node.isFirst) {
-        return VerticalSpacing(top: 16, bottom: 0);
-      }
       return theme.largeHeading.spacing;
     } else if (style == NotusAttribute.middleHeading) {
-      if (node.isFirst) {
-        return VerticalSpacing(top: 16, bottom: 0);
-      }
       return theme.middleHeading.spacing;
     } else {
       return theme.lists.spacing;
