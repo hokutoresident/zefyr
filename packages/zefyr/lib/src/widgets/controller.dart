@@ -93,6 +93,13 @@ class ZefyrController extends ChangeNotifier {
             baseOffset: selection.baseOffset,
             extentOffset: selection.baseOffset - 1,
           ));
+        // インデントがある場合はlineの削除ではなく一個ずつインデントを減らしていき、最後に削除するようにする
+        } else if (_shouldDecreaseIndent(data)) {
+          final indent = getSelectionStyle().get(NotusAttribute.indent)?.value ?? 0;
+          final nextIndent = indent - 1;
+          if (nextIndent < 0) return;
+          print(nextIndent);
+          formatSelection(NotusAttribute.indent.fromInt(nextIndent));
         } else {
           // need to transform selection position in case actual delta
           // is different from user's version (in deletes and inserts).
@@ -129,6 +136,20 @@ class ZefyrController extends ChangeNotifier {
     final beforeText = document.toPlainText().substring(0, isLastCaractor ? selection.start : selection.start + 1);
     final hasBlockEmbedAtBeforeSelection = beforeText.endsWith(blockEmbedPattern);
     return hasBlockEmbedAtBeforeSelection;
+  }
+
+  // 削除の代わりに、インデントを減らすべきか否か
+  bool _shouldDecreaseIndent(Object data) {
+    if (data != '') return false;
+    final doc = document;
+    final plain = document.toPlainText();
+    final end = document.toPlainText()[selection.start];
+
+    // TODO: 調整
+    if (document.toPlainText()[selection.start] != '\n' ||
+        document.toPlainText()[selection.start - 1] != '\n') return false;
+    final indent = getSelectionStyle().get(NotusAttribute.indent)?.value ?? 0;
+    return indent > 0;
   }
 
   void formatText(int index, int length, NotusAttribute attribute) {
