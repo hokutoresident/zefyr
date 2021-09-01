@@ -141,10 +141,6 @@ class ZefyrController extends ChangeNotifier {
   // 削除の代わりに、インデントを減らすべきか否か
   bool _shouldDecreaseIndent(Object data) {
     if (data != '') return false;
-    final doc = document;
-    final plain = document.toPlainText();
-    final end = document.toPlainText()[selection.start];
-
     // TODO: 調整
     if (document.toPlainText()[selection.start] != '\n' ||
         document.toPlainText()[selection.start - 1] != '\n') return false;
