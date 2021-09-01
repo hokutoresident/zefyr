@@ -234,6 +234,13 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
     if (identical(this, other)) return true;
     if (other is! NotusAttribute<T>) return false;
     NotusAttribute<T> typedOther = other;
+
+    // NOTE: 色付きスタイルのhexの差は無視する
+    if ([NotusAttribute.marker.key, NotusAttribute.textColor.key].contains(key)) {
+      return key == typedOther.key &&
+          scope == typedOther.scope;
+    }
+
     return key == typedOther.key &&
         scope == typedOther.scope &&
         value == typedOther.value;
