@@ -109,6 +109,7 @@ class EditableTextBlock extends StatelessWidget {
       return _BulletPoint(
         style: theme.paragraph.style.copyWith(fontWeight: FontWeight.bold),
         width: theme.indentWidth,
+        indent: indent,
       );
     } else if (block == NotusAttribute.largeHeading) {
       return Row(
@@ -336,9 +337,10 @@ class _NumberPoint extends StatelessWidget {
 
     return Container(
       width: width,
-      padding: EdgeInsets.only(right: 4),
+      // 視覚補正
+      padding: EdgeInsets.only(top: 1, right: 4),
       child: Text(
-        withDot ? '$count.' : '$count',
+        _createNumberText(withDot, indent, count),
         textAlign: TextAlign.right,
         style: GoogleFonts.notoSans(
           color: style.color,
@@ -347,31 +349,96 @@ class _NumberPoint extends StatelessWidget {
       ),
     );
   }
+
+  String _createNumberText(bool widthDot, int indent, int count) {
+    if ([0, 3].contains(indent)) {
+      return withDot ? '$count.' : '$count';
+    }
+    if ([1, 4].contains(indent)) {
+      return '$count )';
+    }
+    if ([2, 5].contains(indent)) {
+      const nums = ['①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⑩', '⑪', '⑫', '⑬', '⑭', '⑮', '⑯', '⑰', '⑱', '⑲', '⑳', '㉑', '㉒', '㉓', '㉔', '㉕', '㉖', '㉗', '㉘', '㉙', '㉚', '㉛', '㉜', '㉝', '㉞', '㉟', '㊱', '㊲', '㊳', '㊴', '㊵', '㊶', '㊷', '㊸', '㊹', '㊺', '㊻',' ㊼', '㊽', '㊾', '㊿'];
+      if (count <= nums.length) {
+        return '${nums[count - 1]}';
+      } else {
+        return '$count ';
+      }
+    }
+    return '';
+  }
 }
 
 class _BulletPoint extends StatelessWidget {
   final TextStyle style;
   final double width;
+  final int indent;
 
   const _BulletPoint({
     Key key,
     @required this.style,
     @required this.width,
+    @required this.indent,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(top: 10, right: 10),
       alignment: AlignmentDirectional.topEnd,
       width: width,
-      child: Container(
-        height: 6,
-        width: 6,
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.black,
-        ),
-      ),
+      child: Builder(
+        builder: (context) {
+          // ●
+          if ([0, 3].contains(indent)) {
+            return Container(
+              height: 6,
+              width: 6,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.black,
+              ),
+            );
+          }
+
+          // -
+          if ([1, 4].contains(indent)) {
+            return Container(
+              // 視覚補正
+              margin: EdgeInsets.only(top: 2),
+              height: 2,
+              width: 8,
+              color: Colors.black,
+            );
+          }
+
+          // ○
+          if ([2, 5].contains(indent)) {
+            return Container(
+              height: 6,
+              width: 6,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+                border: Border.all(
+                  color: Colors.black,
+                  width: 1,
+                ),
+              ),
+            );
+          }
+
+          // ●
+          return Container(
+            height: 6,
+            width: 6,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.black,
+            ),
+          );
+        },
+      )
     );
   }
 }
