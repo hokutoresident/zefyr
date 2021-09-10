@@ -429,6 +429,10 @@ class _ZefyrEditorSelectionGestureDetectorBuilder
       }
     }
     _state._requestKeyboard();
+    // 遅延実行しないと動かない
+    Future.delayed(const Duration(milliseconds: 100)).whenComplete(() {
+      editor.showCaretOnScreen();
+    });
     // if (_state.widget.onTap != null)
     //   _state.widget.onTap();
   }
@@ -680,6 +684,7 @@ abstract class EditorState extends State<RawEditor> {
   bool showToolbar();
   void hideToolbar();
   void requestKeyboard();
+  void showCaretOnScreen();
 }
 
 class RawEditorState extends EditorState
@@ -909,7 +914,7 @@ class RawEditorState extends EditorState
   void _didChangeTextEditingValue() {
     requestKeyboard();
 
-    _showCaretOnScreen();
+    showCaretOnScreen();
     updateRemoteValueIfNeeded();
     _cursorController.startOrStopCursorTimerIfNeeded(
         _hasFocus, widget.controller.selection);
@@ -952,7 +957,7 @@ class RawEditorState extends EditorState
     if (_hasFocus) {
       // Listen for changing viewInsets, which indicates keyboard showing up.
       WidgetsBinding.instance.addObserver(this);
-      _showCaretOnScreen();
+      showCaretOnScreen();
 //      _lastBottomViewInset = WidgetsBinding.instance.window.viewInsets.bottom;
 //      if (!_value.selection.isValid) {
       // Place cursor at the end if the selection is invalid when we receive focus.
@@ -1013,13 +1018,14 @@ class RawEditorState extends EditorState
 
   bool _showCaretOnScreenScheduled = false;
 
-  void _showCaretOnScreen() {
+  @override
+  void showCaretOnScreen() {
     if (!widget.showCursor || _showCaretOnScreenScheduled) {
       return;
     }
 
     _showCaretOnScreenScheduled = true;
-    SchedulerBinding.instance.addPostFrameCallback((Duration _) {
+    Future.delayed(const Duration(milliseconds: 100)).whenComplete(() {
       _showCaretOnScreenScheduled = false;
 
       final viewport = RenderAbstractViewport.of(renderEditor);

@@ -174,6 +174,20 @@ class _HomePageState extends State<HomePage> {
             hoverElevation: 0,
             size: 32,
             icon: Icon(
+              Icons.keyboard_arrow_down,
+              size: 18,
+              color: Theme.of(context).iconTheme.color,
+            ),
+            fillColor: Theme.of(context).canvasColor,
+            onPressed: () {
+              FocusScope.of(context).unfocus();
+            },
+          ),
+          ZIconButton(
+            highlightElevation: 0,
+            hoverElevation: 0,
+            size: 32,
+            icon: Icon(
               Icons.image,
               size: 18,
               color: Theme.of(context).iconTheme.color,
