@@ -121,8 +121,8 @@ class BlockEmbed extends EmbeddableObject {
 
   static final BlockEmbed horizontalRule = BlockEmbed('hr');
 
-  static BlockEmbed image(String source, {String originalSource}) {
-    return BlockEmbed('image', data: {'source': source, 'originalSource': originalSource});
+  static BlockEmbed image(String source, String ref, {String originalSource, String originalRef}) {
+    return BlockEmbed('image', data: {'source': source, 'ref': ref, 'originalSource': originalSource, 'originalRef': originalRef});
   }
 
   static BlockEmbed pdf(String source, String name, int size) {
