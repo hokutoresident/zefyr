@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:clipboard_listener/clipboard_listener.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:notus/notus.dart';

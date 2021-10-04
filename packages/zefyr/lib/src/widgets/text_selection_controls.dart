@@ -10,11 +10,33 @@ class ZefyrCupertinoTextSelectionControls extends CupertinoTextSelectionControls
   final ZefyrController controller;
 
   @override
-  void handleCut(TextSelectionDelegate delegate) => _handleCut(delegate, controller, super);
+  void handleCut(TextSelectionDelegate delegate) {
+    final start = delegate.textEditingValue.selection.start;
+    final node = controller.document.lookupLine(start).node;
+    if (_isImage(node)) {
+      final embed = (node as LineNode).children.single as EmbedNode;
+      final url = embed.value.data['source'];
+      Clipboard.setData(ClipboardData(text: '$embedImageUrlPrefix$url'));
+      _deleteImage(controller, delegate);
+      delegate.hideToolbar();
+      return;
+    }
+    super.handleCut(delegate);
+  }
 
   @override
-  void handleCopy(TextSelectionDelegate delegate, ClipboardStatusNotifier clipboardStatus) =>
-      _handleCopy(delegate, controller, clipboardStatus, super);
+  void handleCopy(TextSelectionDelegate delegate, ClipboardStatusNotifier clipboardStatus) {
+    final start = delegate.textEditingValue.selection.start;
+    final node = controller.document.lookupLine(start).node;
+    if (_isImage(node)) {
+      final embed = (node as LineNode).children.single as EmbedNode;
+      final url = embed.value.data['source'];
+      Clipboard.setData(ClipboardData(text: '$embedImageUrlPrefix$url'));
+      delegate.hideToolbar();
+      return;
+    }
+    super.handleCopy(delegate, clipboardStatus);
+  }
 }
 
 class ZefyrMaterialTextSelectionControls extends MaterialTextSelectionControls {
@@ -22,46 +44,33 @@ class ZefyrMaterialTextSelectionControls extends MaterialTextSelectionControls {
   final ZefyrController controller;
 
   @override
-  void handleCut(TextSelectionDelegate delegate) => _handleCut(delegate, controller, super);
+  void handleCut(TextSelectionDelegate delegate) {
+    final start = delegate.textEditingValue.selection.start;
+    final node = controller.document.lookupLine(start).node;
+    if (_isImage(node)) {
+      final embed = (node as LineNode).children.single as EmbedNode;
+      final url = embed.value.data['source'];
+      Clipboard.setData(ClipboardData(text: '$embedImageUrlPrefix$url'));
+      _deleteImage(controller, delegate);
+      delegate.hideToolbar();
+      return;
+    }
+    super.handleCut(delegate);
+  }
 
   @override
-  void handleCopy(TextSelectionDelegate delegate, ClipboardStatusNotifier clipboardStatus) =>
-      _handleCopy(delegate, controller, clipboardStatus, super);
-}
-
-void _handleCut(TextSelectionDelegate delegate, ZefyrController controller, TextSelectionControls _super) {
-  final start = delegate.textEditingValue.selection.start;
-  final node = controller.document.lookupLine(start).node;
-  if (_isImage(node)) {
-    final embed = (node as LineNode).children.single as EmbedNode;
-    final url = embed.value.data['source'];
-    Clipboard.setData(ClipboardData(text: '$embedImageUrlPrefix$url'));
-    controller.replaceText(
-      delegate.textEditingValue.selection.start,
-      delegate.textEditingValue.selection.textInside(delegate.textEditingValue.text).length,
-      '',
-      selection: controller.selection.copyWith(
-        baseOffset: controller.selection.baseOffset,
-        extentOffset: controller.selection.baseOffset,
-      ),
-    );
-    delegate.hideToolbar();
-    return;
+  void handleCopy(TextSelectionDelegate delegate, ClipboardStatusNotifier clipboardStatus) {
+    final start = delegate.textEditingValue.selection.start;
+    final node = controller.document.lookupLine(start).node;
+    if (_isImage(node)) {
+      final embed = (node as LineNode).children.single as EmbedNode;
+      final url = embed.value.data['source'];
+      Clipboard.setData(ClipboardData(text: '$embedImageUrlPrefix$url'));
+      delegate.hideToolbar();
+      return;
+    }
+    super.handleCopy(delegate, clipboardStatus);
   }
-  _super.handleCut(delegate);
-}
-
-void _handleCopy(TextSelectionDelegate delegate, ZefyrController controller, ClipboardStatusNotifier clipboardStatus, TextSelectionControls _super) {
-  final start = delegate.textEditingValue.selection.start;
-  final node = controller.document.lookupLine(start).node;
-  if (_isImage(node)) {
-    final embed = (node as LineNode).children.single as EmbedNode;
-    final url = embed.value.data['source'];
-    Clipboard.setData(ClipboardData(text: '$embedImageUrlPrefix$url'));
-    delegate.hideToolbar();
-    return;
-  }
-  _super.handleCopy(delegate, clipboardStatus);
 }
 
 const embedImageUrlPrefix = 'EMBED_IMAGE_URL:';
@@ -73,4 +82,17 @@ bool _isImage(Node node) {
   final embed = line.children.single as EmbedNode;
   final url = embed.value.data['source'];
   return isURL(url);
+}
+
+void _deleteImage(ZefyrController controller, TextSelectionDelegate delegate) {
+  controller.replaceText(
+    delegate.textEditingValue.selection.start,
+    delegate.textEditingValue.selection.textInside(delegate.textEditingValue.text).length,
+    '',
+    selection: controller.selection.copyWith(
+      baseOffset: controller.selection.baseOffset,
+      extentOffset: controller.selection.baseOffset,
+    ),
+  );
+  delegate.hideToolbar();
 }
