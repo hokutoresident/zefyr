@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:validators/validators.dart';
+import 'package:zefyr/src/widgets/text_selection_controls.dart';
 import 'package:zefyr/zefyr.dart';
 
 import 'editor.dart';
