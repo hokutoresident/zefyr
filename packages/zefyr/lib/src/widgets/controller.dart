@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 
+import 'package:clipboard_listener/clipboard_listener.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:notus/notus.dart';
 import 'package:quill_delta/quill_delta.dart';
 import 'package:zefyr/util.dart';
@@ -18,7 +20,12 @@ List<String> _insertionToggleableStyleKeys = [
 class ZefyrController extends ChangeNotifier {
   ZefyrController([NotusDocument document])
       : document = document ?? NotusDocument(),
-        _selection = TextSelection.collapsed(offset: 0);
+        _selection = TextSelection.collapsed(offset: 0) {
+    ClipboardListener.addListener(() {
+      final a = Clipboard.getData(Clipboard.kTextPlain);
+      print(a);
+    });
+  }
 
   /// Document managed by this controller.
   final NotusDocument document;

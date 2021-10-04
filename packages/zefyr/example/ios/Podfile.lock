@@ -1,4 +1,6 @@
 PODS:
+  - clipboard_listener (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
   - image_picker (0.0.1):
     - Flutter
@@ -8,12 +10,15 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - clipboard_listener (from `.symlinks/plugins/clipboard_listener/ios`)
   - Flutter (from `Flutter`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
 
 EXTERNAL SOURCES:
+  clipboard_listener:
+    :path: ".symlinks/plugins/clipboard_listener/ios"
   Flutter:
     :path: Flutter
   image_picker:
@@ -24,6 +29,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher/ios"
 
 SPEC CHECKSUMS:
+  clipboard_listener: 5bdabc3b4ebabf4b4055ca17aa97b9b4b55160e2
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   image_picker: 66aa71bc96850a90590a35d4c4a2907b0d823109
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c

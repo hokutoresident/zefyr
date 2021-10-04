@@ -46,6 +46,17 @@ mixin RawEditorStateSelectionDelegateMixin on EditorState
           if(compare > 0){
             final data = await Clipboard.getData(Clipboard.kTextPlain);
             if (data != null) {
+              if (data.text.startsWith(CustomCupertinoTextSelectionControls.embedImageUrlPrefix)) {
+                final index = widget.controller.selection.baseOffset;
+                final length = widget.controller.selection.extentOffset - index;
+                widget.controller.replaceText(
+                    index,
+                    length,
+                    BlockEmbed.image(data.text.substring(CustomCupertinoTextSelectionControls.embedImageUrlPrefix.length)),
+                );
+
+                return;
+              }
               final length = selection.end - selection.start;
               widget.controller.replaceText(
                 selection.start,

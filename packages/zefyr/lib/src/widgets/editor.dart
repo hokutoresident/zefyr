@@ -7,8 +7,11 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:notus/notus.dart';
+import 'package:notus/notus.dart';
+import 'package:validators/validators.dart';
 import 'package:zefyr/src/widgets/baseline_proxy.dart';
 
+import '../../zefyr.dart';
 import '../rendering/editor.dart';
 import '../services/keyboard.dart';
 import 'controller.dart';
@@ -260,7 +263,7 @@ class _ZefyrEditorState extends State<ZefyrEditor>
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         final cupertinoTheme = CupertinoTheme.of(context);
-        textSelectionControls = cupertinoTextSelectionControls;
+        textSelectionControls = CustomCupertinoTextSelectionControls(widget.controller);
         paintCursorAboveText = true;
         cursorOpacityAnimates = true;
         cursorColor ??=
@@ -1288,3 +1291,48 @@ class _Editor extends MultiChildRenderObjectWidget {
 //    properties.add(EnumProperty<Axis>('direction', direction));
   }
 }
+
+class CustomCupertinoTextSelectionControls extends CupertinoTextSelectionControls {
+  CustomCupertinoTextSelectionControls(this.controller);
+  final ZefyrController controller;
+  static const embedImageUrlPrefix = 'EMBED_IMAGE_URL:';
+
+  @override
+  void handleCut(TextSelectionDelegate delegate) {
+    // TODO: implement handleCut
+    super.handleCut(delegate);
+  }
+
+  @override
+  void handleCopy(TextSelectionDelegate delegate, ClipboardStatusNotifier clipboardStatus) {
+    final start = delegate.textEditingValue.selection.start;
+    final node = controller.document.lookupLine(start).node;
+    if (_isImage(node)) {
+      final embed = (node as LineNode).children.single as EmbedNode;
+      final url = embed.value.data['source'];
+      Clipboard.setData(ClipboardData(text: '$embedImageUrlPrefix$url'));
+      delegate.hideToolbar();
+      return;
+    }
+    super.handleCopy(delegate, clipboardStatus);
+  }
+
+  bool _isImage(Node node) {
+    if (!(node is LineNode)) return false;
+    final line = node as LineNode;
+    if (!line.hasEmbed) return false;
+    final embed = line.children.single as EmbedNode;
+    final url = embed.value.data['source'];
+    return isURL(url);
+  }
+}
+//
+// class CustomMaterialTextSelectionControls extends MaterialTextSelectionControls {
+//   CustomMaterialTextSelectionControls(this.controller);
+//   final ZefyrController controller;
+//   @override
+//   void handleCopy(TextSelectionDelegate delegate, ClipboardStatusNotifier clipboardStatus) {
+//     // TODO: implement handleCopy
+//     super.handleCopy(delegate, clipboardStatus);
+//   }
+// }
