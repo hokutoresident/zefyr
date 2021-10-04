@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:validators/validators.dart';
@@ -46,13 +44,13 @@ mixin RawEditorStateSelectionDelegateMixin on EditorState
           if(compare > 0){
             final data = await Clipboard.getData(Clipboard.kTextPlain);
             if (data != null) {
-              if (data.text.startsWith(CustomCupertinoTextSelectionControls.embedImageUrlPrefix)) {
+              if (data.text.startsWith(embedImageUrlPrefix)) {
                 final index = widget.controller.selection.baseOffset;
                 final length = widget.controller.selection.extentOffset - index;
                 widget.controller.replaceText(
                     index,
                     length,
-                    BlockEmbed.image(data.text.substring(CustomCupertinoTextSelectionControls.embedImageUrlPrefix.length)),
+                    BlockEmbed.image(data.text.substring(embedImageUrlPrefix.length)),
                 );
 
                 return;

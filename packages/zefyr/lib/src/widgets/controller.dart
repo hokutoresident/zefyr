@@ -20,12 +20,7 @@ List<String> _insertionToggleableStyleKeys = [
 class ZefyrController extends ChangeNotifier {
   ZefyrController([NotusDocument document])
       : document = document ?? NotusDocument(),
-        _selection = TextSelection.collapsed(offset: 0) {
-    ClipboardListener.addListener(() {
-      final a = Clipboard.getData(Clipboard.kTextPlain);
-      print(a);
-    });
-  }
+        _selection = TextSelection.collapsed(offset: 0);
 
   /// Document managed by this controller.
   final NotusDocument document;
