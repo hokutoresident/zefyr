@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:validators/validators.dart';
+import 'package:zefyr/src/widgets/text_selection_controls.dart';
 import 'package:zefyr/zefyr.dart';
 
 import 'editor.dart';
@@ -46,6 +45,17 @@ mixin RawEditorStateSelectionDelegateMixin on EditorState
           if(compare > 0){
             final data = await Clipboard.getData(Clipboard.kTextPlain);
             if (data != null) {
+              if (data.text.startsWith(embedImageUrlPrefix)) {
+                final index = widget.controller.selection.baseOffset;
+                final length = widget.controller.selection.extentOffset - index;
+                widget.controller.replaceText(
+                    index,
+                    length,
+                    BlockEmbed.image(data.text.substring(embedImageUrlPrefix.length)),
+                );
+
+                return;
+              }
               final length = selection.end - selection.start;
               widget.controller.replaceText(
                 selection.start,
