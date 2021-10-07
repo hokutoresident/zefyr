@@ -5,6 +5,8 @@ import 'package:notus/notus.dart';
 import 'package:validators/validators.dart';
 import 'package:zefyr/src/widgets/controller.dart';
 
+// TODO: ZefyrCupertinoTextSelectionControlsとZefyrMaterialTextSelectionControlsで完全に重複しているが、他のスタイルの維持したままコピペ機能を追加するにあたってここは完全に消えるはずなのでいったんこのままにしてます
+// TODO: 選択したnodeごとtoJson()して文字列に直したものをクリップボードへコピーして、ペースト後のコールバックで復元してペーストする
 class ZefyrCupertinoTextSelectionControls extends CupertinoTextSelectionControls {
   ZefyrCupertinoTextSelectionControls(this.controller);
   final ZefyrController controller;
