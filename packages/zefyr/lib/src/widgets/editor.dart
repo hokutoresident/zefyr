@@ -8,7 +8,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:notus/notus.dart';
 import 'package:zefyr/src/widgets/baseline_proxy.dart';
+import 'package:zefyr/src/widgets/text_selection_controls.dart';
 
+import '../../zefyr.dart';
 import '../rendering/editor.dart';
 import '../services/keyboard.dart';
 import 'controller.dart';
@@ -260,7 +262,7 @@ class _ZefyrEditorState extends State<ZefyrEditor>
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         final cupertinoTheme = CupertinoTheme.of(context);
-        textSelectionControls = cupertinoTextSelectionControls;
+        textSelectionControls = ZefyrCupertinoTextSelectionControls(widget.controller);
         paintCursorAboveText = true;
         cursorOpacityAnimates = true;
         cursorColor ??=
@@ -278,7 +280,7 @@ class _ZefyrEditorState extends State<ZefyrEditor>
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        textSelectionControls = materialTextSelectionControls;
+        textSelectionControls = ZefyrMaterialTextSelectionControls(widget.controller);
         paintCursorAboveText = false;
         cursorOpacityAnimates = false;
         cursorColor ??= selectionTheme.cursorColor ?? theme.colorScheme.primary;
