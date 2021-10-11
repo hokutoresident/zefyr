@@ -125,10 +125,11 @@ class BlockEmbed extends EmbeddableObject {
     return BlockEmbed('image', data: {'source': source, 'ref': ref, 'originalSource': originalSource, 'originalRef': originalRef});
   }
 
-  static BlockEmbed pdf(String source, String name, int size) {
+  static BlockEmbed pdf(String source, {String ref, String name, int size}) {
     return BlockEmbed(
       'pdf',
       data: {
+        'ref': ref,
         'source': source,
         'name': name,
         'size': size,

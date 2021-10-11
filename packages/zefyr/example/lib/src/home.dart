@@ -279,8 +279,9 @@ class _HomePageState extends State<HomePage> {
                         final url = node.value.data['source'] as String;
                         final fileName = node.value.data['name'] as String;
                         final size = node.value.data['size'] as int;
+                        final ref = node.value.data['ref'] as String;
                         return Text(
-                          'pdf url: $url, fileName: $fileName, size: $size',
+                          'pdf url: $url, ref: $ref, fileName: $fileName, size: $size',
                         );
                       }
                       if (node.value.type == 'table') {
