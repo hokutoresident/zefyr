@@ -200,7 +200,7 @@ class _HomePageState extends State<HomePage> {
                   index,
                   length,
                   BlockEmbed.image(
-                      'https://firebasestorage.googleapis.com/v0/b/hokutoapp-jp.appspot.com/o/admin%2Fsample-notes%2Fintroduce%2F2.png?alt=media&token=5c054a6a-fb45-43ff-9a83-87f2dec7a568'));
+                      source: 'https://firebasestorage.googleapis.com/v0/b/hokutoapp-jp.appspot.com/o/admin%2Fsample-notes%2Fintroduce%2F2.png?alt=media&token=5c054a6a-fb45-43ff-9a83-87f2dec7a568'));
             },
           ),
           ZIconButton(

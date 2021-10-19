@@ -52,7 +52,7 @@ mixin RawEditorStateSelectionDelegateMixin on EditorState
                     index,
                     length,
                     /// TODO: FIXME add to ref
-                    BlockEmbed.image(data.text.substring(embedImageUrlPrefix.length)),
+                    BlockEmbed.image(source: data.text.substring(embedImageUrlPrefix.length)),
                 );
 
                 return;
