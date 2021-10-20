@@ -12,7 +12,7 @@ import 'package:zefyr/src/widgets/text_selection_controls.dart';
 
 import '../../zefyr.dart';
 import '../rendering/editor.dart';
-import '../services/keyboard.dart';
+import '../services/keyboard.dart' as zefyr;
 import 'controller.dart';
 import 'cursor.dart';
 import 'editable_text_block.dart';
@@ -708,7 +708,7 @@ class RawEditorState extends EditorState
   FloatingCursorController _floatingCursorController;
 
   // Keyboard
-  KeyboardListener _keyboardListener;
+  zefyr.KeyboardListener _keyboardListener;
 
   // Selection overlay
   @override
@@ -812,7 +812,7 @@ class RawEditorState extends EditorState
     );
 
     // Keyboard
-    _keyboardListener = KeyboardListener(
+    _keyboardListener = zefyr.KeyboardListener(
       onCursorMovement: handleCursorMovement,
       onShortcut: handleShortcut,
       onDelete: handleDelete,
