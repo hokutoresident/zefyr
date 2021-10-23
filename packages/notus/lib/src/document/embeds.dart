@@ -122,10 +122,12 @@ class BlockEmbed extends EmbeddableObject {
   static final BlockEmbed horizontalRule = BlockEmbed('hr');
 
   static BlockEmbed image({String source, String ref}) {
+    assert(source != null || ref != null);
     return BlockEmbed('image', data: {'source': source, 'ref': ref});
   }
 
-  static BlockEmbed pdf(String source, {String ref, String name, int size}) {
+  static BlockEmbed pdf({String source, String ref, String name, int size}) {
+    assert(source != null || ref != null);
     return BlockEmbed(
       'pdf',
       data: {
