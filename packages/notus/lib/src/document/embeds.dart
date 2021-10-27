@@ -170,3 +170,10 @@ class EmbedPdf extends BlockEmbed {
   final String name;
   final int size;
 }
+
+class EmbedTable extends BlockEmbed {
+  EmbedTable(String type, {this.style, this.contents}) : super(type);
+  
+  final String style; 
+  final List<Map<String, dynamic>> contents;
+}

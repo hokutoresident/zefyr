@@ -287,7 +287,8 @@ class _HomePageState extends State<HomePage> {
                         );
                       }
                       if (node.value.type == 'table') {
-                        final contents = node.value.data['contents'] as List<dynamic>;
+                        final table = node.value as EmbedTable;
+                        final contents = table.contents;
                         return Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
