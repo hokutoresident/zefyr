@@ -123,19 +123,17 @@ class BlockEmbed extends EmbeddableObject {
 
   static BlockEmbed image({String source, String ref}) {
     assert((source != null || ref != null));
-    return BlockEmbed('image', data: {'source': source, 'ref': ref});
+    return EmbedImage('image', source: source, ref: ref);
   }
 
   static BlockEmbed pdf({String source, String ref, String name, int size}) {
     assert((source != null || ref != null));
-    return BlockEmbed(
+    return EmbedPdf(
       'pdf',
-      data: {
-        'ref': ref,
-        'source': source,
-        'name': name,
-        'size': size,
-      },
+      ref: ref,
+      source: source,
+      name: name,
+      size: size,
     );
   }
 
@@ -148,4 +146,27 @@ class BlockEmbed extends EmbeddableObject {
       }
     );
   }
+}
+
+
+class EmbedImage extends BlockEmbed {
+  EmbedImage(String type, {this.source, this.ref}) : super(type);
+  
+  final String source;
+  final String ref;
+}
+
+class EmbedPdf extends BlockEmbed {
+  EmbedPdf(
+    String type, {
+      this.source, 
+      this.ref, 
+      @required this.name,
+      @required this.size,
+    }) : super(type);
+  
+  final String source;
+  final String ref;
+  final String name;
+  final int size;
 }

@@ -264,8 +264,9 @@ class _HomePageState extends State<HomePage> {
                         );
                       }
                       if (node.value.type == 'image') {
+                        final image = node.value as EmbedImage;
                         return Image.network(
-                          node.value.data['source'] as String,
+                          image.source,
                           fit: BoxFit.fitWidth,
                           loadingBuilder: (context, widget, event) => event == null
                               ? widget
@@ -276,10 +277,11 @@ class _HomePageState extends State<HomePage> {
                         );
                       }
                       if (node.value.type == 'pdf') {
-                        final url = node.value.data['source'] as String;
-                        final fileName = node.value.data['name'] as String;
-                        final size = node.value.data['size'] as int;
-                        final ref = node.value.data['ref'] as String;
+                        final pdf = node.value as EmbedPdf;
+                        final url = pdf.source;
+                        final fileName = pdf.name;
+                        final size = pdf.size;
+                        final ref = pdf.ref;
                         return Text(
                           'pdf url: $url, ref: $ref, fileName: $fileName, size: $size',
                         );
