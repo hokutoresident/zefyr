@@ -150,7 +150,8 @@ class BlockEmbed extends EmbeddableObject {
 
 
 class EmbedImage extends BlockEmbed {
-  EmbedImage(String type, {this.source, this.ref}) : super(type);
+  EmbedImage(String type, {this.source, this.ref}) 
+    : super(type, data: {'source': source, 'ref': ref});
   
   final String source;
   final String ref;
@@ -163,7 +164,14 @@ class EmbedPdf extends BlockEmbed {
       this.ref, 
       @required this.name,
       @required this.size,
-    }) : super(type);
+    }) : super(
+        type,
+        data: {
+          'source': source,
+          'name': name,
+          'size': size,
+        },
+      );
   
   final String source;
   final String ref;
@@ -172,7 +180,14 @@ class EmbedPdf extends BlockEmbed {
 }
 
 class EmbedTable extends BlockEmbed {
-  EmbedTable(String type, {this.style, this.contents}) : super(type);
+  EmbedTable(String type, {this.style, this.contents}) 
+    : super(
+      type,
+      data: {
+        'style': style,
+        'contents': contents,
+      },
+    );
   
   final String style; 
   final List<Map<String, dynamic>> contents;
