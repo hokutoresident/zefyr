@@ -117,7 +117,6 @@ class TextLine extends StatelessWidget {
         return TextSpan(
           children: [
             TextSpan(
-              text: segment.value.substring(0, segment.value.indexOf(searchQuery)),
               children: _highlightTextSpans(segment.value, searchQuery, style),
             ),
           ],
