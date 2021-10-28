@@ -81,6 +81,7 @@ class EditableTextBlock extends StatelessWidget {
           embedBuilder: embedBuilder,
           inputtingTextRange: inputtingTextRange(line),
           lookupResult: lookupResult,
+          searchQuery: searchQuery,
         ),
         cursorController: cursorController,
         selection: selection,
