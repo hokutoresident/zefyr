@@ -124,7 +124,6 @@ class TextLine extends StatelessWidget {
           style: _getInlineTextStyle(attrs, theme),
         );
       }
-      // ==============
 
       if (textRange != null) {
         final style = _getInlineTextStyle(attrs, theme);
