@@ -93,7 +93,7 @@ class TextLine extends StatelessWidget {
 
       children.add(TextSpan(
         text: source.substring(match.start, match.end),
-        style: style.copyWith(backgroundColor: Colors.red),
+        style: style.copyWith(backgroundColor: Color(0xff0099DD).withOpacity(0.20)),
       ));
 
       if (i == matches.length - 1 && match.end != source.length) {
