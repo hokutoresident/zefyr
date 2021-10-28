@@ -183,6 +183,8 @@ class ZefyrEditor extends StatefulWidget {
   /// Defaults to [defaultZefyrEmbedBuilder].
   final ZefyrEmbedBuilder embedBuilder;
 
+  final String searchQuery;
+
   const ZefyrEditor({
     Key key,
     @required this.controller,
@@ -204,6 +206,7 @@ class ZefyrEditor extends StatefulWidget {
     this.onLaunchUrl,
     this.onTapEmbedObject,
     this.embedBuilder = defaultZefyrEmbedBuilder,
+    this.searchQuery = '',
   })  : assert(controller != null),
         super(key: key);
 
@@ -309,6 +312,7 @@ class _ZefyrEditorState extends State<ZefyrEditor>
       onLaunchUrl: widget.onLaunchUrl,
       onTapEmbedObject: widget.onTapEmbedObject,
       embedBuilder: widget.embedBuilder,
+      searchQuery: widget.searchQuery,
       // encapsulated fields below
       cursorStyle: CursorStyle(
         color: cursorColor,
@@ -490,6 +494,7 @@ class RawEditor extends StatefulWidget {
     this.showSelectionHandles = false,
     this.selectionControls,
     this.embedBuilder = defaultZefyrEmbedBuilder,
+    this.searchQuery,
   })  : assert(controller != null),
         assert(focusNode != null),
         assert(scrollable || scrollController != null),
@@ -645,6 +650,8 @@ class RawEditor extends StatefulWidget {
   ///
   /// Defaults to [defaultZefyrEmbedBuilder].
   final ZefyrEmbedBuilder embedBuilder;
+
+  final String searchQuery;
 
   bool get selectionEnabled => enableInteractiveSelection;
 
@@ -1167,6 +1174,7 @@ class RawEditorState extends EditorState
             embedBuilder: widget.embedBuilder,
             inputtingTextRange: _inputtingTextRange(lookup)(node),
             lookupResult: lookup,
+            searchQuery: widget.searchQuery,
           ),
           hasFocus: _hasFocus,
           devicePixelRatio: MediaQuery.of(context).devicePixelRatio,
@@ -1188,6 +1196,7 @@ class RawEditorState extends EditorState
           inputtingTextRange: _inputtingTextRange(lookup),
           lookupResult: lookup,
           indentLevelCounts: indentLevelCounts,
+          searchQuery: widget.searchQuery,
         ));
       } else {
         throw StateError('Unreachable.');
