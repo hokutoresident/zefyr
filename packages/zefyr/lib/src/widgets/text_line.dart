@@ -18,6 +18,7 @@ class TextLine extends StatelessWidget {
   final ZefyrEmbedBuilder embedBuilder;
   final TextRange inputtingTextRange;
   final LookupResult lookupResult;
+  final String searchQuery;
 
   const TextLine({
     Key key,
@@ -26,6 +27,7 @@ class TextLine extends StatelessWidget {
     @required this.embedBuilder,
     this.inputtingTextRange,
     this.lookupResult,
+    this.searchQuery,
   })  : assert(node != null),
         assert(embedBuilder != null),
         super(key: key);
@@ -71,11 +73,59 @@ class TextLine extends StatelessWidget {
     );
   }
 
+  List<TextSpan> _highlightTextSpans(String source, String query, TextStyle style) {
+    if (query == null || query.isEmpty || !source.toLowerCase().contains(query.toLowerCase())) {
+      return [ TextSpan(text: source) ];
+    }
+    final matches = query.toLowerCase().allMatches(source.toLowerCase());
+
+    var lastMatchEnd = 0;
+
+    final children = <TextSpan>[];
+    for (var i = 0; i < matches.length; i++) {
+      final match = matches.elementAt(i);
+
+      if (match.start != lastMatchEnd) {
+        children.add(TextSpan(
+          text: source.substring(lastMatchEnd, match.start),
+        ));
+      }
+
+      children.add(TextSpan(
+        text: source.substring(match.start, match.end),
+        style: style.copyWith(backgroundColor: Colors.red),
+      ));
+
+      if (i == matches.length - 1 && match.end != source.length) {
+        children.add(TextSpan(
+          text: source.substring(match.end, source.length),
+        ));
+      }
+
+      lastMatchEnd = match.end;
+    }
+    return children;
+  }
+
   TextSpan _segmentToTextSpan(Node node, ZefyrThemeData theme, TextRange textRange) {
     final TextNode segment = node;
     final attrs = segment.style;
 
     try {
+      if (searchQuery.isNotEmpty && segment.value.contains(searchQuery)) {
+        final style = _getInlineTextStyle(attrs, theme).copyWith();
+        return TextSpan(
+          children: [
+            TextSpan(
+              text: segment.value.substring(0, segment.value.indexOf(searchQuery)),
+              children: _highlightTextSpans(segment.value, searchQuery, style),
+            ),
+          ],
+          style: _getInlineTextStyle(attrs, theme),
+        );
+      }
+      // ==============
+
       if (textRange != null) {
         final style = _getInlineTextStyle(attrs, theme);
         return TextSpan(
