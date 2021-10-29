@@ -28,6 +28,7 @@ class _HomePageState extends State<HomePage> {
   var _isContainsUnsupportedFormat = false;
 
   String _searchQuery = '';
+  int _searchHitsCount = 0;
 
   void _handleSettingsLoaded(Settings value) {
     setState(() {
@@ -401,9 +402,13 @@ class _HomePageState extends State<HomePage> {
                 onChanged: (query) {
                   setState(() {
                     _searchQuery = query;
+                    _searchHitsCount = _controller.findSearchHitsCount(query);
                   });
                 },
               ),
+            ),
+            Text(
+              _searchHitsCount.toString(),
             ),
             IconButton(
               icon: Icon(Icons.arrow_downward),

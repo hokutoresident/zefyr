@@ -319,4 +319,9 @@ class ZefyrController extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  int findSearchHitsCount(String searchQuery) {
+    if (searchQuery.isEmpty) return 0;
+    return searchQuery.allMatches(document.toPlainText()).length;
+  }
 }
