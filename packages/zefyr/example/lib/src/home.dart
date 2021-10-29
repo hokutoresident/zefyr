@@ -28,7 +28,6 @@ class _HomePageState extends State<HomePage> {
   var _isContainsUnsupportedFormat = false;
 
   String _searchQuery = '';
-  int _searchHitsCount = 0;
 
   void _handleSettingsLoaded(Settings value) {
     setState(() {
@@ -402,21 +401,28 @@ class _HomePageState extends State<HomePage> {
                 onChanged: (query) {
                   setState(() {
                     _searchQuery = query;
-                    _searchHitsCount = _controller.findSearchHitsCount(query);
                   });
                 },
               ),
             ),
             Text(
-              _searchHitsCount.toString(),
+              (_controller.searchFocusIndex == 0 && _searchQuery.isEmpty ? 0 : _controller.searchFocusIndex + 1).toString() + ' / ' + _controller.findSearchMatch(_searchQuery).length.toString(),
             ),
             IconButton(
               icon: Icon(Icons.arrow_downward),
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  _controller.selectNextSearchHit(_searchQuery);
+                });
+              },
             ),
             IconButton(
               icon: Icon(Icons.arrow_upward),
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  _controller.selectPreviousSearchHit(_searchQuery);
+                });
+              },
             ),
           ],
         ),

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/cupertino.dart';
@@ -32,6 +33,9 @@ class ZefyrController extends ChangeNotifier {
   /// It gets reset after each format action within the [document].
   NotusStyle get toggledStyles => _toggledStyles;
   NotusStyle _toggledStyles = NotusStyle();
+
+  int searchFocusIndex = 0;
+  final focusStream = StreamController<void>();
 
   /// Returns style of specified text range.
   ///
@@ -203,6 +207,7 @@ class ZefyrController extends ChangeNotifier {
   @override
   void dispose() {
     document.close();
+    focusStream.close();
     super.dispose();
   }
 
@@ -320,8 +325,28 @@ class ZefyrController extends ChangeNotifier {
     }
   }
 
-  int findSearchHitsCount(String searchQuery) {
-    if (searchQuery.isEmpty) return 0;
-    return searchQuery.allMatches(document.toPlainText()).length;
+  List<Match> findSearchMatch(String searchQuery) {
+    if (searchQuery.isEmpty) return [];
+    return searchQuery.allMatches(document.toPlainText()).toList();
   }
+
+  void selectNextSearchHit(String searchQuery) {
+    final total = findSearchMatch(searchQuery).length;
+    if (searchQuery.isEmpty || searchFocusIndex >= total) return;
+    searchFocusIndex++;
+    final searchFocus = findSearchMatch(searchQuery)[searchFocusIndex];
+    final next = TextSelection(baseOffset: searchFocus.start, extentOffset: searchFocus.end);
+    updateSelection(next, source: ChangeSource.local);
+    focusStream.sink.add({});
+  }
+
+  void selectPreviousSearchHit(String searchQuery) {
+    if (searchQuery.isEmpty || searchFocusIndex <= 0) return;
+    searchFocusIndex--;
+    final searchFocus = findSearchMatch(searchQuery)[searchFocusIndex];
+    final next = TextSelection(baseOffset: searchFocus.start, extentOffset: searchFocus.end);
+    updateSelection(next, source: ChangeSource.local);
+    focusStream.sink.add({});
+  }
+
 }
