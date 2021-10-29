@@ -335,7 +335,7 @@ class ZefyrController extends ChangeNotifier {
     if (searchQuery.isEmpty || searchFocusIndex >= total) return;
     searchFocusIndex++;
     final searchFocus = findSearchMatch(searchQuery)[searchFocusIndex];
-    final next = TextSelection(baseOffset: searchFocus.start, extentOffset: searchFocus.end);
+    final next = TextSelection(baseOffset: searchFocus.end, extentOffset: searchFocus.end);
     updateSelection(next, source: ChangeSource.local);
     focusStream.sink.add({});
   }
@@ -344,7 +344,7 @@ class ZefyrController extends ChangeNotifier {
     if (searchQuery.isEmpty || searchFocusIndex <= 0) return;
     searchFocusIndex--;
     final searchFocus = findSearchMatch(searchQuery)[searchFocusIndex];
-    final next = TextSelection(baseOffset: searchFocus.start, extentOffset: searchFocus.end);
+    final next = TextSelection(baseOffset: searchFocus.end, extentOffset: searchFocus.end);
     updateSelection(next, source: ChangeSource.local);
     focusStream.sink.add({});
   }
