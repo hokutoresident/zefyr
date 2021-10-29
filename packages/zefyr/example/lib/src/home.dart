@@ -170,17 +170,8 @@ class _HomePageState extends State<HomePage> {
   Widget _buildWelcomeEditor(BuildContext context) {
     return Column(
       children: [
+        _buildSearchBar(context),
         ZefyrToolbar(children: [
-          ZIconButton(
-            size: 32,
-            icon: Icon(
-              Icons.search,
-              size: 18,
-            ),
-            onPressed: () {
-              _showSearchTextField(context);
-            },
-          ),
           ZIconButton(
             highlightElevation: 0,
             hoverElevation: 0,
@@ -394,30 +385,37 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> _showSearchTextField(BuildContext context) async {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text('検索'),
-            content: TextFormField(
-              initialValue: _searchQuery,
-              onChanged: (value) {
-                setState(() {
-                  _searchQuery = value;
-                });
-              },
-            ),
-            actions: <Widget>[
-              // ignore: deprecated_member_use
-              FlatButton(
-                onPressed: () {
-                  Navigator.pop(context);
+  Widget _buildSearchBar(BuildContext context) {
+    return SizedBox(
+      height: 40,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                initialValue: _searchQuery,
+                decoration: const InputDecoration(
+                  hintText: '検索',
+                ),
+                onChanged: (query) {
+                  setState(() {
+                    _searchQuery = query;
+                  });
                 },
-                child: Text('閉じる'),
               ),
-            ],
-          );
-        });
+            ),
+            IconButton(
+              icon: Icon(Icons.arrow_downward),
+              onPressed: () {},
+            ),
+            IconButton(
+              icon: Icon(Icons.arrow_upward),
+              onPressed: () {},
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
