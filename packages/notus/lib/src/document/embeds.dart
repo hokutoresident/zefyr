@@ -170,6 +170,7 @@ class EmbedPdf extends BlockEmbed {
           'source': source,
           'name': name,
           'size': size,
+          'ref': ref,
         },
       );
   
