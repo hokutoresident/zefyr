@@ -109,7 +109,11 @@ class ZefyrController extends ChangeNotifier {
             source: ChangeSource.local,
           );
         }
-        // selectionにlh, mh, bqが入っている && 消す対象が改行 && 最後が改行 ならもう一個改行を足すことで、`AutoExitBlockRule`を適用させてstyleを抜ける
+        // - selectionにlh, mh, bqが入っている &&
+        // - 消す対象が改行 &&
+        // - 最後が改行 &&
+        // - 現在カーソルのあたってる一個右のスタイルがlh, mh, bqではない
+        // ならもう一個改行を足すことで、`AutoExitBlockRule`を適用させてstyleを抜ける
         final isInMhLhBq = getSelectionStyle().containsAny([NotusAttribute.largeHeading, NotusAttribute.middleHeading, NotusAttribute.bq]);
         final selectionEnd = document.toPlainText()[selection.end];
         final selectionRightIsNotInMhLhBq = !_getCursorRightStyle().containsAny([NotusAttribute.largeHeading, NotusAttribute.middleHeading, NotusAttribute.bq]);
