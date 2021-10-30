@@ -112,13 +112,21 @@ class ZefyrController extends ChangeNotifier {
         // selectionにlh, mh, bqが入っている && 消す対象が改行 && 最後が改行 ならもう一個改行を足すことで、`AutoExitBlockRule`を適用させてstyleを抜ける
         final isInMhLhBq = getSelectionStyle().containsAny([NotusAttribute.largeHeading, NotusAttribute.middleHeading, NotusAttribute.bq]);
         final selectionEnd = document.toPlainText()[selection.end];
-        if (isInMhLhBq && data == '\n' && selectionEnd == '\n') {
+        final selectionRightIsNotInMhLhBq = !_getCursorRightStyle().containsAny([NotusAttribute.largeHeading, NotusAttribute.middleHeading, NotusAttribute.bq]);
+        if (isInMhLhBq && data == '\n' && selectionEnd == '\n' && selectionRightIsNotInMhLhBq) {
           addNewlineAtSelectionEnd();
         }
       }
     }
 //    _lastChangeSource = ChangeSource.local;
     notifyListeners();
+  }
+
+  // 現在カーソルのあたってる一個右のスタイル
+  NotusStyle _getCursorRightStyle() {
+    var lineStyle = document.collectStyle(_selection.end + 1, 0);
+    lineStyle = lineStyle.mergeAll(toggledStyles);
+    return lineStyle;
   }
 
   // カーソルの位置を一つ左にずらすべきか否か
