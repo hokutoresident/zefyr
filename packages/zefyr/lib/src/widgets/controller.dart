@@ -112,14 +112,20 @@ class ZefyrController extends ChangeNotifier {
         // - selectionにlh, mh, bqが入っている &&
         // - 消す対象が改行 &&
         // - 最後が改行 &&
-        // - 現在カーソルのあたってる一個右のスタイルがlh, mh, bqではない
+        // - 現在カーソルのあたってる一個右のスタイルがlh, mh, bqではない || - documentの最後にカーソルがあたってる
         // ならもう一個改行を足すことで、`AutoExitBlockRule`を適用させてstyleを抜ける
-        final isInMhLhBq = getSelectionStyle().containsAny([NotusAttribute.largeHeading, NotusAttribute.middleHeading, NotusAttribute.bq]);
-        final selectionEnd = document.toPlainText()[selection.end];
-        final selectionRightIsNotInMhLhBq = !_getCursorRightStyle().containsAny([NotusAttribute.largeHeading, NotusAttribute.middleHeading, NotusAttribute.bq]);
-        if (isInMhLhBq && data == '\n' && selectionEnd == '\n' && selectionRightIsNotInMhLhBq) {
-          addNewlineAtSelectionEnd();
+        try {
+          final isInMhLhBq = getSelectionStyle().containsAny([NotusAttribute.largeHeading, NotusAttribute.middleHeading, NotusAttribute.bq]);
+          final selectionEnd = document.toPlainText()[selection.end];
+          final selectionRightIsNotInMhLhBq = !_getCursorRightStyle().containsAny([NotusAttribute.largeHeading, NotusAttribute.middleHeading, NotusAttribute.bq]);
+          final isOnDocumentTail = document.toPlainText().length - 1 == selection.end;
+          if (isInMhLhBq && data == '\n' && selectionEnd == '\n' && (selectionRightIsNotInMhLhBq || isOnDocumentTail)) {
+            addNewlineAtSelectionEnd();
+          }
+        } catch (e) {
+          print(e);
         }
+
       }
     }
 //    _lastChangeSource = ChangeSource.local;
