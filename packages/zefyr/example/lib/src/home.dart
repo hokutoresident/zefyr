@@ -27,6 +27,8 @@ class _HomePageState extends State<HomePage> {
   Settings _settings;
   var _isContainsUnsupportedFormat = false;
 
+  String _searchQuery = '';
+
   void _handleSettingsLoaded(Settings value) {
     setState(() {
       _settings = value;
@@ -169,6 +171,16 @@ class _HomePageState extends State<HomePage> {
     return Column(
       children: [
         ZefyrToolbar(children: [
+          ZIconButton(
+            size: 32,
+            icon: Icon(
+              Icons.search,
+              size: 18,
+            ),
+            onPressed: () {
+              _showSearchTextField(context);
+            },
+          ),
           ZIconButton(
             highlightElevation: 0,
             hoverElevation: 0,
@@ -323,6 +335,7 @@ class _HomePageState extends State<HomePage> {
                     // readOnly: true,
                     // padding: EdgeInsets.only(left: 16, right: 16),
                     onLaunchUrl: _launchUrl,
+                    searchQuery: _searchQuery,
                   ),
                 ),
         ),
@@ -383,5 +396,32 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  Future<void> _showSearchTextField(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('検索'),
+            content: TextFormField(
+              initialValue: _searchQuery,
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value;
+                });
+              },
+            ),
+            actions: <Widget>[
+              // ignore: deprecated_member_use
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('閉じる'),
+              ),
+            ],
+          );
+        });
   }
 }

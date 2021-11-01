@@ -23,6 +23,7 @@ class EditableTextBlock extends StatelessWidget {
   final TextRange Function(Node node) inputtingTextRange;
   final LookupResult lookupResult;
   final Map<int, int> indentLevelCounts;
+  final String searchQuery;
 
   EditableTextBlock({
     Key key,
@@ -39,6 +40,7 @@ class EditableTextBlock extends StatelessWidget {
     @required this.inputtingTextRange,
     @required this.lookupResult,
     @required this.indentLevelCounts,
+    @required this.searchQuery,
   })  : assert(hasFocus != null),
         assert(embedBuilder != null),
         super(key: key);
@@ -79,6 +81,7 @@ class EditableTextBlock extends StatelessWidget {
           embedBuilder: embedBuilder,
           inputtingTextRange: inputtingTextRange(line),
           lookupResult: lookupResult,
+          searchQuery: searchQuery,
         ),
         cursorController: cursorController,
         selection: selection,
