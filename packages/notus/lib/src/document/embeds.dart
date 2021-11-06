@@ -155,6 +155,14 @@ class EmbedImage extends BlockEmbed {
   
   final String source;
   final String ref;
+
+  factory EmbedImage.fromEmbedObj(EmbeddableObject obj) {
+    return EmbedImage(
+      obj.type,
+      source: obj.data['source'],
+      ref: obj.data['ref'],
+    );
+  }
 }
 
 class EmbedPdf extends BlockEmbed {
@@ -178,6 +186,16 @@ class EmbedPdf extends BlockEmbed {
   final String ref;
   final String name;
   final int size;
+
+  factory EmbedPdf.fromEmbedObj(EmbeddableObject obj) {
+    return EmbedPdf(
+      obj.type,
+      source: obj.data['source'],
+      ref: obj.data['ref'],
+      name: obj.data['name'],
+      size: obj.data['size'],
+    );
+  }
 }
 
 class EmbedTable extends BlockEmbed {
@@ -192,4 +210,14 @@ class EmbedTable extends BlockEmbed {
   
   final String style; 
   final List<Map<String, dynamic>> contents;
+
+  factory EmbedTable.fromEmbedObj(EmbeddableObject obj) {
+    return EmbedTable(
+      obj.type,
+      style: obj.data['style'],
+      contents: (obj.data['contents'] as List<dynamic>)
+        .map((e) => e as Map<String, dynamic>)
+        .toList(),
+    );
+  }
 }

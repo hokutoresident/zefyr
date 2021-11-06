@@ -276,7 +276,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       }
                       if (node.value.type == 'image') {
-                        final image = node.value as EmbedImage;
+                        final image = EmbedImage.fromEmbedObj(node.value);
                         return Image.network(
                           image.source,
                           fit: BoxFit.fitWidth,
@@ -289,7 +289,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       }
                       if (node.value.type == 'pdf') {
-                        final pdf = node.value as EmbedPdf;
+                        final pdf = EmbedPdf.fromEmbedObj(node.value);
                         final url = pdf.source;
                         final fileName = pdf.name;
                         final size = pdf.size;
@@ -299,7 +299,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       }
                       if (node.value.type == 'table') {
-                        final table = node.value as EmbedTable;
+                        final table = EmbedTable.fromEmbedObj(node.value);
                         final contents = table.contents;
                         return Container(
                           decoration: BoxDecoration(
