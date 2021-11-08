@@ -798,6 +798,10 @@ class RawEditorState extends EditorState
   void initState() {
     super.initState();
 
+    widget.controller.onChangeSearchFocus.stream.listen((_) {
+      showCaretOnScreen();
+    });
+
     _clipboardStatus?.addListener(_onChangedClipboardStatus);
 
     widget.controller.addListener(_didChangeTextEditingValue);

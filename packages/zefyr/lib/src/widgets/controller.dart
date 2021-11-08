@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/cupertino.dart';
@@ -32,6 +33,9 @@ class ZefyrController extends ChangeNotifier {
   /// It gets reset after each format action within the [document].
   NotusStyle get toggledStyles => _toggledStyles;
   NotusStyle _toggledStyles = NotusStyle();
+
+  int searchFocusIndex = 0;
+  final onChangeSearchFocus = StreamController<void>();
 
   /// Returns style of specified text range.
   ///
@@ -109,16 +113,29 @@ class ZefyrController extends ChangeNotifier {
             source: ChangeSource.local,
           );
         }
-        // selectionにlh, mh, bqが入っている && 消す対象が改行 && 最後が改行 ならもう一個改行を足すことで、`AutoExitBlockRule`を適用させてstyleを抜ける
+        // lh, mh, bq内の最後尾でも、一回の改行ではスタイルを抜けることができないため以下の処理をしてる
+        // - selectionにlh, mh, bqが入っている &&
+        // - 消す対象が改行 &&
+        // - 最後が改行 &&
+        // - 現在カーソルのあたってる一個右のスタイルがlh, mh, bqではない
+        // ならもう一個改行を足すことで、`AutoExitBlockRule`を適用させてstyleを抜ける
         final isInMhLhBq = getSelectionStyle().containsAny([NotusAttribute.largeHeading, NotusAttribute.middleHeading, NotusAttribute.bq]);
         final selectionEnd = document.toPlainText()[selection.end];
-        if (isInMhLhBq && data == '\n' && selectionEnd == '\n') {
+        final selectionRightIsNotInMhLhBq = !_getStyleRightOfCurrentCursor().containsAny([NotusAttribute.largeHeading, NotusAttribute.middleHeading, NotusAttribute.bq]);
+        if (isInMhLhBq && data == '\n' && selectionEnd == '\n' && selectionRightIsNotInMhLhBq) {
           addNewlineAtSelectionEnd();
         }
       }
     }
 //    _lastChangeSource = ChangeSource.local;
     notifyListeners();
+  }
+
+  // 現在カーソルのあたってる一個右のスタイル
+  NotusStyle _getStyleRightOfCurrentCursor() {
+    var lineStyle = document.collectStyle(_selection.end + 1, 0);
+    lineStyle = lineStyle.mergeAll(toggledStyles);
+    return lineStyle;
   }
 
   // カーソルの位置を一つ左にずらすべきか否か
@@ -203,6 +220,7 @@ class ZefyrController extends ChangeNotifier {
   @override
   void dispose() {
     document.close();
+    onChangeSearchFocus.close();
     super.dispose();
   }
 
@@ -319,4 +337,38 @@ class ZefyrController extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  List<Match> findSearchMatch(String searchQuery) {
+    if (searchQuery.isEmpty) return [];
+    return searchQuery.allMatches(document.toPlainText()).toList();
+  }
+
+  void selectNextSearchHit(String searchQuery) {
+    final total = findSearchMatch(searchQuery).length;
+    if (searchQuery.isEmpty) return;
+    if (searchFocusIndex >= total - 1) {
+      searchFocusIndex = 0;
+    } else {
+      searchFocusIndex++;
+    }
+    final searchFocus = findSearchMatch(searchQuery)[searchFocusIndex];
+    final next = TextSelection(baseOffset: searchFocus.end, extentOffset: searchFocus.end);
+    updateSelection(next, source: ChangeSource.local);
+    onChangeSearchFocus.sink.add({});
+  }
+
+  void selectPreviousSearchHit(String searchQuery) {
+    if (searchQuery.isEmpty) return;
+    if (searchFocusIndex <= 0) {
+      final total = findSearchMatch(searchQuery).length;
+      searchFocusIndex = total - 1;
+    } else {
+      searchFocusIndex--;
+    }
+    final searchFocus = findSearchMatch(searchQuery)[searchFocusIndex];
+    final next = TextSelection(baseOffset: searchFocus.end, extentOffset: searchFocus.end);
+    updateSelection(next, source: ChangeSource.local);
+    onChangeSearchFocus.sink.add({});
+  }
+
 }
