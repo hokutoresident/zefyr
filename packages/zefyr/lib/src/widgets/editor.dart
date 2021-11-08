@@ -798,7 +798,7 @@ class RawEditorState extends EditorState
   void initState() {
     super.initState();
 
-    widget.controller.focusStream.stream.listen((_) {
+    widget.controller.onChangeSearchFocus.stream.listen((_) {
       showCaretOnScreen();
     });
 

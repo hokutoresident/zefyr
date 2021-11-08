@@ -35,7 +35,7 @@ class ZefyrController extends ChangeNotifier {
   NotusStyle _toggledStyles = NotusStyle();
 
   int searchFocusIndex = 0;
-  final focusStream = StreamController<void>();
+  final onChangeSearchFocus = StreamController<void>();
 
   /// Returns style of specified text range.
   ///
@@ -207,7 +207,7 @@ class ZefyrController extends ChangeNotifier {
   @override
   void dispose() {
     document.close();
-    focusStream.close();
+    onChangeSearchFocus.close();
     super.dispose();
   }
 
@@ -341,7 +341,7 @@ class ZefyrController extends ChangeNotifier {
     final searchFocus = findSearchMatch(searchQuery)[searchFocusIndex];
     final next = TextSelection(baseOffset: searchFocus.end, extentOffset: searchFocus.end);
     updateSelection(next, source: ChangeSource.local);
-    focusStream.sink.add({});
+    onChangeSearchFocus.sink.add({});
   }
 
   void selectPreviousSearchHit(String searchQuery) {
@@ -355,7 +355,7 @@ class ZefyrController extends ChangeNotifier {
     final searchFocus = findSearchMatch(searchQuery)[searchFocusIndex];
     final next = TextSelection(baseOffset: searchFocus.end, extentOffset: searchFocus.end);
     updateSelection(next, source: ChangeSource.local);
-    focusStream.sink.add({});
+    onChangeSearchFocus.sink.add({});
   }
 
 }
