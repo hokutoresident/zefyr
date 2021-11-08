@@ -109,6 +109,7 @@ class ZefyrController extends ChangeNotifier {
             source: ChangeSource.local,
           );
         }
+        // lh, mh, bq内の最後尾でも、一回の改行ではスタイルを抜けることができないため以下の処理をしてる
         // - selectionにlh, mh, bqが入っている &&
         // - 消す対象が改行 &&
         // - 最後が改行 &&
