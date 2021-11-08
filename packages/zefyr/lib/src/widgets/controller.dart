@@ -117,7 +117,7 @@ class ZefyrController extends ChangeNotifier {
         // ならもう一個改行を足すことで、`AutoExitBlockRule`を適用させてstyleを抜ける
         final isInMhLhBq = getSelectionStyle().containsAny([NotusAttribute.largeHeading, NotusAttribute.middleHeading, NotusAttribute.bq]);
         final selectionEnd = document.toPlainText()[selection.end];
-        final selectionRightIsNotInMhLhBq = !_getCursorRightStyle().containsAny([NotusAttribute.largeHeading, NotusAttribute.middleHeading, NotusAttribute.bq]);
+        final selectionRightIsNotInMhLhBq = !_getStyleRightOfCurrentCursor().containsAny([NotusAttribute.largeHeading, NotusAttribute.middleHeading, NotusAttribute.bq]);
         if (isInMhLhBq && data == '\n' && selectionEnd == '\n' && selectionRightIsNotInMhLhBq) {
           addNewlineAtSelectionEnd();
         }
@@ -128,7 +128,7 @@ class ZefyrController extends ChangeNotifier {
   }
 
   // 現在カーソルのあたってる一個右のスタイル
-  NotusStyle _getCursorRightStyle() {
+  NotusStyle _getStyleRightOfCurrentCursor() {
     var lineStyle = document.collectStyle(_selection.end + 1, 0);
     lineStyle = lineStyle.mergeAll(toggledStyles);
     return lineStyle;
