@@ -57,8 +57,7 @@ class ZefyrController extends ChangeNotifier {
   /// in any cases as we don't want to keep it except on inserts.
   ///
   /// Optionally updates selection if provided.
-  void replaceText(int index, int length, Object data,
-      {TextSelection selection}) {
+  void replaceText(int index, int length, Object data, {TextSelection selection}) {
     assert(data is String || data is EmbeddableObject);
     Delta delta;
 
@@ -73,9 +72,7 @@ class ZefyrController extends ChangeNotifier {
           delta.length <= 2 && // covers single insert and a retain+insert
           delta.last.isInsert) {
         final dataLength = data is String ? data.length : 1;
-        final retainDelta = Delta()
-          ..retain(index)
-          ..retain(dataLength, toggledStyles.toJson());
+        final retainDelta = Delta()..retain(index)..retain(dataLength, toggledStyles.toJson());
         document.compose(retainDelta, ChangeSource.local);
       }
     }
@@ -114,18 +111,18 @@ class ZefyrController extends ChangeNotifier {
         // - 最後が改行 &&
         // - 現在カーソルのあたってる一個右のスタイルがlh, mh, bqではない || - documentの最後にカーソルがあたってる
         // ならもう一個改行を足すことで、`AutoExitBlockRule`を適用させてstyleを抜ける
-        try {
-          final isInMhLhBq = getSelectionStyle().containsAny([NotusAttribute.largeHeading, NotusAttribute.middleHeading, NotusAttribute.bq]);
-          final selectionEnd = document.toPlainText()[selection.end];
-          final selectionRightIsNotInMhLhBq = !_getCursorRightStyle().containsAny([NotusAttribute.largeHeading, NotusAttribute.middleHeading, NotusAttribute.bq]);
-          final isOnDocumentTail = document.toPlainText().length - 1 == selection.end;
-          if (isInMhLhBq && data == '\n' && selectionEnd == '\n' && (selectionRightIsNotInMhLhBq || isOnDocumentTail)) {
-            addNewlineAtSelectionEnd();
-          }
-        } catch (e) {
-          print(e);
+        final isInMhLhBq =
+            getSelectionStyle().containsAny([NotusAttribute.largeHeading, NotusAttribute.middleHeading, NotusAttribute.bq]);
+        final documentPlainText = document.toPlainText();
+        final lastIndex = selection.end;
+        if (documentPlainText.length <= lastIndex) return;
+        final selectionEnd = documentPlainText[lastIndex];
+        final selectionRightIsNotInMhLhBq =
+            !_getCursorRightStyle().containsAny([NotusAttribute.largeHeading, NotusAttribute.middleHeading, NotusAttribute.bq]);
+        final isOnDocumentTail = documentPlainText.length - 1 == lastIndex;
+        if (isInMhLhBq && data == '\n' && selectionEnd == '\n' && (selectionRightIsNotInMhLhBq || isOnDocumentTail)) {
+          addNewlineAtSelectionEnd();
         }
-
       }
     }
 //    _lastChangeSource = ChangeSource.local;
@@ -142,7 +139,7 @@ class ZefyrController extends ChangeNotifier {
   // カーソルの位置を一つ左にずらすべきか否か
   bool _shouldBackSelection(Object data) {
     // 削除中 && 文字列が(\n + BlockEmbed + \n)の時
-    if(data != '') return false;
+    if (data != '') return false;
     final blockEmbedPattern = '\n${EmbedNode.kObjectReplacementCharacter}\n';
     final isLastCaractor = selection.start >= document.toPlainText().length;
     final beforeText = document.toPlainText().substring(0, isLastCaractor ? selection.start : selection.start + 1);
@@ -165,8 +162,7 @@ class ZefyrController extends ChangeNotifier {
     // inserts data into the document (e.g. embeds).
     final base = change.transformPosition(_selection.baseOffset);
     final extent = change.transformPosition(_selection.extentOffset);
-    final adjustedSelection =
-        _selection.copyWith(baseOffset: base, extentOffset: extent);
+    final adjustedSelection = _selection.copyWith(baseOffset: base, extentOffset: extent);
     if (_selection != adjustedSelection) {
       _updateSelectionSilent(adjustedSelection, source: source);
     }
@@ -183,8 +179,7 @@ class ZefyrController extends ChangeNotifier {
   /// Updates selection with specified [value].
   ///
   /// [value] and [source] cannot be `null`.
-  void updateSelection(TextSelection value,
-      {ChangeSource source = ChangeSource.remote}) {
+  void updateSelection(TextSelection value, {ChangeSource source = ChangeSource.remote}) {
     _updateSelectionSilent(value, source: source);
     notifyListeners();
   }
@@ -196,8 +191,7 @@ class ZefyrController extends ChangeNotifier {
   /// can be composed without errors.
   ///
   /// If composing this change fails then this method throws [ComposeError].
-  void compose(Delta change,
-      {TextSelection selection, ChangeSource source = ChangeSource.remote}) {
+  void compose(Delta change, {TextSelection selection, ChangeSource source = ChangeSource.remote}) {
     if (change.isNotEmpty) {
       document.compose(change, source);
     }
@@ -206,10 +200,8 @@ class ZefyrController extends ChangeNotifier {
     } else {
       // Transform selection against the composed change and give priority to
       // current position (force: false).
-      final base =
-          change.transformPosition(_selection.baseOffset, force: false);
-      final extent =
-          change.transformPosition(_selection.extentOffset, force: false);
+      final base = change.transformPosition(_selection.baseOffset, force: false);
+      final extent = change.transformPosition(_selection.extentOffset, force: false);
       selection = _selection.copyWith(baseOffset: base, extentOffset: extent);
       if (_selection != selection) {
         _updateSelectionSilent(selection, source: source);
@@ -225,8 +217,7 @@ class ZefyrController extends ChangeNotifier {
   }
 
   /// Updates selection without triggering notifications to listeners.
-  void _updateSelectionSilent(TextSelection value,
-      {ChangeSource source = ChangeSource.remote}) {
+  void _updateSelectionSilent(TextSelection value, {ChangeSource source = ChangeSource.remote}) {
     assert(value != null && source != null);
     _selection = value;
 //    _lastChangeSource = source;
@@ -311,7 +302,7 @@ class ZefyrController extends ChangeNotifier {
 
   void undo() {
     final tup = document.undo();
-    if(tup.item1) {
+    if (tup.item1) {
       _handleHistoryChange(tup.item2);
     }
   }
@@ -328,7 +319,7 @@ class ZefyrController extends ChangeNotifier {
   bool get hasRedo => document.hasRedo;
 
   void _handleHistoryChange(int len) {
-    if(len != 0) {
+    if (len != 0) {
       updateSelection(
         TextSelection.collapsed(offset: selection.baseOffset + len),
         source: ChangeSource.local,
