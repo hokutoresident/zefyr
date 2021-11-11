@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:notus/notus.dart';
 
 import 'editable_text_line.dart';
@@ -182,7 +183,7 @@ class TextLine extends StatelessWidget {
       textStyle = textStyle.merge(theme.lists.style);
     }
 
-    return textStyle;
+    return textStyle.merge(TextStyle(fontFamilyFallback: [GoogleFonts.inter().fontFamily]),);
   }
 
   TextStyle _getInlineTextStyle(NotusStyle style, ZefyrThemeData theme) {
