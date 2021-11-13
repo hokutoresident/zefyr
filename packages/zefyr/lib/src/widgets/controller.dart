@@ -61,7 +61,8 @@ class ZefyrController extends ChangeNotifier {
   /// in any cases as we don't want to keep it except on inserts.
   ///
   /// Optionally updates selection if provided.
-  void replaceText(int index, int length, Object data, {TextSelection selection}) {
+  void replaceText(int index, int length, Object data,
+      {TextSelection selection}) {
     assert(data is String || data is EmbeddableObject);
     Delta delta;
 
@@ -76,7 +77,9 @@ class ZefyrController extends ChangeNotifier {
           delta.length <= 2 && // covers single insert and a retain+insert
           delta.last.isInsert) {
         final dataLength = data is String ? data.length : 1;
-        final retainDelta = Delta()..retain(index)..retain(dataLength, toggledStyles.toJson());
+        final retainDelta = Delta()
+          ..retain(index)
+          ..retain(dataLength, toggledStyles.toJson());
         document.compose(retainDelta, ChangeSource.local);
       }
     }
@@ -167,7 +170,8 @@ class ZefyrController extends ChangeNotifier {
     // inserts data into the document (e.g. embeds).
     final base = change.transformPosition(_selection.baseOffset);
     final extent = change.transformPosition(_selection.extentOffset);
-    final adjustedSelection = _selection.copyWith(baseOffset: base, extentOffset: extent);
+    final adjustedSelection =
+        _selection.copyWith(baseOffset: base, extentOffset: extent);
     if (_selection != adjustedSelection) {
       _updateSelectionSilent(adjustedSelection, source: source);
     }
@@ -184,7 +188,8 @@ class ZefyrController extends ChangeNotifier {
   /// Updates selection with specified [value].
   ///
   /// [value] and [source] cannot be `null`.
-  void updateSelection(TextSelection value, {ChangeSource source = ChangeSource.remote}) {
+  void updateSelection(TextSelection value,
+      {ChangeSource source = ChangeSource.remote}) {
     _updateSelectionSilent(value, source: source);
     notifyListeners();
   }
@@ -196,7 +201,8 @@ class ZefyrController extends ChangeNotifier {
   /// can be composed without errors.
   ///
   /// If composing this change fails then this method throws [ComposeError].
-  void compose(Delta change, {TextSelection selection, ChangeSource source = ChangeSource.remote}) {
+  void compose(Delta change,
+      {TextSelection selection, ChangeSource source = ChangeSource.remote}) {
     if (change.isNotEmpty) {
       document.compose(change, source);
     }
@@ -205,8 +211,10 @@ class ZefyrController extends ChangeNotifier {
     } else {
       // Transform selection against the composed change and give priority to
       // current position (force: false).
-      final base = change.transformPosition(_selection.baseOffset, force: false);
-      final extent = change.transformPosition(_selection.extentOffset, force: false);
+      final base =
+          change.transformPosition(_selection.baseOffset, force: false);
+      final extent =
+          change.transformPosition(_selection.extentOffset, force: false);
       selection = _selection.copyWith(baseOffset: base, extentOffset: extent);
       if (_selection != selection) {
         _updateSelectionSilent(selection, source: source);
@@ -223,7 +231,8 @@ class ZefyrController extends ChangeNotifier {
   }
 
   /// Updates selection without triggering notifications to listeners.
-  void _updateSelectionSilent(TextSelection value, {ChangeSource source = ChangeSource.remote}) {
+  void _updateSelectionSilent(TextSelection value,
+      {ChangeSource source = ChangeSource.remote}) {
     assert(value != null && source != null);
     _selection = value;
 //    _lastChangeSource = source;
