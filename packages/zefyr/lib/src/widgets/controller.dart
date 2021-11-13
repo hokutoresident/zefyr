@@ -343,6 +343,14 @@ class ZefyrController extends ChangeNotifier {
     return searchQuery.allMatches(document.toPlainText()).toList();
   }
 
+  void selectFirstSearchHit(String searchQuery) {
+    if (searchQuery.isEmpty) return;
+    final searchFocus = findSearchMatch(searchQuery)[0];
+    final next = TextSelection(baseOffset: searchFocus.end, extentOffset: searchFocus.end);
+    updateSelection(next, source: ChangeSource.local);
+    focusStream.sink.add({});
+  }
+
   void selectNextSearchHit(String searchQuery) {
     final total = findSearchMatch(searchQuery).length;
     if (searchQuery.isEmpty) return;
