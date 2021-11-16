@@ -117,12 +117,18 @@ class ZefyrController extends ChangeNotifier {
         // - selectionにlh, mh, bqが入っている &&
         // - 消す対象が改行 &&
         // - 最後が改行 &&
-        // - 現在カーソルのあたってる一個右のスタイルがlh, mh, bqではない
+        // - 現在カーソルのあたってる一個右のスタイルがlh, mh, bqではない || - documentの最後にカーソルがあたってる
         // ならもう一個改行を足すことで、`AutoExitBlockRule`を適用させてstyleを抜ける
-        final isInMhLhBq = getSelectionStyle().containsAny([NotusAttribute.largeHeading, NotusAttribute.middleHeading, NotusAttribute.bq]);
-        final selectionEnd = document.toPlainText()[selection.end];
-        final selectionRightIsNotInMhLhBq = !_getStyleRightOfCurrentCursor().containsAny([NotusAttribute.largeHeading, NotusAttribute.middleHeading, NotusAttribute.bq]);
-        if (isInMhLhBq && data == '\n' && selectionEnd == '\n' && selectionRightIsNotInMhLhBq) {
+        final isInMhLhBq =
+            getSelectionStyle().containsAny([NotusAttribute.largeHeading, NotusAttribute.middleHeading, NotusAttribute.bq]);
+        final documentPlainText = document.toPlainText();
+        final lastIndex = selection.end;
+        if (documentPlainText.length <= lastIndex) return;
+        final selectionEnd = documentPlainText[lastIndex];
+        final selectionRightIsNotInMhLhBq = !_getStyleRightOfCurrentCursor()
+            .containsAny([NotusAttribute.largeHeading, NotusAttribute.middleHeading, NotusAttribute.bq]);
+        final isOnDocumentTail = documentPlainText.length - 1 == lastIndex;
+        if (isInMhLhBq && data == '\n' && selectionEnd == '\n' && (selectionRightIsNotInMhLhBq || isOnDocumentTail)) {
           addNewlineAtSelectionEnd();
         }
       }
@@ -141,7 +147,7 @@ class ZefyrController extends ChangeNotifier {
   // カーソルの位置を一つ左にずらすべきか否か
   bool _shouldBackSelection(Object data) {
     // 削除中 && 文字列が(\n + BlockEmbed + \n)の時
-    if(data != '') return false;
+    if (data != '') return false;
     final blockEmbedPattern = '\n${EmbedNode.kObjectReplacementCharacter}\n';
     final isLastCaractor = selection.start >= document.toPlainText().length;
     final beforeText = document.toPlainText().substring(0, isLastCaractor ? selection.start : selection.start + 1);
@@ -311,7 +317,7 @@ class ZefyrController extends ChangeNotifier {
 
   void undo() {
     final tup = document.undo();
-    if(tup.item1) {
+    if (tup.item1) {
       _handleHistoryChange(tup.item2);
     }
   }
@@ -328,7 +334,7 @@ class ZefyrController extends ChangeNotifier {
   bool get hasRedo => document.hasRedo;
 
   void _handleHistoryChange(int len) {
-    if(len != 0) {
+    if (len != 0) {
       updateSelection(
         TextSelection.collapsed(offset: selection.baseOffset + len),
         source: ChangeSource.local,
@@ -378,5 +384,4 @@ class ZefyrController extends ChangeNotifier {
     updateSelection(next, source: ChangeSource.local);
     onChangeSearchFocus.sink.add({});
   }
-
 }
