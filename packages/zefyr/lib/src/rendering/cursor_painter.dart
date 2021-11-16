@@ -18,23 +18,21 @@ class CursorPainter {
   final double devicePixelRatio;
 
   CursorPainter({
-    @required this.editable,
-    @required this.style,
-    @required this.cursorPrototype,
-    @required this.effectiveColor,
-    @required this.devicePixelRatio,
+    required this.editable,
+    required this.style,
+    required this.cursorPrototype,
+    required this.effectiveColor,
+    required this.devicePixelRatio,
   });
 
   /// Paints cursor on [canvas] at specified [textPosition].
   void paint(Canvas canvas, Offset effectiveOffset, TextPosition textPosition) {
-    assert(cursorPrototype != null);
-
     final paint = Paint()..color = effectiveColor;
     final Offset caretOffset =
         editable.getOffsetForCaret(textPosition, cursorPrototype) +
             effectiveOffset;
     Rect caretRect = cursorPrototype.shift(caretOffset);
-    if (style.offset != null) caretRect = caretRect.shift(style.offset);
+    if (style.offset != null) caretRect = caretRect.shift(style.offset!);
 
     if (caretRect.left < 0.0) {
       // For iOS the cursor may get clipped by the scroll view when
@@ -45,7 +43,7 @@ class CursorPainter {
       caretRect = caretRect.shift(Offset(-caretRect.left, 0.0));
     }
 
-    final double caretHeight = editable.getFullHeightForCaret(textPosition);
+    final double? caretHeight = editable.getFullHeightForCaret(textPosition);
     if (caretHeight != null) {
       switch (defaultTargetPlatform) {
         case TargetPlatform.iOS:
@@ -76,19 +74,18 @@ class CursorPainter {
       }
     }
 
-    caretRect = caretRect.shift(
-        _getPixelPerfectCursorOffset(editable, caretRect, devicePixelRatio));
+    caretRect = caretRect.shift(_getPixelPerfectCursorOffset(caretRect));
 
     if (style.radius == null) {
       canvas.drawRect(caretRect, paint);
     } else {
-      final RRect caretRRect = RRect.fromRectAndRadius(caretRect, style.radius);
+      final RRect caretRRect =
+          RRect.fromRectAndRadius(caretRect, style.radius!);
       canvas.drawRRect(caretRRect, paint);
     }
   }
 
-  Offset _getPixelPerfectCursorOffset(
-      RenderContentProxyBox editable, Rect caretRect, double devicePixelRatio) {
+  Offset _getPixelPerfectCursorOffset(Rect caretRect) {
     final Offset caretPosition = editable.localToGlobal(caretRect.topLeft);
     final double pixelMultiple = 1.0 / devicePixelRatio;
     final double pixelPerfectOffsetX = caretPosition.dx.isFinite

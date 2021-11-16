@@ -7,7 +7,7 @@ import 'editable_box.dart';
 /// Computes necessary editing metrics based on the dimensions of the child
 /// render box.
 class RenderEmbedProxy extends RenderProxyBox implements RenderContentProxyBox {
-  RenderEmbedProxy({RenderBox child}) : super(child);
+  RenderEmbedProxy({RenderBox? child}) : super(child);
 
   @override
   List<TextBox> getBoxesForSelection(TextSelection selection) {
@@ -31,7 +31,9 @@ class RenderEmbedProxy extends RenderProxyBox implements RenderContentProxyBox {
   @override
   Offset getOffsetForCaret(TextPosition position, Rect caretPrototype) {
     assert(position.offset == 0 || position.offset == 1);
-    return (position.offset == 0) ? Offset.zero : Offset(size.width, 0.0);
+    return (position.offset == 0)
+        ? Offset.zero
+        : Offset(size.width - caretPrototype.width, 0.0);
   }
 
   @override

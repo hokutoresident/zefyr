@@ -18,15 +18,18 @@ void main() {
         )
         ..insert('\n');
       var doc = NotusDocument.fromDelta(delta);
-      var theme = ZefyrThemeData(link: TextStyle(color: Colors.red));
+      final BuildContext context = tester.element(find.byType(Container));
+      var theme = ZefyrThemeData.fallback(context)
+          .copyWith(link: TextStyle(color: Colors.red));
       var editor = EditorSandBox(tester: tester, document: doc, theme: theme);
       await editor.pumpAndTap();
       // await tester.pumpAndSettle();
       final p = tester.widget(find.byType(RichText).first) as RichText;
       final text = p.text as TextSpan;
-      expect(text.children.first.style.color, Colors.red);
+      expect(text.children!.first.style!.color, Colors.red);
     });
 
+<<<<<<< HEAD
     // TODO: findRenderObject()でそもそもクラッシュしてる
     // testWidgets('collapses selection when unfocused', (tester) async {
     //   final editor = EditorSandBox(tester: tester);
@@ -37,6 +40,17 @@ void main() {
     //   // expect(editor.findSelectionHandle(), findsNothing);
     //   expect(editor.selection, TextSelection.collapsed(offset: 3));
     // });
+=======
+    testWidgets('collapses selection when unfocused', (tester) async {
+      final editor = EditorSandBox(tester: tester);
+      await editor.pumpAndTap();
+      await editor.updateSelection(base: 0, extent: 3);
+      // expect(editor.findSelectionHandle(), findsNWidgets(2));
+      await editor.unfocus();
+      // expect(editor.findSelectionHandle(), findsNothing);
+      expect(editor.selection, TextSelection.collapsed(offset: 3));
+    }, skip: true);
+>>>>>>> 43b3755ab6885cefbc829d9c75a26c7f68263d0a
 
     testWidgets('toggle enabled state', (tester) async {
       final editor = EditorSandBox(tester: tester);

@@ -4,8 +4,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+<<<<<<< HEAD
 import 'package:google_fonts/google_fonts.dart';
 import 'package:meta/meta.dart';
+=======
+>>>>>>> 43b3755ab6885cefbc829d9c75a26c7f68263d0a
 
 /// Applies a Zefyr editor theme to descendant widgets.
 ///
@@ -24,12 +27,10 @@ class ZefyrTheme extends InheritedWidget {
   ///
   /// The [data] and [child] arguments must not be null.
   ZefyrTheme({
-    Key key,
-    @required this.data,
-    @required Widget child,
-  })  : assert(data != null),
-        assert(child != null),
-        super(key: key, child: child);
+    Key? key,
+    required this.data,
+    required Widget child,
+  }) : super(key: key, child: child);
 
   @override
   bool updateShouldNotify(ZefyrTheme oldWidget) {
@@ -42,12 +43,12 @@ class ZefyrTheme extends InheritedWidget {
   /// Returns `null` if there is no [ZefyrTheme] in the given build context
   /// and [nullOk] is set to `true`. If [nullOk] is set to `false` (default)
   /// then this method asserts.
-  static ZefyrThemeData of(BuildContext context, {bool nullOk = false}) {
+  static ZefyrThemeData? of(BuildContext context, {bool nullOk = false}) {
     final widget = context.dependOnInheritedWidgetOfExactType<ZefyrTheme>();
     if (widget == null && nullOk) return null;
     assert(widget != null,
         '$ZefyrTheme.of() called with a context that does not contain a ZefyrEditor.');
-    return widget.data;
+    return widget!.data;
   }
 }
 
@@ -57,6 +58,7 @@ class VerticalSpacing {
   final double bottom;
 
   const VerticalSpacing({this.top = 0.0, this.bottom = 0.0});
+
   const VerticalSpacing.zero()
       : top = 0.0,
         bottom = 0.0;
@@ -75,11 +77,16 @@ class ZefyrThemeData {
   /// Style of strikethrough text.
   final TextStyle strikethrough;
 
+<<<<<<< HEAD
   /// Style of textColor text.
   final TextStyle textColor;
 
   /// Style of marker text.
   final TextStyle marker;
+=======
+  /// Theme of inline code.
+  final InlineCodeThemeData inlineCode;
+>>>>>>> 43b3755ab6885cefbc829d9c75a26c7f68263d0a
 
   /// Style of links in text.
   final TextStyle link;
@@ -114,6 +121,7 @@ class ZefyrThemeData {
   final double indentWidth;
 
   ZefyrThemeData({
+<<<<<<< HEAD
     this.bold,
     this.italic,
     this.underline,
@@ -132,6 +140,21 @@ class ZefyrThemeData {
     this.largeHeading,
     this.middleHeading,
     this.indentWidth,
+=======
+    required this.bold,
+    required this.italic,
+    required this.underline,
+    required this.strikethrough,
+    required this.inlineCode,
+    required this.link,
+    required this.paragraph,
+    required this.heading1,
+    required this.heading2,
+    required this.heading3,
+    required this.lists,
+    required this.quote,
+    required this.code,
+>>>>>>> 43b3755ab6885cefbc829d9c75a26c7f68263d0a
   });
 
   factory ZefyrThemeData.fallback(BuildContext context) {
@@ -139,6 +162,7 @@ class ZefyrThemeData {
     final defaultStyle = DefaultTextStyle.of(context);
 
     return ZefyrThemeData(
+<<<<<<< HEAD
       bold: GoogleFonts.notoSans(fontWeight: FontWeight.bold),
       italic: GoogleFonts.notoSans(fontStyle: FontStyle.italic),
       underline: GoogleFonts.notoSans(decoration: TextDecoration.underline),
@@ -150,6 +174,17 @@ class ZefyrThemeData {
         decorationThickness: 10,
       ),
       link: GoogleFonts.notoSans(
+=======
+      bold: TextStyle(fontWeight: FontWeight.bold),
+      italic: TextStyle(fontStyle: FontStyle.italic),
+      underline: TextStyle(decoration: TextDecoration.underline),
+      strikethrough: TextStyle(decoration: TextDecoration.lineThrough),
+      inlineCode: InlineCodeThemeData(TextStyle(
+        color: Colors.blue.shade900.withOpacity(0.9),
+        fontFamily: fontFamily,
+      )),
+      link: TextStyle(
+>>>>>>> 43b3755ab6885cefbc829d9c75a26c7f68263d0a
         color: themeData.accentColor,
         decoration: TextDecoration.underline,
       ),
@@ -165,26 +200,43 @@ class ZefyrThemeData {
       ),
       heading1: TextBlockTheme(
         style: defaultStyle.style.copyWith(
+<<<<<<< HEAD
           fontSize: 24.0,
           color: Colors.black,
+=======
+          fontSize: 34.0,
+          color: defaultStyle.style.color?.withOpacity(0.70),
+>>>>>>> 43b3755ab6885cefbc829d9c75a26c7f68263d0a
           height: 1.15,
           fontWeight: FontWeight.w700,
         ),
         spacing: VerticalSpacing(top: 40.0, bottom: 0.0),
       ),
       heading2: TextBlockTheme(
+<<<<<<< HEAD
         style: GoogleFonts.notoSans(
           fontSize: 20.0,
           color: Colors.black,
+=======
+        style: TextStyle(
+          fontSize: 24.0,
+          color: defaultStyle.style.color?.withOpacity(0.70),
+>>>>>>> 43b3755ab6885cefbc829d9c75a26c7f68263d0a
           height: 1.15,
           fontWeight: FontWeight.w700,
         ),
         spacing: VerticalSpacing(top: 32.0, bottom: 0.0),
       ),
       heading3: TextBlockTheme(
+<<<<<<< HEAD
         style: GoogleFonts.notoSans(
           fontSize: 18.0,
           color: Colors.black,
+=======
+        style: TextStyle(
+          fontSize: 20.0,
+          color: defaultStyle.style.color?.withOpacity(0.70),
+>>>>>>> 43b3755ab6885cefbc829d9c75a26c7f68263d0a
           height: 1.25,
           fontWeight: FontWeight.w700,
         ),
@@ -209,6 +261,7 @@ class ZefyrThemeData {
         lineSpacing: VerticalSpacing(bottom: 8),
       ),
       quote: TextBlockTheme(
+<<<<<<< HEAD
         style: GoogleFonts.notoSans(
           fontWeight: FontWeight.w400,
           fontSize: 16.0,
@@ -222,6 +275,14 @@ class ZefyrThemeData {
               width: 4,
               color: Color(0xffCCCCCC),
             ),
+=======
+        style: TextStyle(color: baseStyle.color?.withOpacity(0.6)),
+        spacing: baseSpacing,
+        lineSpacing: VerticalSpacing(top: 6, bottom: 2),
+        decoration: BoxDecoration(
+          border: BorderDirectional(
+            start: BorderSide(width: 4, color: Colors.grey.shade300),
+>>>>>>> 43b3755ab6885cefbc829d9c75a26c7f68263d0a
           ),
         ),
       ),
@@ -269,6 +330,7 @@ class ZefyrThemeData {
   }
 
   ZefyrThemeData copyWith({
+<<<<<<< HEAD
     TextStyle bold,
     TextStyle italic,
     TextStyle underline,
@@ -284,14 +346,33 @@ class ZefyrThemeData {
     TextBlockTheme quote,
     TextBlockTheme code,
     double indentWidth,
+=======
+    TextStyle? bold,
+    TextStyle? italic,
+    TextStyle? underline,
+    TextStyle? strikethrough,
+    TextStyle? link,
+    InlineCodeThemeData? inlineCode,
+    TextBlockTheme? paragraph,
+    TextBlockTheme? heading1,
+    TextBlockTheme? heading2,
+    TextBlockTheme? heading3,
+    TextBlockTheme? lists,
+    TextBlockTheme? quote,
+    TextBlockTheme? code,
+>>>>>>> 43b3755ab6885cefbc829d9c75a26c7f68263d0a
   }) {
     return ZefyrThemeData(
       bold: bold ?? this.bold,
       italic: italic ?? this.italic,
       underline: underline ?? this.underline,
       strikethrough: strikethrough ?? this.strikethrough,
+<<<<<<< HEAD
       textColor: textColor ?? this.textColor,
       marker: marker ?? this.marker,
+=======
+      inlineCode: inlineCode ?? this.inlineCode,
+>>>>>>> 43b3755ab6885cefbc829d9c75a26c7f68263d0a
       link: link ?? this.link,
       paragraph: paragraph ?? this.paragraph,
       heading1: heading1 ?? this.heading1,
@@ -310,8 +391,12 @@ class ZefyrThemeData {
       italic: other.italic,
       underline: other.underline,
       strikethrough: other.strikethrough,
+<<<<<<< HEAD
       textColor: other.textColor,
       marker: other.marker,
+=======
+      inlineCode: other.inlineCode,
+>>>>>>> 43b3755ab6885cefbc829d9c75a26c7f68263d0a
       link: other.link,
       paragraph: other.paragraph,
       heading1: other.heading1,
@@ -342,12 +427,21 @@ class TextBlockTheme {
   ///
   /// Decoration, if present, is painted in the content area, excluding
   /// any [spacing].
-  final BoxDecoration decoration;
+  final BoxDecoration? decoration;
 
   TextBlockTheme({
-    @required this.style,
-    @required this.spacing,
+    required this.style,
+    required this.spacing,
     this.lineSpacing = const VerticalSpacing.zero(),
     this.decoration,
   });
+}
+
+/// Theme data for inline code.
+class InlineCodeThemeData {
+
+  /// Base text style for an inline code.
+  final TextStyle style;
+
+  InlineCodeThemeData(this.style);
 }

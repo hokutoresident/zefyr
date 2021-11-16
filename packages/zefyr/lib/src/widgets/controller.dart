@@ -12,12 +12,16 @@ List<String> _insertionToggleableStyleKeys = [
   NotusAttribute.italic.key,
   NotusAttribute.underline.key,
   NotusAttribute.strikethrough.key,
+<<<<<<< HEAD
   NotusAttribute.textColor.key,
   NotusAttribute.marker.key,
+=======
+  NotusAttribute.inlineCode.key,
+>>>>>>> 43b3755ab6885cefbc829d9c75a26c7f68263d0a
 ];
 
 class ZefyrController extends ChangeNotifier {
-  ZefyrController([NotusDocument document])
+  ZefyrController([NotusDocument? document])
       : document = document ?? NotusDocument(),
         _selection = TextSelection.collapsed(offset: 0);
 
@@ -62,17 +66,16 @@ class ZefyrController extends ChangeNotifier {
   ///
   /// Optionally updates selection if provided.
   void replaceText(int index, int length, Object data,
-      {TextSelection selection}) {
+      {TextSelection? selection}) {
     assert(data is String || data is EmbeddableObject);
-    Delta delta;
+    Delta? delta;
 
     final isDataNotEmpty = data is String ? data.isNotEmpty : true;
     if (length > 0 || isDataNotEmpty) {
       delta = document.replace(index, length, data);
       // If the delta is an insert operation and we have toggled
       // some styles, then apply those styles to the inserted text.
-      if (delta != null &&
-          toggledStyles.isNotEmpty &&
+      if (toggledStyles.isNotEmpty &&
           delta.isNotEmpty &&
           delta.length <= 2 && // covers single insert and a retain+insert
           delta.last.isInsert) {
@@ -196,7 +199,7 @@ class ZefyrController extends ChangeNotifier {
   ///
   /// If composing this change fails then this method throws [ComposeError].
   void compose(Delta change,
-      {TextSelection selection, ChangeSource source = ChangeSource.remote}) {
+      {TextSelection? selection, ChangeSource source = ChangeSource.remote}) {
     if (change.isNotEmpty) {
       document.compose(change, source);
     }
@@ -227,7 +230,6 @@ class ZefyrController extends ChangeNotifier {
   /// Updates selection without triggering notifications to listeners.
   void _updateSelectionSilent(TextSelection value,
       {ChangeSource source = ChangeSource.remote}) {
-    assert(value != null && source != null);
     _selection = value;
 //    _lastChangeSource = source;
     _ensureSelectionBeforeLastBreak();

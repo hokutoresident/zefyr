@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:notus/notus.dart';
 
 import 'controller.dart';
 import 'editor.dart';
@@ -15,14 +16,14 @@ class ZefyrField extends StatefulWidget {
   ///
   /// Can be `null` in which case this editor creates its own instance to
   /// control keyboard focus.
-  final FocusNode focusNode;
+  final FocusNode? focusNode;
 
   /// The [ScrollController] to use when vertically scrolling the contents.
   ///
   /// If `null` then this editor instantiates a new ScrollController.
   ///
   /// Scroll controller must not be `null` if [scrollable] is set to `false`.
-  final ScrollController scrollController;
+  final ScrollController? scrollController;
 
   /// Whether this editor should create a scrollable container for its content.
   ///
@@ -80,13 +81,13 @@ class ZefyrField extends StatefulWidget {
   ///
   /// This only has effect if [scrollable] is set to `true` and [expands] is
   /// set to `false`.
-  final double minHeight;
+  final double? minHeight;
 
   /// The maximum height to be occupied by this editor.
   ///
   /// This only has effect if [scrollable] is set to `true` and [expands] is
   /// set to `false`.
-  final double maxHeight;
+  final double? maxHeight;
 
   /// Whether this editor's height will be sized to fill its parent.
   ///
@@ -124,14 +125,14 @@ class ZefyrField extends StatefulWidget {
   /// If not specified, it will behave according to the current platform.
   ///
   /// See [Scrollable.physics].
-  final ScrollPhysics scrollPhysics;
+  final ScrollPhysics? scrollPhysics;
 
   /// Callback to invoke when user wants to launch a URL.
-  final ValueChanged<String> onLaunchUrl;
+  final ValueChanged<String?>? onLaunchUrl;
 
-  final InputDecoration decoration;
+  final InputDecoration? decoration;
 
-  final Widget toolbar;
+  final Widget? toolbar;
 
   /// Builder function for embeddable objects.
   ///
@@ -139,8 +140,8 @@ class ZefyrField extends StatefulWidget {
   final ZefyrEmbedBuilder embedBuilder;
 
   ZefyrField({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
     this.focusNode,
     this.scrollController,
     this.scrollable = true,
@@ -166,27 +167,28 @@ class ZefyrField extends StatefulWidget {
 }
 
 class _ZefyrFieldState extends State<ZefyrField> {
-  bool _focused;
+  late bool _focused;
+
   void _editorFocusChanged() {
     setState(() {
-      _focused = widget.focusNode.hasFocus;
+      _focused = widget.focusNode!.hasFocus;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _focused = widget.focusNode.hasFocus;
-    widget.focusNode.addListener(_editorFocusChanged);
+    _focused = widget.focusNode!.hasFocus;
+    widget.focusNode!.addListener(_editorFocusChanged);
   }
 
   @override
   void didUpdateWidget(covariant ZefyrField oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.focusNode != oldWidget.focusNode) {
-      oldWidget.focusNode.removeListener(_editorFocusChanged);
-      widget.focusNode.addListener(_editorFocusChanged);
-      _focused = widget.focusNode.hasFocus;
+      oldWidget.focusNode!.removeListener(_editorFocusChanged);
+      widget.focusNode!.addListener(_editorFocusChanged);
+      _focused = widget.focusNode!.hasFocus;
     }
   }
 
@@ -217,11 +219,11 @@ class _ZefyrFieldState extends State<ZefyrField> {
         children: [
           child,
           Visibility(
-            child: widget.toolbar,
             visible: _focused,
             maintainSize: true,
             maintainAnimation: true,
             maintainState: true,
+            child: widget.toolbar!,
           ),
         ],
       );
@@ -229,18 +231,28 @@ class _ZefyrFieldState extends State<ZefyrField> {
 
     return AnimatedBuilder(
       animation:
-          Listenable.merge(<Listenable>[widget.focusNode, widget.controller]),
-      builder: (BuildContext context, Widget child) {
+          Listenable.merge(<Listenable?>[widget.focusNode, widget.controller]),
+      builder: (BuildContext context, Widget? child) {
         return InputDecorator(
           decoration: _getEffectiveDecoration(),
-          isFocused: widget.focusNode.hasFocus,
-          // TODO: Document should be considered empty of it has single empty line with no styles applied
-          isEmpty: widget.controller.document.length == 1,
+          isFocused: widget.focusNode!.hasFocus,
+          isEmpty: _isEmpty,
           child: child,
         );
       },
       child: child,
     );
+  }
+
+  /// Field is considered empty when the document consists of
+  /// a single empty line of text with no styles applied to it
+  bool get _isEmpty {
+    if (widget.controller.document.length > 1) {
+      return false;
+    }
+    final node = widget.controller.document.root.first;
+    assert(node is StyledNode);
+    return (node as StyledNode).style.isEmpty;
   }
 
   InputDecoration _getEffectiveDecoration() {

@@ -11,6 +11,12 @@ void main() {
       var attr = attrs.get(NotusAttribute.block);
       expect(attr, NotusAttribute.ul);
     });
+
+    test('get unset', () {
+      var attrs = NotusStyle.fromJson(<String, dynamic>{'b': null});
+      var attr = attrs.get(NotusAttribute.bold);
+      expect(attr, NotusAttribute.bold.unset);
+    });
   });
 
   group('$NotusStyle inlines', () {

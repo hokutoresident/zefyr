@@ -1,3 +1,19 @@
+## 1.0.0-dev.8.0
+
+* Fixed an issue with composing unset attributes with null-safety (#514)
+
+## 1.0.0-dev.7.0
+
+* Fixed remaining usage of annotations from the meta package
+
+## 1.0.0-dev.6.0
+
+* Removed dependency on meta package
+
+## 1.0.0-dev.5.0
+
+* Added support for null-safety (#510)
+
 ## 1.0.0-dev.4.0
 
 * Added support for underline and strikethrough inline styles (#429).
