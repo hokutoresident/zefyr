@@ -1,5 +1,5 @@
 {
   "editor.formatOnSave": false,
   "dart.allowAnalytics": false,
-  "dart.enableSdkFormatter": false
+  "dart.enableSdkFormatter": false,
 }
