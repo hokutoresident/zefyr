@@ -11,21 +11,21 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  collection: ^1.14.6
-  url_launcher: ^6.0.0
-  quill_delta: ^2.0.0
+  collection: ^1.15.0
+  url_launcher: ^6.0.13
+  quill_delta: ^3.0.0-nullsafety.2
   notus:
     git:
       url: https://github.com/hokutoresident/zefyr
       ref: feature/zefyr-null-safety
       path: packages/notus
-  meta: ^1.1.0
-  quiver_hashcode: ^2.0.0
-  characters: ^1.0.0
+  meta: ^1.7.0
+  quiver_hashcode: ^3.0.0+1
+  characters: ^1.1.0
   google_fonts: ^2.1.0
   validators: ^3.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  pedantic: ^1.0.0
+  pedantic: ^1.11.1
