@@ -183,7 +183,7 @@ class TextLine extends StatelessWidget {
       textStyle = textStyle.merge(theme.lists.style);
     }
 
-    return textStyle.merge(TextStyle(fontFamilyFallback: [GoogleFonts.inter().fontFamily]),);
+    return textStyle.merge(TextStyle(fontFamilyFallback: [GoogleFonts.nanumGothicTextTheme().bodyText1.fontFamily, GoogleFonts.inter().fontFamily]),);
   }
 
   TextStyle _getInlineTextStyle(NotusStyle style, ZefyrThemeData theme) {
