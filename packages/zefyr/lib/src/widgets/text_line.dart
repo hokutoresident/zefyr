@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notus/notus.dart';
@@ -184,11 +185,7 @@ class TextLine extends StatelessWidget {
     }
 
     return textStyle.merge(TextStyle(
-      fontFamily: GoogleFonts.notoSans(locale: const Locale('ja')).fontFamily, 
-      fontFamilyFallback: [
-        GoogleFonts.nanumGothicTextTheme().bodyText1.fontFamily, 
-        GoogleFonts.inter().fontFamily,
-      ]
+      fontFamilyFallback: [GoogleFonts.workSans().fontFamily],
     ));
   }
 
