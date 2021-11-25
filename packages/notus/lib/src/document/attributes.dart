@@ -2,8 +2,12 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 import 'package:collection/collection.dart';
+<<<<<<< HEAD
 import 'package:notus/src/exceptions/unsupported_format.dart';
 import 'package:quiver_hashcode/hashcode.dart';
+=======
+import 'package:quiver/core.dart';
+>>>>>>> 3842ca0150178ce0428c059e516f8a05ebc1d2c6
 
 /// Scope of a style attribute, defines context in which an attribute can be
 /// applied.
@@ -43,7 +47,7 @@ abstract class NotusAttributeBuilder<T> implements NotusAttributeKey<T> {
   final String key;
   final NotusAttributeScope scope;
   NotusAttribute<T> get unset => NotusAttribute<T>._(key, scope, null);
-  NotusAttribute<T> withValue(T value) =>
+  NotusAttribute<T> withValue(T? value) =>
       NotusAttribute<T>._(key, scope, value);
 }
 
@@ -73,18 +77,27 @@ abstract class NotusAttributeBuilder<T> implements NotusAttributeKey<T> {
 ///   * [NotusAttribute.link]
 ///   * [NotusAttribute.heading]
 ///   * [NotusAttribute.block]
+///   * [NotusAttribute.direction]
 class NotusAttribute<T> implements NotusAttributeBuilder<T> {
   static final Map<String, NotusAttributeBuilder> _registry = {
     NotusAttribute.bold.key: NotusAttribute.bold,
     NotusAttribute.italic.key: NotusAttribute.italic,
     NotusAttribute.underline.key: NotusAttribute.underline,
     NotusAttribute.strikethrough.key: NotusAttribute.strikethrough,
+<<<<<<< HEAD
     NotusAttribute.textColor.key: NotusAttribute.textColor,
     NotusAttribute.marker.key: NotusAttribute.marker,
     NotusAttribute.link.key: NotusAttribute.link,
     NotusAttribute.heading.key: NotusAttribute.heading,
     NotusAttribute.block.key: NotusAttribute.block,
     NotusAttribute.indent.key: NotusAttribute.indent,
+=======
+    NotusAttribute.inlineCode.key: NotusAttribute.inlineCode,
+    NotusAttribute.link.key: NotusAttribute.link,
+    NotusAttribute.heading.key: NotusAttribute.heading,
+    NotusAttribute.block.key: NotusAttribute.block,
+    NotusAttribute.direction.key: NotusAttribute.direction,
+>>>>>>> 3842ca0150178ce0428c059e516f8a05ebc1d2c6
   };
 
   // Inline attributes
@@ -101,11 +114,16 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
   /// Strikethrough style attribute.
   static const strikethrough = _StrikethroughAttribute();
 
+<<<<<<< HEAD
   /// text color style attribute.
   static const textColor = _TextColorAttribute();
 
   /// marker style attribute.
   static const marker = _MarkerAttribute();
+=======
+  /// Inline code style attribute.
+  static const inlineCode = _InlineCodeAttribute();
+>>>>>>> 3842ca0150178ce0428c059e516f8a05ebc1d2c6
 
   /// Link style attribute.
   // ignore: const_eval_throws_exception
@@ -151,6 +169,7 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
   /// Alias for [NotusAttribute.block.code].
   static NotusAttribute<String> get code => block.code;
 
+<<<<<<< HEAD
   static NotusAttribute<String> get largeHeading => block.largeHeading;
 
   static NotusAttribute<String> get middleHeading => block.middleHeading;
@@ -174,6 +193,13 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
     NotusAttribute.block.quote,
     NotusAttribute.block.code,
   ];
+=======
+  /// Direction attribute
+  static const direction = DirectionAttributeBuilder._();
+
+  /// Alias for [NotusAttribute.direction.rtl].
+  static NotusAttribute<String> get rtl => direction.rtl;
+>>>>>>> 3842ca0150178ce0428c059e516f8a05ebc1d2c6
 
   static NotusAttribute _fromKeyValue(String key, dynamic value) {
     if (!_registry.containsKey(key)) {
@@ -185,8 +211,12 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
     if (key == NotusAttribute.heading.key && !_validHeadingValues.contains(value) && value != null) {
       throw UnsupportedFormatException('NotusAttribute has a unsupported heading value. heading: $value');
     }
+<<<<<<< HEAD
 
     final builder = _registry[key];
+=======
+    final builder = _registry[key]!;
+>>>>>>> 3842ca0150178ce0428c059e516f8a05ebc1d2c6
     return builder.withValue(value);
   }
 
@@ -208,7 +238,7 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
   ///
   /// See also [unset], [NotusStyle.merge] and [NotusStyle.put]
   /// for details.
-  final T value;
+  final T? value;
 
   /// Returns special "unset" version of this attribute.
   ///
@@ -226,13 +256,14 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
   bool get isInline => scope == NotusAttributeScope.inline;
 
   @override
-  NotusAttribute<T> withValue(T value) =>
+  NotusAttribute<T> withValue(T? value) =>
       NotusAttribute<T>._(key, scope, value);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! NotusAttribute<T>) return false;
+<<<<<<< HEAD
     NotusAttribute<T> typedOther = other;
 
     // NOTE: 色付きスタイルのhexの差は無視する
@@ -244,6 +275,9 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
     return key == typedOther.key &&
         scope == typedOther.scope &&
         value == typedOther.value;
+=======
+    return key == other.key && scope == other.scope && value == other.value;
+>>>>>>> 3842ca0150178ce0428c059e516f8a05ebc1d2c6
   }
 
   @override
@@ -261,7 +295,7 @@ class NotusStyle {
 
   final Map<String, NotusAttribute> _data;
 
-  static NotusStyle fromJson(Map<String, dynamic> data) {
+  static NotusStyle fromJson(Map<String, dynamic>? data) {
     if (data == null) return NotusStyle();
 
     final result = data.map((String key, dynamic value) {
@@ -298,7 +332,6 @@ class NotusStyle {
   /// Returns `true` if this set contains attribute with the same value as
   /// [attribute].
   bool containsSame(NotusAttribute attribute) {
-    assert(attribute != null);
     return get<dynamic>(attribute) == attribute;
   }
 
@@ -308,11 +341,11 @@ class NotusStyle {
   }
 
   /// Returns value of specified attribute [key] in this set.
-  T value<T>(NotusAttributeKey<T> key) => get(key).value;
+  T? value<T>(NotusAttributeKey<T> key) => get(key)?.value;
 
   /// Returns [NotusAttribute] from this set by specified [key].
-  NotusAttribute<T> get<T>(NotusAttributeKey<T> key) =>
-      _data[key.key] as NotusAttribute<T>;
+  NotusAttribute<T>? get<T>(NotusAttributeKey<T> key) =>
+      _data[key.key] as NotusAttribute<T>?;
 
   /// Returns collection of all attribute keys in this set.
   Iterable<String> get keys => _data.keys;
@@ -364,7 +397,7 @@ class NotusStyle {
   }
 
   /// Returns JSON-serializable representation of this style.
-  Map<String, dynamic> toJson() => _data.isEmpty
+  Map<String, dynamic>? toJson() => _data.isEmpty
       ? null
       : _data.map<String, dynamic>((String _, NotusAttribute value) =>
           MapEntry<String, dynamic>(value.key, value.value));
@@ -373,9 +406,8 @@ class NotusStyle {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! NotusStyle) return false;
-    NotusStyle typedOther = other;
     final eq = const MapEquality<String, NotusAttribute>();
-    return eq.equals(_data, typedOther._data);
+    return eq.equals(_data, other._data);
   }
 
   @override
@@ -409,6 +441,7 @@ class _StrikethroughAttribute extends NotusAttribute<bool> {
       : super._('s', NotusAttributeScope.inline, true);
 }
 
+<<<<<<< HEAD
 /// Applies text color style to a text segment.
 class _TextColorAttribute extends NotusAttribute<String> {
   const _TextColorAttribute()
@@ -419,6 +452,11 @@ class _TextColorAttribute extends NotusAttribute<String> {
 class _MarkerAttribute extends NotusAttribute<String> {
   const _MarkerAttribute()
       : super._('m', NotusAttributeScope.inline, '1A0099DD');
+=======
+/// Applies code style to a text segment.
+class _InlineCodeAttribute extends NotusAttribute<bool> {
+  const _InlineCodeAttribute() : super._('c', NotusAttributeScope.inline, true);
+>>>>>>> 3842ca0150178ce0428c059e516f8a05ebc1d2c6
 }
 
 /// Builder for link attribute values.
@@ -497,4 +535,12 @@ class IndentAttributeBuilder extends NotusAttributeBuilder<int> {
 
   NotusAttribute<int> fromInt(int value) =>
       NotusAttribute<int>._(key, scope, value);
+}
+
+class DirectionAttributeBuilder extends NotusAttributeBuilder<String> {
+  static const _kDirection = 'direction';
+  const DirectionAttributeBuilder._()
+      : super._(_kDirection, NotusAttributeScope.line);
+
+  NotusAttribute<String> get rtl => NotusAttribute<String>._(key, scope, 'rtl');
 }

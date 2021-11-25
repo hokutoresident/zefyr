@@ -16,13 +16,13 @@ import 'theme.dart';
 class TextLine extends StatelessWidget {
   /// Line of text represented by this widget.
   final LineNode node;
-  final TextDirection textDirection;
   final ZefyrEmbedBuilder embedBuilder;
   final TextRange inputtingTextRange;
   final LookupResult lookupResult;
   final String searchQuery;
 
   const TextLine({
+<<<<<<< HEAD
     Key key,
     @required this.node,
     this.textDirection,
@@ -33,6 +33,12 @@ class TextLine extends StatelessWidget {
   })  : assert(node != null),
         assert(embedBuilder != null),
         super(key: key);
+=======
+    Key? key,
+    required this.node,
+    required this.embedBuilder,
+  }) : super(key: key);
+>>>>>>> 3842ca0150178ce0428c059e516f8a05ebc1d2c6
 
   @override
   Widget build(BuildContext context) {
@@ -44,15 +50,17 @@ class TextLine extends StatelessWidget {
     }
     final text = buildText(context, node);
     final strutStyle =
-        StrutStyle.fromTextStyle(text.style, forceStrutHeight: true);
+        StrutStyle.fromTextStyle(text.style!, forceStrutHeight: true);
     return RichTextProxy(
-      textStyle: text.style,
-      textDirection: textDirection,
+      textStyle: text.style!,
       strutStyle: strutStyle,
+<<<<<<< HEAD
       locale: Localizations.localeOf(context),
+=======
+      locale: Localizations.maybeLocaleOf(context),
+>>>>>>> 3842ca0150178ce0428c059e516f8a05ebc1d2c6
       child: RichText(
         text: buildText(context, node),
-        textDirection: textDirection,
         strutStyle: strutStyle,
         textScaleFactor: MediaQuery.textScaleFactorOf(context),
       ),
@@ -64,8 +72,12 @@ class TextLine extends StatelessWidget {
   }
 
   TextSpan buildText(BuildContext context, LineNode node) {
+<<<<<<< HEAD
     final theme = ZefyrTheme.of(context);
     final textNodeLookup = lookupResult != null && lookupResult.offset <= node.length ? node.lookup(lookupResult.offset) : null;
+=======
+    final theme = ZefyrTheme.of(context)!;
+>>>>>>> 3842ca0150178ce0428c059e516f8a05ebc1d2c6
     final children = node.children
         .map((node) => _segmentToTextSpan(node, theme, _textNodeInputtingRange(textNodeLookup, node)))
         .toList(growable: false);
@@ -75,6 +87,7 @@ class TextLine extends StatelessWidget {
     );
   }
 
+<<<<<<< HEAD
   List<TextSpan> _highlightTextSpans(String source, String query, TextStyle style) {
     if (query == null || query.isEmpty || !source.toLowerCase().contains(query.toLowerCase())) {
       return [ TextSpan(text: source) ];
@@ -111,6 +124,10 @@ class TextLine extends StatelessWidget {
 
   TextSpan _segmentToTextSpan(Node node, ZefyrThemeData theme, TextRange textRange) {
     final TextNode segment = node;
+=======
+  TextSpan _segmentToTextSpan(Node node, ZefyrThemeData theme) {
+    final segment = node as TextNode;
+>>>>>>> 3842ca0150178ce0428c059e516f8a05ebc1d2c6
     final attrs = segment.style;
 
     try {
@@ -206,6 +223,7 @@ class TextLine extends StatelessWidget {
     if (style.contains(NotusAttribute.strikethrough)) {
       result = _mergeTextStyleWithDecoration(result, theme.strikethrough);
     }
+<<<<<<< HEAD
     if (style.contains(NotusAttribute.textColor)) {
       result = _mergeTextStyleWithDecoration(result, theme.textColor);
     }
@@ -213,16 +231,21 @@ class TextLine extends StatelessWidget {
       result = _mergeTextStyleWithDecoration(result, theme.marker);
     }
 
+=======
+    if (style.contains(NotusAttribute.inlineCode)) {
+      result = _mergeTextStyleWithDecoration(result, theme.inlineCode.style);
+    }
+>>>>>>> 3842ca0150178ce0428c059e516f8a05ebc1d2c6
     return result;
   }
 
-  TextStyle _mergeTextStyleWithDecoration(TextStyle a, TextStyle b) {
+  TextStyle _mergeTextStyleWithDecoration(TextStyle a, TextStyle? b) {
     var decorations = <TextDecoration>[];
     if (a.decoration != null) {
-      decorations.add(a.decoration);
+      decorations.add(a.decoration!);
     }
-    if (b.decoration != null) {
-      decorations.add(b.decoration);
+    if (b?.decoration != null) {
+      decorations.add(b!.decoration!);
     }
     return a.merge(b).apply(decoration: TextDecoration.combine(decorations));
   }

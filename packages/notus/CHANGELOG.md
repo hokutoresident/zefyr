@@ -1,3 +1,26 @@
+## 1.0.0-dev.9.0
+
+* Added `inlineCode` style ([#534](https://github.com/memspace/zefyr/pull/534)), by @Amir-P
+* Added text `direction` style for controlling RTL layouts ([#438](https://github.com/memspace/zefyr/pull/438)), by @Amir-P
+* Added Markdown block style shortcuts ([#558](https://github.com/memspace/zefyr/pull/558)), by @cgestes
+* Various internal linter fixes
+
+## 1.0.0-dev.8.0
+
+* Fixed an issue with composing unset attributes with null-safety (#514)
+
+## 1.0.0-dev.7.0
+
+* Fixed remaining usage of annotations from the meta package
+
+## 1.0.0-dev.6.0
+
+* Removed dependency on meta package
+
+## 1.0.0-dev.5.0
+
+* Added support for null-safety (#510)
+
 ## 1.0.0-dev.4.0
 
 * Added support for underline and strikethrough inline styles (#429).

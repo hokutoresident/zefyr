@@ -8,11 +8,17 @@ import 'editor.dart';
 
 mixin RawEditorStateTextInputClientMixin on EditorState
     implements TextInputClient {
+<<<<<<< HEAD
   final List<TextEditingValue> _sentRemoteValues = [];
   TextInputConnection _textInputConnection;
   TextEditingValue _lastKnownRemoteTextEditingValue;
   TextEditingValue _inputtingTextEditingValue;
   TextEditingValue get inputtingTextEditingValue => _inputtingTextEditingValue;
+=======
+  final List<TextEditingValue?> _sentRemoteValues = [];
+  TextInputConnection? _textInputConnection;
+  TextEditingValue? _lastKnownRemoteTextEditingValue;
+>>>>>>> 3842ca0150178ce0428c059e516f8a05ebc1d2c6
 
   /// Whether to create an input connection with the platform for text editing
   /// or not.
@@ -37,14 +43,15 @@ mixin RawEditorStateTextInputClientMixin on EditorState
 
   /// Returns `true` if there is open input connection.
   bool get hasConnection =>
-      _textInputConnection != null && _textInputConnection.attached;
+      _textInputConnection != null && _textInputConnection!.attached;
 
   /// Opens or closes input connection based on the current state of
   /// [focusNode] and [value].
   void openOrCloseConnection() {
-    if (widget.focusNode.hasFocus && widget.focusNode.consumeKeyboardToken()) {
+    if (effectiveFocusNode.hasFocus &&
+        effectiveFocusNode.consumeKeyboardToken()) {
       openConnectionIfNeeded();
-    } else if (!widget.focusNode.hasFocus) {
+    } else if (!effectiveFocusNode.hasFocus) {
       closeConnectionIfNeeded();
     }
   }
@@ -70,17 +77,17 @@ mixin RawEditorStateTextInputClientMixin on EditorState
       );
 
       _updateSizeAndTransform();
-      _textInputConnection.setEditingState(_lastKnownRemoteTextEditingValue);
+      _textInputConnection!.setEditingState(_lastKnownRemoteTextEditingValue!);
 
       _sentRemoteValues.add(_lastKnownRemoteTextEditingValue);
     }
-    _textInputConnection.show();
+    _textInputConnection!.show();
   }
 
   /// Closes input connection if it's currently open. Otherwise does nothing.
   void closeConnectionIfNeeded() {
     if (hasConnection) {
-      _textInputConnection.close();
+      _textInputConnection!.close();
       _textInputConnection = null;
       _lastKnownRemoteTextEditingValue = null;
       _sentRemoteValues.clear();
@@ -103,14 +110,14 @@ mixin RawEditorStateTextInputClientMixin on EditorState
     // It is important to prevent excessive remote updates as it can cause
     // race conditions.
     final actualValue = value.copyWith(
-      composing: _lastKnownRemoteTextEditingValue.composing,
+      composing: _lastKnownRemoteTextEditingValue!.composing,
     );
 
     if (actualValue == _lastKnownRemoteTextEditingValue) return;
 
-    final shouldRemember = value.text != _lastKnownRemoteTextEditingValue.text;
+    final shouldRemember = value.text != _lastKnownRemoteTextEditingValue!.text;
     _lastKnownRemoteTextEditingValue = actualValue;
-    _textInputConnection.setEditingState(actualValue);
+    _textInputConnection!.setEditingState(actualValue);
     if (shouldRemember) {
       // Only keep track if text changed (selection changes are not relevant)
       _sentRemoteValues.add(actualValue);
@@ -119,12 +126,12 @@ mixin RawEditorStateTextInputClientMixin on EditorState
 
   // Start TextInputClient implementation
   @override
-  TextEditingValue get currentTextEditingValue =>
+  TextEditingValue? get currentTextEditingValue =>
       _lastKnownRemoteTextEditingValue;
 
   // autofill is not needed
   @override
-  AutofillScope /*?*/ get currentAutofillScope => null;
+  AutofillScope? get currentAutofillScope => null;
 
   @override
   void updateEditingValue(TextEditingValue value) {
@@ -156,12 +163,28 @@ mixin RawEditorStateTextInputClientMixin on EditorState
       return;
     }
 
+<<<<<<< HEAD
+=======
+    // Check if only composing range changed.
+    if (_lastKnownRemoteTextEditingValue!.text == value.text &&
+        _lastKnownRemoteTextEditingValue!.selection == value.selection) {
+      // This update only modifies composing range. Since we don't keep track
+      // of composing range in Zefyr we just need to update last known value
+      // here.
+      // This check fixes an issue on Android when it sends
+      // composing updates separately from regular changes for text and
+      // selection.
+      _lastKnownRemoteTextEditingValue = value;
+      return;
+    }
+
+>>>>>>> 3842ca0150178ce0428c059e516f8a05ebc1d2c6
     // Note Flutter (unintentionally?) silences errors occurred during
     // text input update, so we have to report it ourselves.
     // For more details see https://github.com/flutter/flutter/issues/19191
     // TODO: remove try-catch when/if Flutter stops silencing these errors.
     try {
-      final effectiveLastKnownValue = _lastKnownRemoteTextEditingValue;
+      final effectiveLastKnownValue = _lastKnownRemoteTextEditingValue!;
       _lastKnownRemoteTextEditingValue = value;
       final oldText = effectiveLastKnownValue.text;
       final text = value.text;
@@ -203,7 +226,7 @@ mixin RawEditorStateTextInputClientMixin on EditorState
   @override
   void connectionClosed() {
     if (hasConnection) {
-      _textInputConnection.connectionClosedReceived();
+      _textInputConnection!.connectionClosedReceived();
       _textInputConnection = null;
       _lastKnownRemoteTextEditingValue = null;
       _sentRemoteValues.clear();
@@ -214,10 +237,13 @@ mixin RawEditorStateTextInputClientMixin on EditorState
     if (hasConnection) {
       // Asking for renderEditor.size here can cause errors if layout hasn't
       // occurred yet. So we schedule a post frame callback instead.
-      SchedulerBinding.instance.addPostFrameCallback((Duration _) {
+      SchedulerBinding.instance!.addPostFrameCallback((Duration _) {
+        if (!mounted) {
+          return;
+        }
         final size = renderEditor.size;
         final transform = renderEditor.getTransformTo(null);
-        _textInputConnection.setEditableSizeAndTransform(size, transform);
+        _textInputConnection!.setEditableSizeAndTransform(size, transform);
       });
     }
   }

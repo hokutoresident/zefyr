@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notus/notus.dart';
 
+import '../rendering/editable_box.dart';
 import '../rendering/editable_text_line.dart';
 import 'cursor.dart';
 import 'text_line.dart';
@@ -14,7 +15,7 @@ class EditableTextLine extends RenderObjectWidget {
   final LineNode node;
 
   /// A widget to display before the body.
-  final Widget leading;
+  final Widget? leading;
 
   /// The primary rich text content of this widget. Usually [TextLine] widget.
   final Widget body;
@@ -28,7 +29,6 @@ class EditableTextLine extends RenderObjectWidget {
   /// Space above and below [body] of this text line.
   final VerticalSpacing spacing;
 
-  final TextDirection textDirection;
   final CursorController cursorController;
   final TextSelection selection;
   final Color selectionColor;
@@ -38,28 +38,24 @@ class EditableTextLine extends RenderObjectWidget {
 
   /// Creates an editable line of text.
   EditableTextLine({
-    Key key,
-    @required this.node,
+    Key? key,
+    required this.node,
+    required this.body,
+    required this.cursorController,
+    required this.selection,
+    required this.selectionColor,
+    required this.enableInteractiveSelection,
+    required this.hasFocus,
+    required this.devicePixelRatio,
     this.leading,
+<<<<<<< HEAD
     @required this.body,
     this.bottom,
+=======
+>>>>>>> 3842ca0150178ce0428c059e516f8a05ebc1d2c6
     this.indentWidth = 0.0,
     this.spacing = const VerticalSpacing(),
-    @required this.textDirection,
-    @required this.cursorController,
-    @required this.selection,
-    @required this.selectionColor,
-    @required this.enableInteractiveSelection,
-    @required this.hasFocus,
-    @required this.devicePixelRatio,
-  })  : assert(node != null),
-        assert(indentWidth != null),
-        assert(cursorController != null),
-        assert(selection != null),
-        assert(selectionColor != null),
-        assert(enableInteractiveSelection != null),
-        assert(hasFocus != null),
-        super(key: key);
+  }) : super(key: key);
 
   EdgeInsetsGeometry get _padding => EdgeInsetsDirectional.only(
         start: indentWidth,
@@ -75,7 +71,7 @@ class EditableTextLine extends RenderObjectWidget {
     return RenderEditableTextLine(
       node: node,
       padding: _padding,
-      textDirection: textDirection,
+      textDirection: Directionality.of(context),
       cursorController: cursorController,
       selection: selection,
       selectionColor: selectionColor,
@@ -90,7 +86,7 @@ class EditableTextLine extends RenderObjectWidget {
       BuildContext context, covariant RenderEditableTextLine renderObject) {
     renderObject.node = node;
     renderObject.padding = _padding;
-    renderObject.textDirection = textDirection;
+    renderObject.textDirection = Directionality.of(context);
     renderObject.cursorController = cursorController;
     renderObject.selection = selection;
     renderObject.selectionColor = selectionColor;
@@ -126,7 +122,7 @@ class _RenderEditableTextLineElement extends RenderObjectElement {
     super.forgetChild(child);
   }
 
-  void _mountChild(Widget widget, TextLineSlot slot) {
+  void _mountChild(Widget? widget, TextLineSlot slot) {
     final oldChild = slotToChild[slot];
     final newChild = updateChild(oldChild, widget, slot);
     if (oldChild != null) {
@@ -138,14 +134,14 @@ class _RenderEditableTextLineElement extends RenderObjectElement {
   }
 
   @override
-  void mount(Element parent, dynamic newSlot) {
+  void mount(Element? parent, dynamic newSlot) {
     super.mount(parent, newSlot);
     _mountChild(widget.bottom, TextLineSlot.bottom);
     _mountChild(widget.leading, TextLineSlot.leading);
     _mountChild(widget.body, TextLineSlot.body);
   }
 
-  void _updateChild(Widget widget, TextLineSlot slot) {
+  void _updateChild(Widget? widget, TextLineSlot slot) {
     final oldChild = slotToChild[slot];
     final newChild = updateChild(oldChild, widget, slot);
     if (oldChild != null) {
@@ -165,13 +161,15 @@ class _RenderEditableTextLineElement extends RenderObjectElement {
     _updateChild(widget.body, TextLineSlot.body);
   }
 
-  void _updateRenderObject(RenderObject child, TextLineSlot slot) {
+  void _updateRenderObject(RenderObject? child, TextLineSlot? slot) {
     switch (slot) {
       case TextLineSlot.leading:
-        renderObject.leading = child as RenderBox;
+        renderObject.leading = child as RenderBox?;
         break;
       case TextLineSlot.body:
-        renderObject.body = child as RenderBox;
+        renderObject.body = child as RenderContentProxyBox?;
+        break;
+      case null:
         break;
       case TextLineSlot.bottom:
         renderObject.bottom = child as RenderBox;
@@ -180,16 +178,16 @@ class _RenderEditableTextLineElement extends RenderObjectElement {
   }
 
   @override
-  void insertRenderObjectChild(RenderObject child, TextLineSlot slot) {
+  void insertRenderObjectChild(RenderObject child, TextLineSlot? slot) {
     assert(child is RenderBox);
     _updateRenderObject(child, slot);
     assert(renderObject.children.keys.contains(slot));
   }
 
   @override
-  void removeRenderObjectChild(RenderObject child, TextLineSlot slot) {
+  void removeRenderObjectChild(RenderObject child, TextLineSlot? slot) {
     assert(child is RenderBox);
-    assert(renderObject.children[slot] == child);
+    assert(renderObject.children[slot!] == child);
     _updateRenderObject(null, slot);
     assert(!renderObject.children.keys.contains(slot));
   }
