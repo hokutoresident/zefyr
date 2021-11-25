@@ -26,19 +26,11 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   image_picker: ^0.6.1
-<<<<<<< HEAD
-  url_launcher: ^6.0.0
-  adaptive_breakpoints: ^0.0.3
-  google_fonts: ^2.1.0
-  file: ^6.1.1
-  path_provider: ^2.0.0
-=======
   url_launcher: ^6.0.9
   adaptive_breakpoints: ^0.0.3
   google_fonts: ^1.1.0
   file: ^6.1.2
   path_provider: ^2.0.2
->>>>>>> 3842ca0150178ce0428c059e516f8a05ebc1d2c6
   zefyr:
     path: ../
 
@@ -49,10 +41,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-<<<<<<< HEAD
-=======
   flutter_lints: ^1.0.4
->>>>>>> 3842ca0150178ce0428c059e516f8a05ebc1d2c6
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
