@@ -1,13 +1,9 @@
 import 'dart:collection';
 
 import 'package:collection/collection.dart';
-<<<<<<< HEAD
-import 'package:meta/meta.dart';
 import 'package:notus/src/exceptions/unsupported_format.dart';
-import 'package:quiver_hashcode/hashcode.dart';
-=======
+
 import 'package:quiver/core.dart';
->>>>>>> 3842ca0150178ce0428c059e516f8a05ebc1d2c6
 
 const _dataEquality = DeepCollectionEquality();
 
@@ -137,7 +133,7 @@ class BlockEmbed extends EmbeddableObject {
     );
   }
 
-  static BlockEmbed table({String style, List<Map<String, dynamic>> contents}) {
+  static BlockEmbed table({required String style, required  List<Map<String, dynamic>> contents}) {
     return BlockEmbed(
       'table',
       data: {
