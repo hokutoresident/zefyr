@@ -219,18 +219,18 @@ class AutoExitBlockRule extends InsertRule {
 class AutoExitIndentRule extends InsertRule {
   const AutoExitIndentRule();
 
-  bool isEmptyLine(Operation before, Operation after) {
-    final textBefore = before?.data is String ? before.data as String : '';
+  bool isEmptyLine(Operation? before, Operation after) {
+    final textBefore = before?.data is String ? before!.data as String : '';
     final textAfter = after.data is String ? after.data as String : '';
     return (before == null || textBefore.endsWith('\n')) &&
         textAfter.startsWith('\n');
   }
 
   @override
-  Delta apply(Delta document, int index, Object data) {
+  Delta? apply(Delta document, int index, Object data) {
     if (data is! String) return null;
 
-    final text = data as String;
+    final text = data;
     if (text != '\n') return null;
 
     final iter = DeltaIterator(document);
@@ -238,12 +238,12 @@ class AutoExitIndentRule extends InsertRule {
     final target = iter.next();
 
     final isInIndent = target.isNotPlain &&
-        target.attributes.containsKey(NotusAttribute.indent.key);
+        (target.attributes?.containsKey(NotusAttribute.indent.key) ?? false);
 
     if (!isInIndent) return null;
     if (!isEmptyLine(previous, target)) return null;
 
-    final indentStyle = target.attributes[NotusAttribute.indent.key];
+    final indentStyle = target.attributes![NotusAttribute.indent.key];
     final targetText = target.value as String;
 
     if (targetText.length > 1) {
@@ -252,8 +252,8 @@ class AutoExitIndentRule extends InsertRule {
 
     final nextNewline = _findNextNewline(iter);
     if (nextNewline.isNotEmpty &&
-        nextNewline.op.attributes != null &&
-        nextNewline.op.attributes[NotusAttribute.indent.key] == indentStyle) {
+        nextNewline.op?.attributes != null &&
+        nextNewline.op?.attributes![NotusAttribute.indent.key] == indentStyle) {
       return null;
     }
 
@@ -478,13 +478,7 @@ class InsertEmbedsRule extends InsertRule {
   const InsertEmbedsRule();
 
   @override
-<<<<<<< HEAD
-  Delta apply(Delta document, int index, Object data) {
-    // TODO: imageとか入れた時にここに入ってくる
-
-=======
   Delta? apply(Delta document, int index, Object data) {
->>>>>>> 3842ca0150178ce0428c059e516f8a05ebc1d2c6
     // We are only interested in embeddable objects.
     if (data is String) return null;
 
