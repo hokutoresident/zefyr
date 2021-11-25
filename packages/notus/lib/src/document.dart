@@ -322,11 +322,7 @@ class NotusDocument {
         ? data
         : data is EmbeddableObject
             ? data
-<<<<<<< HEAD
-            : EmbeddableObject.fromJson(data);
-=======
             : EmbeddableObject.fromJson(data as Map<String, dynamic>);
->>>>>>> 3842ca0150178ce0428c059e516f8a05ebc1d2c6
   }
 
   /// Loads [document] delta into this document.
