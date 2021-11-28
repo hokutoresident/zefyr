@@ -253,6 +253,27 @@ class RenderEditor extends RenderEditableContainerBox
     return null;
   }
 
+  double getSelectionOffset(double viewportHeight, double scrollOffset, double offsetInViewport, TextSelection selection) {
+    const cursorMargin = 8.0;
+    final endpoints = getEndpointsForSelection(selection);
+    if (endpoints.length != 1) return null;
+    final child = childAtPosition(selection.extent);
+    final childPosition = TextPosition(offset: selection.extentOffset - child.node.offset);
+    final caretTop = endpoints.single.point.dy -
+        child.preferredLineHeight(childPosition) -
+        cursorMargin +
+        offsetInViewport;
+    final caretBottom = endpoints.single.point.dy + cursorMargin + offsetInViewport;
+    double dy;
+    if (caretTop < scrollOffset) {
+      dy = caretTop;
+    } else if (caretBottom > scrollOffset + viewportHeight) {
+      dy = caretBottom - viewportHeight;
+    }
+    if (dy == null) return null;
+    return math.max(dy, 0.0);
+  }
+
   @override
   List<TextSelectionPoint> getEndpointsForSelection(TextSelection selection) {
     assert(constraints != null);

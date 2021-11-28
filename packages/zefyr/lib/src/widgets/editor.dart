@@ -806,7 +806,7 @@ class RawEditorState extends EditorState
     super.initState();
 
     widget.controller.onChangeSearchFocus.stream.listen((_) {
-      showCaretOnScreen();
+      _showSearchFocus();
     });
 
     _clipboardStatus?.addListener(_onChangedClipboardStatus);
@@ -1068,6 +1068,26 @@ class RawEditorState extends EditorState
         );
       }
     });
+  }
+
+  void _showSearchFocus() async {
+    await Future.delayed(const Duration(milliseconds: 100));
+    final viewport = RenderAbstractViewport.of(renderEditor);
+    if (viewport == null || widget.searchFocus == null) return;
+    final editorOffset = renderEditor.localToGlobal(Offset(0.0, 0.0), ancestor: viewport);
+    final offsetInViewport = _scrollController.offset + editorOffset.dy;
+    final offset = renderEditor.getSelectionOffset(
+      _scrollController.position.viewportDimension,
+      _scrollController.offset,
+      offsetInViewport,
+      TextSelection(baseOffset: widget.searchFocus.end, extentOffset: widget.searchFocus.end),
+    );
+    if (offset == null) return;
+    await _scrollController.animateTo(
+      offset,
+      duration: _caretAnimationDuration,
+      curve: _caretAnimationCurve,
+    );
   }
 
   void _onChangedClipboardStatus() {

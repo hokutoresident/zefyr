@@ -349,14 +349,8 @@ class ZefyrController extends ChangeNotifier {
     return searchQuery.allMatches(document.toPlainText()).toList();
   }
 
-
-
   void selectFirstSearchHit(String searchQuery) {
-    // if (searchQuery.isEmpty) return;
-    // final searchFocus = findSearchMatch(searchQuery)[0];
-    // final next = TextSelection(baseOffset: searchFocus.end, extentOffset: searchFocus.end);
-    // updateSelection(next, source: ChangeSource.local);
-    // onChangeSearchFocus.sink.add({});
+    onChangeSearchFocus.sink.add({});
   }
 
   void selectNextSearchHit(String searchQuery) {
@@ -367,10 +361,7 @@ class ZefyrController extends ChangeNotifier {
     } else {
       searchFocusIndex++;
     }
-    // final searchFocus = findSearchMatch(searchQuery)[searchFocusIndex];
-    // final next = TextSelection(baseOffset: searchFocus.end, extentOffset: searchFocus.end);
-    // updateSelection(next, source: ChangeSource.local);
-    // onChangeSearchFocus.sink.add({});
+    onChangeSearchFocus.sink.add({});
   }
 
   void selectPreviousSearchHit(String searchQuery) {
@@ -381,9 +372,6 @@ class ZefyrController extends ChangeNotifier {
     } else {
       searchFocusIndex--;
     }
-    // final searchFocus = findSearchMatch(searchQuery)[searchFocusIndex];
-    // final next = TextSelection(baseOffset: searchFocus.end, extentOffset: searchFocus.end);
-    // updateSelection(next, source: ChangeSource.local);
-    // onChangeSearchFocus.sink.add({});
+    onChangeSearchFocus.sink.add({});
   }
 }
