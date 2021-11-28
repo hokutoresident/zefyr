@@ -254,7 +254,7 @@ class RenderEditor extends RenderEditableContainerBox
   }
 
   double getSelectionOffset(double viewportHeight, double scrollOffset, double offsetInViewport, TextSelection selection) {
-    const cursorMargin = 8.0;
+    const cursorMargin = 48.0;
     final endpoints = getEndpointsForSelection(selection);
     if (endpoints.length != 1) return null;
     final child = childAtPosition(selection.extent);
