@@ -185,6 +185,8 @@ class ZefyrEditor extends StatefulWidget {
 
   final String searchQuery;
 
+  final Match searchFocus;
+
   const ZefyrEditor({
     Key key,
     @required this.controller,
@@ -207,6 +209,7 @@ class ZefyrEditor extends StatefulWidget {
     this.onTapEmbedObject,
     this.embedBuilder = defaultZefyrEmbedBuilder,
     this.searchQuery = '',
+    this.searchFocus,
   })  : assert(controller != null),
         super(key: key);
 
@@ -313,6 +316,7 @@ class _ZefyrEditorState extends State<ZefyrEditor>
       onTapEmbedObject: widget.onTapEmbedObject,
       embedBuilder: widget.embedBuilder,
       searchQuery: widget.searchQuery,
+      searchFocus: widget.searchFocus,
       // encapsulated fields below
       cursorStyle: CursorStyle(
         color: cursorColor,
@@ -495,6 +499,7 @@ class RawEditor extends StatefulWidget {
     this.selectionControls,
     this.embedBuilder = defaultZefyrEmbedBuilder,
     this.searchQuery,
+    this.searchFocus,
   })  : assert(controller != null),
         assert(focusNode != null),
         assert(scrollable || scrollController != null),
@@ -652,6 +657,8 @@ class RawEditor extends StatefulWidget {
   final ZefyrEmbedBuilder embedBuilder;
 
   final String searchQuery;
+
+  final Match searchFocus;
 
   bool get selectionEnabled => enableInteractiveSelection;
 
@@ -1179,6 +1186,7 @@ class RawEditorState extends EditorState
             inputtingTextRange: _inputtingTextRange(lookup)(node),
             lookupResult: lookup,
             searchQuery: widget.searchQuery,
+            searchFocus: widget.searchFocus,
           ),
           hasFocus: _hasFocus,
           devicePixelRatio: MediaQuery.of(context).devicePixelRatio,
@@ -1201,6 +1209,7 @@ class RawEditorState extends EditorState
           lookupResult: lookup,
           indentLevelCounts: indentLevelCounts,
           searchQuery: widget.searchQuery,
+          searchFocus: widget.searchFocus,
         ));
       } else {
         throw StateError('Unreachable.');

@@ -28,6 +28,7 @@ class _HomePageState extends State<HomePage> {
   var _isContainsUnsupportedFormat = false;
 
   String _searchQuery = '';
+  Match _searchFocus;
 
   void _handleSettingsLoaded(Settings value) {
     setState(() {
@@ -323,6 +324,7 @@ class _HomePageState extends State<HomePage> {
                     // padding: EdgeInsets.only(left: 16, right: 16),
                     onLaunchUrl: _launchUrl,
                     searchQuery: _searchQuery,
+                    searchFocus: _searchFocus,
                   ),
                 ),
         ),
@@ -413,6 +415,8 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 setState(() {
                   _controller.selectNextSearchHit(_searchQuery);
+                  final a = _controller.findSearchMatch(_searchQuery)[_controller.searchFocusIndex];
+                  _searchFocus = a;
                 });
               },
             ),
@@ -421,6 +425,8 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 setState(() {
                   _controller.selectPreviousSearchHit(_searchQuery);
+                  final a = _controller.findSearchMatch(_searchQuery)[_controller.searchFocusIndex];
+                  _searchFocus = a;
                 });
               },
             ),
