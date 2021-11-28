@@ -34,8 +34,10 @@ class ZefyrController extends ChangeNotifier {
   NotusStyle get toggledStyles => _toggledStyles;
   NotusStyle _toggledStyles = NotusStyle();
 
-  int searchFocusIndex = 0;
-  final onChangeSearchFocus = StreamController<void>();
+  String searchQuery = '';
+  int searchFocusIndex = -1;
+  final onChangeSearchFocus = StreamController<Match>();
+  final onChangeSearchQuery = StreamController<String>();
 
   /// Returns style of specified text range.
   ///
@@ -344,34 +346,44 @@ class ZefyrController extends ChangeNotifier {
     }
   }
 
-  List<Match> findSearchMatch(String searchQuery) {
+  void search(String query) {
+    searchQuery = query;
+    onChangeSearchQuery.sink.add(query);
+  }
+
+  List<Match> findSearchMatch() {
     if (searchQuery.isEmpty) return [];
     return searchQuery.allMatches(document.toPlainText()).toList();
   }
 
-  void selectFirstSearchHit(String searchQuery) {
-    onChangeSearchFocus.sink.add({});
-  }
+  // void selectFirstSearchHit(String searchQuery) {
+  //   if (searchQuery.isEmpty) return;
+  //   searchFocusIndex = 0;
+  //   final focus = findSearchMatch()[searchFocusIndex];
+  //   onChangeSearchFocus.sink.add(focus);
+  // }
 
-  void selectNextSearchHit(String searchQuery) {
-    final total = findSearchMatch(searchQuery).length;
+  void selectNextSearchHit() {
+    final total = findSearchMatch().length;
     if (searchQuery.isEmpty) return;
     if (searchFocusIndex >= total - 1) {
       searchFocusIndex = 0;
     } else {
       searchFocusIndex++;
     }
-    onChangeSearchFocus.sink.add({});
+    final focus = findSearchMatch()[searchFocusIndex];
+    onChangeSearchFocus.sink.add(focus);
   }
 
-  void selectPreviousSearchHit(String searchQuery) {
+  void selectPreviousSearchHit() {
     if (searchQuery.isEmpty) return;
     if (searchFocusIndex <= 0) {
-      final total = findSearchMatch(searchQuery).length;
+      final total = findSearchMatch().length;
       searchFocusIndex = total - 1;
     } else {
       searchFocusIndex--;
     }
-    onChangeSearchFocus.sink.add({});
+    final focus = findSearchMatch()[searchFocusIndex];
+    onChangeSearchFocus.sink.add(focus);
   }
 }
