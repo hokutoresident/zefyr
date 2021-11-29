@@ -12,21 +12,11 @@ class RenderEditableTextBlock extends RenderEditableContainerBox
     implements RenderEditableBox {
   ///
   RenderEditableTextBlock({
-<<<<<<< HEAD
-    List<RenderEditableBox> children,
-    @required BlockNode node,
-    @required TextDirection textDirection,
-    double scrollBottomInset,
-    @required EdgeInsetsGeometry padding,
-    @required Decoration decoration,
-    ImageConfiguration configuration = ImageConfiguration.empty,
-=======
     List<RenderEditableBox>? children,
     required BlockNode node,
     required TextDirection textDirection,
     required EdgeInsetsGeometry padding,
     required Decoration decoration,
->>>>>>> 3842ca0150178ce0428c059e516f8a05ebc1d2c6
     EdgeInsets contentPadding = EdgeInsets.zero,
   })  : _decoration = decoration,
         _configuration = ImageConfiguration(textDirection: textDirection),
@@ -205,7 +195,7 @@ class RenderEditableTextBlock extends RenderEditableContainerBox
     }
 
     final caretOffset = child.getOffsetForCaret(childLocalPosition);
-    final testPosition = TextPosition(offset: 0);
+    const  testPosition = TextPosition(offset: 0);
     final testOffset = sibling.getOffsetForCaret(testPosition);
     final finalOffset = Offset(caretOffset.dx, testOffset.dy);
     final siblingLocalPosition = sibling.getPositionForOffset(finalOffset);

@@ -159,7 +159,7 @@ class RenderEditableTextLine extends RenderEditableBox {
       yield _leading!;
     }
     if (_bottom != null) {
-      yield _bottom;
+      yield _bottom!;
     }
     if (_body != null) {
       yield _body!;
@@ -173,25 +173,16 @@ class RenderEditableTextLine extends RenderEditableBox {
     _leading = _updateChild(_leading, value, TextLineSlot.leading);
   }
 
-<<<<<<< HEAD
-  RenderBox get bottom => _bottom;
-  RenderBox _bottom;
-  set bottom(RenderBox value) {
-    _bottom = _updateChild(_bottom, value, TextLineSlot.bottom);
+  RenderBox? get bottom => _bottom;
+  RenderBox? _bottom;
+  set bottom(RenderBox? value) {
+    _bottom = _updateChild(_bottom, value, TextLineSlot.bottom) as RenderContentProxyBox?;
   }
 
-  RenderContentProxyBox get body => _body;
-  RenderContentProxyBox _body;
-  set body(RenderContentProxyBox value) {
-    _body = _updateChild(_body, value, TextLineSlot.body);
-=======
   RenderContentProxyBox? get body => _body;
   RenderContentProxyBox? _body;
-
   set body(RenderContentProxyBox? value) {
-    _body =
-        _updateChild(_body, value, TextLineSlot.body) as RenderContentProxyBox?;
->>>>>>> 3842ca0150178ce0428c059e516f8a05ebc1d2c6
+    _body = _updateChild(_body, value, TextLineSlot.body) as RenderContentProxyBox?;
   }
 
   RenderBox? _updateChild(
@@ -455,7 +446,7 @@ class RenderEditableTextLine extends RenderEditableBox {
       _cursorController.style.height ??
       // hard code position to 0 here but it really doesn't matter since it's
       // the same for the entire paragraph of text.
-      preferredLineHeight(TextPosition(offset: 0));
+      preferredLineHeight(const TextPosition(offset: 0));
 
   /// We cache containsCursor value because this method depends on the node
   /// state. In some cases the node gets detached from its document before this
@@ -656,13 +647,13 @@ class RenderEditableTextLine extends RenderEditableBox {
 
     if (bottom != null) {
       final bottomConstraints = innerConstraints.copyWith(
-        minWidth: body.size.width + _resolvedPadding.right + _resolvedPadding.left,
-        maxWidth: body.size.width + _resolvedPadding.right + _resolvedPadding.left,
-        maxHeight: body.size.height,
+        minWidth: body!.size.width + _resolvedPadding!.right + _resolvedPadding!.left,
+        maxWidth: body!.size.width + _resolvedPadding!.right + _resolvedPadding!.left,
+        maxHeight: body!.size.height,
       );
-      bottom.layout(bottomConstraints, parentUsesSize: true);
-      final parentData = bottom.parentData as BoxParentData;
-      parentData.offset = Offset(0.0, _resolvedPadding.top);
+      bottom!.layout(bottomConstraints, parentUsesSize: true);
+      final parentData = bottom!.parentData as BoxParentData;
+      parentData.offset = Offset(0.0, _resolvedPadding!.top);
     }
 
     size = constraints.constrain(Size(
@@ -690,8 +681,8 @@ class RenderEditableTextLine extends RenderEditableBox {
     }
 
     if (bottom != null) {
-      final effectiveOffset = offset + Offset(0, body.size.height - 4);
-      context.paintChild(bottom, effectiveOffset);
+      final effectiveOffset = offset + Offset(0, body?.size.height ?? 0 - 4);
+      context.paintChild(bottom!, effectiveOffset);
     }
 
     if (body != null) {
@@ -711,17 +702,11 @@ class RenderEditableTextLine extends RenderEditableBox {
           !_cursorController.style.paintAboveText) {
         _paintCursor(context, effectiveOffset);
       }
-<<<<<<< HEAD
       if (node.style.get(NotusAttribute.block) == NotusAttribute.largeHeading) {
-        context.paintChild(body, effectiveOffset + Offset(0, -4));
+        context.paintChild(body!, effectiveOffset + const Offset(0, -4));
       } else {
-        context.paintChild(body, effectiveOffset);
+        context.paintChild(body!, effectiveOffset);
       }
-=======
-
-      context.paintChild(body!, effectiveOffset);
-
->>>>>>> 3842ca0150178ce0428c059e516f8a05ebc1d2c6
       if (hasFocus &&
           _cursorController.showCursor.value &&
           containsCursor &&
