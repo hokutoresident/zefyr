@@ -27,8 +27,6 @@ class _HomePageState extends State<HomePage> {
   Settings _settings;
   var _isContainsUnsupportedFormat = false;
 
-  String _searchQuery = '';
-
   void _handleSettingsLoaded(Settings value) {
     setState(() {
       _settings = value;
@@ -322,7 +320,6 @@ class _HomePageState extends State<HomePage> {
                     // readOnly: true,
                     // padding: EdgeInsets.only(left: 16, right: 16),
                     onLaunchUrl: _launchUrl,
-                    searchQuery: _searchQuery,
                   ),
                 ),
         ),
@@ -394,34 +391,34 @@ class _HomePageState extends State<HomePage> {
           children: [
             Expanded(
               child: TextFormField(
-                initialValue: _searchQuery,
+                initialValue: _controller.searchQuery,
                 decoration: const InputDecoration(
                   hintText: '検索',
                 ),
+                onFieldSubmitted: (_) {
+                  _controller.selectNextSearchHit();
+                },
                 onChanged: (query) {
-                  setState(() {
-                    _searchQuery = query;
-                  });
+                  _controller.search(query);
+                  setState(() {});
                 },
               ),
             ),
             Text(
-              (_controller.searchFocusIndex == 0 && _searchQuery.isEmpty ? 0 : _controller.searchFocusIndex + 1).toString() + ' / ' + _controller.findSearchMatch(_searchQuery).length.toString(),
+              (_controller.searchFocusIndex == 0 && _controller.searchQuery.isEmpty ? 0 : _controller.searchFocusIndex + 1).toString() + ' / ' + _controller.findSearchMatch().length.toString(),
             ),
             IconButton(
               icon: Icon(Icons.arrow_downward),
               onPressed: () {
-                setState(() {
-                  _controller.selectNextSearchHit(_searchQuery);
-                });
+                _controller.selectNextSearchHit();
+                setState(() {});
               },
             ),
             IconButton(
               icon: Icon(Icons.arrow_upward),
               onPressed: () {
-                setState(() {
-                  _controller.selectPreviousSearchHit(_searchQuery);
-                });
+                _controller.selectPreviousSearchHit();
+                setState(() {});
               },
             ),
           ],

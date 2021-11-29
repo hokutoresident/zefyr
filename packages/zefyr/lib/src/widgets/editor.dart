@@ -183,9 +183,7 @@ class ZefyrEditor extends StatefulWidget {
   /// Defaults to [defaultZefyrEmbedBuilder].
   final ZefyrEmbedBuilder embedBuilder;
 
-  final String searchQuery;
-
-  const ZefyrEditor({
+  ZefyrEditor({
     Key key,
     @required this.controller,
     this.focusNode,
@@ -206,7 +204,6 @@ class ZefyrEditor extends StatefulWidget {
     this.onLaunchUrl,
     this.onTapEmbedObject,
     this.embedBuilder = defaultZefyrEmbedBuilder,
-    this.searchQuery = '',
   })  : assert(controller != null),
         super(key: key);
 
@@ -312,7 +309,6 @@ class _ZefyrEditorState extends State<ZefyrEditor>
       onLaunchUrl: widget.onLaunchUrl,
       onTapEmbedObject: widget.onTapEmbedObject,
       embedBuilder: widget.embedBuilder,
-      searchQuery: widget.searchQuery,
       // encapsulated fields below
       cursorStyle: CursorStyle(
         color: cursorColor,
@@ -494,7 +490,6 @@ class RawEditor extends StatefulWidget {
     this.showSelectionHandles = false,
     this.selectionControls,
     this.embedBuilder = defaultZefyrEmbedBuilder,
-    this.searchQuery,
   })  : assert(controller != null),
         assert(focusNode != null),
         assert(scrollable || scrollController != null),
@@ -651,8 +646,6 @@ class RawEditor extends StatefulWidget {
   /// Defaults to [defaultZefyrEmbedBuilder].
   final ZefyrEmbedBuilder embedBuilder;
 
-  final String searchQuery;
-
   bool get selectionEnabled => enableInteractiveSelection;
 
   @override
@@ -734,6 +727,9 @@ class RawEditorState extends EditorState
   FocusAttachment _focusAttachment;
   bool get _hasFocus => widget.focusNode.hasFocus;
 
+  String _searchQuery = '';
+  Match _searchFocus;
+
   @override
   bool get wantKeepAlive => widget.focusNode.hasFocus;
 
@@ -798,8 +794,17 @@ class RawEditorState extends EditorState
   void initState() {
     super.initState();
 
-    widget.controller.onChangeSearchFocus.stream.listen((_) {
-      showCaretOnScreen();
+    widget.controller.onChangeSearchFocus.stream.listen((focus) {
+      setState(() {
+        _searchFocus = focus;
+      });
+      _showSearchFocus();
+    });
+
+    widget.controller.onChangeSearchQuery.stream.listen((query) {
+      setState(() {
+        _searchQuery = query;
+      });
     });
 
     _clipboardStatus?.addListener(_onChangedClipboardStatus);
@@ -1063,6 +1068,26 @@ class RawEditorState extends EditorState
     });
   }
 
+  void _showSearchFocus() async {
+    await Future.delayed(const Duration(milliseconds: 100));
+    final viewport = RenderAbstractViewport.of(renderEditor);
+    if (viewport == null || _searchFocus == null) return;
+    final editorOffset = renderEditor.localToGlobal(Offset(0.0, 0.0), ancestor: viewport);
+    final offsetInViewport = _scrollController.offset + editorOffset.dy;
+    final offset = renderEditor.getSelectionOffset(
+      _scrollController.position.viewportDimension,
+      _scrollController.offset,
+      offsetInViewport,
+      TextSelection(baseOffset: _searchFocus.end, extentOffset: _searchFocus.end),
+    );
+    if (offset == null) return;
+    await _scrollController.animateTo(
+      offset,
+      duration: _caretAnimationDuration,
+      curve: _caretAnimationCurve,
+    );
+  }
+
   void _onChangedClipboardStatus() {
     setState(() {
       // Inform the widget that the value of clipboardStatus has changed.
@@ -1178,7 +1203,8 @@ class RawEditorState extends EditorState
             embedBuilder: widget.embedBuilder,
             inputtingTextRange: _inputtingTextRange(lookup)(node),
             lookupResult: lookup,
-            searchQuery: widget.searchQuery,
+            searchQuery: _searchQuery,
+            searchFocus: _searchFocus,
           ),
           hasFocus: _hasFocus,
           devicePixelRatio: MediaQuery.of(context).devicePixelRatio,
@@ -1200,7 +1226,8 @@ class RawEditorState extends EditorState
           inputtingTextRange: _inputtingTextRange(lookup),
           lookupResult: lookup,
           indentLevelCounts: indentLevelCounts,
-          searchQuery: widget.searchQuery,
+          searchQuery: _searchQuery,
+          searchFocus: _searchFocus,
         ));
       } else {
         throw StateError('Unreachable.');
