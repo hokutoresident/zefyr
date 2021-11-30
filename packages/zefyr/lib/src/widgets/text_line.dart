@@ -21,6 +21,7 @@ class TextLine extends StatelessWidget {
   final TextRange inputtingTextRange;
   final LookupResult lookupResult;
   final String searchQuery;
+  final Match searchFocus;
 
   const TextLine({
     Key key,
@@ -30,6 +31,7 @@ class TextLine extends StatelessWidget {
     this.inputtingTextRange,
     this.lookupResult,
     this.searchQuery,
+    this.searchFocus,
   })  : assert(node != null),
         assert(embedBuilder != null),
         super(key: key);
@@ -75,7 +77,7 @@ class TextLine extends StatelessWidget {
     );
   }
 
-  List<TextSpan> _highlightTextSpans(String source, String query, TextStyle style) {
+  List<TextSpan> _highlightTextSpans(String source, String query, TextStyle style, Node node) {
     if (query == null || query.isEmpty || !source.toLowerCase().contains(query.toLowerCase())) {
       return [ TextSpan(text: source) ];
     }
@@ -93,9 +95,14 @@ class TextLine extends StatelessWidget {
         ));
       }
 
+      final isInThisMatch = match.start + node.documentOffset == searchFocus?.start &&
+          match.end + node.documentOffset == searchFocus?.end;
+      final isInThisTextLine = node.containsOffset(searchFocus?.start ?? -1);
+      final isFocusing = isInThisMatch && isInThisTextLine;
       children.add(TextSpan(
         text: source.substring(match.start, match.end),
-        style: style.copyWith(backgroundColor: Color(0xff0099DD).withOpacity(0.20)),
+        style: style.copyWith(
+            backgroundColor: isFocusing ? Color(0xff0099DD).withOpacity(0.60) : Color(0xff0099DD).withOpacity(0.20)),
       ));
 
       if (i == matches.length - 1 && match.end != source.length) {
@@ -119,7 +126,7 @@ class TextLine extends StatelessWidget {
         return TextSpan(
           children: [
             TextSpan(
-              children: _highlightTextSpans(segment.value, searchQuery, style),
+              children: _highlightTextSpans(segment.value, searchQuery, style, node),
             ),
           ],
           style: _getInlineTextStyle(attrs, theme),
@@ -132,8 +139,7 @@ class TextLine extends StatelessWidget {
           children: [
             TextSpan(text: segment.value.substring(0, textRange.start)),
             TextSpan(
-                text: segment.value
-                    .substring(textRange.start, textRange.end),
+                text: segment.value.substring(textRange.start, textRange.end),
                 style: style.copyWith(backgroundColor: const Color(0x220000FF))),
             TextSpan(
                 text: segment.value
