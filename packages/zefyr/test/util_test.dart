@@ -90,13 +90,9 @@ void main() {
         expect('アいウ'.findMatches('アイウ').length, 1);
       });
     });
-    group('mix UPPER CASE, lower case, ひらがな, カタカナ and 漢字', () {
-      test('アいウ equal アイウ', () {
-        expect('アイウ'.findMatches('アいウ').length, 1);
-      });
-      test('アイウ equal アいウ', () {
-        expect('アいウ'.findMatches('アイウ').length, 1);
-      });
+    test('mix UPPER CASE, lower case, ひらがな and カタカナ', () {
+      expect('AbCアいウ'.findMatches('アイウ').length, 1);
+      expect('AbCアいウ'.findMatches('Bc').length, 1);
     });
   });
 }
