@@ -41,18 +41,12 @@ int getPositionDelta(Delta user, Delta actual) {
   return diff;
 }
 
-List<Match> findMatches(String query, String source) {
-  if (query.isEmpty) return [];
-  return query.normalized()
-      .allMatches(source.normalized())
-      .toList();
-}
-
 extension StringEx on String {
-  String normalized() {
-    return KanaKit()
-        .copyWithConfig(passKanji: true, passRomaji: true)
-        .toKatakana(toLowerCase());
+  List<Match> findMatches(String query) {
+    if (query.isEmpty) return [];
+    return query.normalized()
+        .allMatches(normalized())
+        .toList();
   }
 
   bool containsMatch(String query) {
@@ -60,10 +54,9 @@ extension StringEx on String {
         .contains(query.normalized());
   }
 
-  List<Match> findMatches(String query) {
-    if (query.isEmpty) return [];
-    return query.normalized()
-        .allMatches(normalized())
-        .toList();
+  String normalized() {
+    return KanaKit()
+        .copyWithConfig(passKanji: true, passRomaji: true)
+        .toKatakana(toLowerCase());
   }
 }
