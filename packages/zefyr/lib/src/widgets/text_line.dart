@@ -82,7 +82,7 @@ class TextLine extends StatelessWidget {
     if (query == null || query.isEmpty || !source.containsMatch(query)) {
       return [ TextSpan(text: source) ];
     }
-    final matches = findMatches(query, source);
+    final matches = source.findMatches(query);
 
     var lastMatchEnd = 0;
 
@@ -122,7 +122,7 @@ class TextLine extends StatelessWidget {
     final attrs = segment.style;
 
     try {
-      if (searchQuery.isNotEmpty && segment.value.normalized().contains(searchQuery.normalized())) {
+      if (searchQuery.isNotEmpty && segment.value.containsMatch(searchQuery)) {
         final style = _getInlineTextStyle(attrs, theme).copyWith();
         return TextSpan(
           children: [
