@@ -7,6 +7,7 @@ library zefyr.util;
 
 import 'dart:math' as math;
 
+import 'package:kana_kit/kana_kit.dart';
 import 'package:quill_delta/quill_delta.dart';
 
 export 'src/fast_diff.dart';
@@ -48,7 +49,11 @@ List<Match> findMatches(String query, String source) {
 }
 
 extension StringEx on String {
-  String normalized() => toLowerCase();
+  String normalized() {
+    return KanaKit()
+        .copyWithConfig(passKanji: true, passRomaji: true, upcaseKatakana: true)
+        .toKatakana(toLowerCase());
+  }
 
   bool containsMatch(String query) {
     return normalized()
