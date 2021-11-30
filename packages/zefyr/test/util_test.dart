@@ -40,4 +40,31 @@ void main() {
       expect(result, 1);
     });
   });
+
+  group('findMatches', () {
+    group('find lower case in UPPER CASE', () {
+      test('a equal A', () {
+        expect('ABC'.findMatches('a').length, 1);
+      });
+      test('ab equal AB', () {
+        expect('ABC'.findMatches('ab').length, 1);
+      });
+    });
+    group('find UPPER CASE in lower case', () {
+      test('A equal a', () {
+        expect('abc'.findMatches('A').length, 1);
+      });
+      test('AB equal ab', () {
+        expect('abc'.findMatches('AB').length, 1);
+      });
+    });
+    group('mix UPPER CASE and lower case', () {
+      test('AbC equal abc', () {
+        expect('AbC'.findMatches('abc').length, 1);
+      });
+      test('abc equal AbC', () {
+        expect('abc'.findMatches('AbC').length, 1);
+      });
+    });
+  });
 }

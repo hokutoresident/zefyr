@@ -39,3 +39,26 @@ int getPositionDelta(Delta user, Delta actual) {
   }
   return diff;
 }
+
+List<Match> findMatches(String query, String source) {
+  if (query.isEmpty) return [];
+  return query.normalized()
+      .allMatches(source.normalized())
+      .toList();
+}
+
+extension StringEx on String {
+  String normalized() => toLowerCase();
+
+  bool containsMatch(String query) {
+    return normalized()
+        .contains(query.normalized());
+  }
+
+  List<Match> findMatches(String query) {
+    if (query.isEmpty) return [];
+    return query.normalized()
+        .allMatches(normalized())
+        .toList();
+  }
+}

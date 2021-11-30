@@ -353,7 +353,7 @@ class ZefyrController extends ChangeNotifier {
 
   List<Match> findSearchMatch() {
     if (searchQuery.isEmpty) return [];
-    return searchQuery.allMatches(document.toPlainText()).toList();
+    return document.toPlainText().findMatches(searchQuery);
   }
 
   void selectNextSearchHit() {
