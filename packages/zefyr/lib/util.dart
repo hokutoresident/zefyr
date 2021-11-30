@@ -51,7 +51,7 @@ List<Match> findMatches(String query, String source) {
 extension StringEx on String {
   String normalized() {
     return KanaKit()
-        .copyWithConfig(passKanji: true, passRomaji: true, upcaseKatakana: true)
+        .copyWithConfig(passKanji: true, passRomaji: true)
         .toKatakana(toLowerCase());
   }
 
