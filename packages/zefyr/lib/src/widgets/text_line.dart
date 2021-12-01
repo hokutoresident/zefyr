@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notus/notus.dart';
+import 'package:zefyr/util.dart';
 
 import 'editable_text_line.dart';
 import 'editor.dart';
@@ -78,10 +79,10 @@ class TextLine extends StatelessWidget {
   }
 
   List<TextSpan> _highlightTextSpans(String source, String query, TextStyle style, Node node) {
-    if (query == null || query.isEmpty || !source.toLowerCase().contains(query.toLowerCase())) {
+    if (query == null || query.isEmpty || !source.containsMatch(query)) {
       return [ TextSpan(text: source) ];
     }
-    final matches = query.toLowerCase().allMatches(source.toLowerCase());
+    final matches = source.findMatches(query);
 
     var lastMatchEnd = 0;
 
@@ -121,7 +122,7 @@ class TextLine extends StatelessWidget {
     final attrs = segment.style;
 
     try {
-      if (searchQuery.isNotEmpty && segment.value.contains(searchQuery)) {
+      if (searchQuery.isNotEmpty && segment.value.containsMatch(searchQuery)) {
         final style = _getInlineTextStyle(attrs, theme).copyWith();
         return TextSpan(
           children: [

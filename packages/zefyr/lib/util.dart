@@ -7,6 +7,7 @@ library zefyr.util;
 
 import 'dart:math' as math;
 
+import 'package:kana_kit/kana_kit.dart';
 import 'package:quill_delta/quill_delta.dart';
 
 export 'src/fast_diff.dart';
@@ -38,4 +39,24 @@ int getPositionDelta(Delta user, Delta actual) {
     }
   }
   return diff;
+}
+
+extension StringEx on String {
+  List<Match> findMatches(String query) {
+    if (query.isEmpty) return [];
+    return query.normalized()
+        .allMatches(normalized())
+        .toList();
+  }
+
+  bool containsMatch(String query) {
+    return normalized()
+        .contains(query.normalized());
+  }
+
+  String normalized() {
+    return KanaKit()
+        .copyWithConfig(passKanji: true, passRomaji: true)
+        .toKatakana(toLowerCase());
+  }
 }
