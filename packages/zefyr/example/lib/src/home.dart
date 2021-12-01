@@ -201,7 +201,7 @@ class _HomePageState extends State<HomePage> {
                   index,
                   length,
                   BlockEmbed.image(
-                      'https://firebasestorage.googleapis.com/v0/b/hokutoapp-jp.appspot.com/o/admin%2Fsample-notes%2Fintroduce%2F2.png?alt=media&token=5c054a6a-fb45-43ff-9a83-87f2dec7a568'));
+                      source: 'https://firebasestorage.googleapis.com/v0/b/hokutoapp-jp.appspot.com/o/admin%2Fsample-notes%2Fintroduce%2F2.png?alt=media&token=5c054a6a-fb45-43ff-9a83-87f2dec7a568'));
             },
           ),
           ZIconButton(
@@ -265,8 +265,9 @@ class _HomePageState extends State<HomePage> {
                         );
                       }
                       if (node.value.type == 'image') {
+                        final image = EmbedImage.fromEmbedObj(node.value);
                         return Image.network(
-                          node.value.data['source'] as String,
+                          image.source,
                           fit: BoxFit.fitWidth,
                           loadingBuilder: (context, widget, event) => event == null
                               ? widget
@@ -277,15 +278,18 @@ class _HomePageState extends State<HomePage> {
                         );
                       }
                       if (node.value.type == 'pdf') {
-                        final url = node.value.data['source'] as String;
-                        final fileName = node.value.data['name'] as String;
-                        final size = node.value.data['size'] as int;
+                        final pdf = EmbedPdf.fromEmbedObj(node.value);
+                        final url = pdf.source;
+                        final fileName = pdf.name;
+                        final size = pdf.size;
+                        final ref = pdf.ref;
                         return Text(
-                          'pdf url: $url, fileName: $fileName, size: $size',
+                          'pdf url: $url, ref: $ref, fileName: $fileName, size: $size',
                         );
                       }
                       if (node.value.type == 'table') {
-                        final contents = node.value.data['contents'] as List<dynamic>;
+                        final table = EmbedTable.fromEmbedObj(node.value);
+                        final contents = table.contents;
                         return Container(
                           decoration: BoxDecoration(
                             color: Colors.white,

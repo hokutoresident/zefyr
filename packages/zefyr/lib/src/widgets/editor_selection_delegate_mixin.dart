@@ -51,7 +51,8 @@ mixin RawEditorStateSelectionDelegateMixin on EditorState
                 widget.controller.replaceText(
                     index,
                     length,
-                    BlockEmbed.image(data.text.substring(embedImageUrlPrefix.length)),
+                    /// TODO: FIXME add to ref
+                    BlockEmbed.image(source: data.text.substring(embedImageUrlPrefix.length)),
                 );
 
                 return;

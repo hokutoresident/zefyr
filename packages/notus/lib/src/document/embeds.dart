@@ -121,18 +121,19 @@ class BlockEmbed extends EmbeddableObject {
 
   static final BlockEmbed horizontalRule = BlockEmbed('hr');
 
-  static BlockEmbed image(String source) {
-    return BlockEmbed('image', data: {'source': source});
+  static BlockEmbed image({String source, String ref}) {
+    assert((source != null || ref != null));
+    return EmbedImage('image', source: source, ref: ref);
   }
 
-  static BlockEmbed pdf(String source, String name, int size) {
-    return BlockEmbed(
+  static BlockEmbed pdf({String source, String ref, String name, int size}) {
+    assert((source != null || ref != null));
+    return EmbedPdf(
       'pdf',
-      data: {
-        'source': source,
-        'name': name,
-        'size': size,
-      },
+      ref: ref,
+      source: source,
+      name: name,
+      size: size,
     );
   }
 
@@ -143,6 +144,80 @@ class BlockEmbed extends EmbeddableObject {
         'style': style,
         'contents': contents,
       }
+    );
+  }
+}
+
+
+class EmbedImage extends BlockEmbed {
+  EmbedImage(String type, {this.source, this.ref}) 
+    : super(type, data: {'source': source, 'ref': ref});
+  
+  final String source;
+  final String ref;
+
+  factory EmbedImage.fromEmbedObj(EmbeddableObject obj) {
+    return EmbedImage(
+      obj.type,
+      source: obj.data['source'],
+      ref: obj.data['ref'],
+    );
+  }
+}
+
+class EmbedPdf extends BlockEmbed {
+  EmbedPdf(
+    String type, {
+      this.source, 
+      this.ref, 
+      @required this.name,
+      @required this.size,
+    }) : super(
+        type,
+        data: {
+          'source': source,
+          'name': name,
+          'size': size,
+          'ref': ref,
+        },
+      );
+  
+  final String source;
+  final String ref;
+  final String name;
+  final int size;
+
+  factory EmbedPdf.fromEmbedObj(EmbeddableObject obj) {
+    return EmbedPdf(
+      obj.type,
+      source: obj.data['source'],
+      ref: obj.data['ref'],
+      name: obj.data['name'],
+      size: obj.data['size'],
+    );
+  }
+}
+
+class EmbedTable extends BlockEmbed {
+  EmbedTable(String type, {this.style, this.contents}) 
+    : super(
+      type,
+      data: {
+        'style': style,
+        'contents': contents,
+      },
+    );
+  
+  final String style; 
+  final List<Map<String, dynamic>> contents;
+
+  factory EmbedTable.fromEmbedObj(EmbeddableObject obj) {
+    return EmbedTable(
+      obj.type,
+      style: obj.data['style'],
+      contents: (obj.data['contents'] as List<dynamic>)
+        .map((e) => e as Map<String, dynamic>)
+        .toList(),
     );
   }
 }
