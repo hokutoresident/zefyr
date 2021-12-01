@@ -7,6 +7,7 @@ library zefyr.util;
 
 import 'dart:math' as math;
 
+import 'package:kana_kit/kana_kit.dart';
 import 'package:quill_delta/quill_delta.dart';
 
 export 'src/fast_diff.dart';
@@ -53,5 +54,9 @@ extension StringEx on String {
         .contains(query.normalized());
   }
 
-  String normalized() => toLowerCase();
+  String normalized() {
+    return KanaKit()
+        .copyWithConfig(passKanji: true, passRomaji: true)
+        .toKatakana(toLowerCase());
+  }
 }

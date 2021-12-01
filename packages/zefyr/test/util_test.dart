@@ -66,5 +66,33 @@ void main() {
         expect('abc'.findMatches('AbC').length, 1);
       });
     });
+    group('find カタカナ in ひらがな', () {
+      test('ア equal あ', () {
+        expect('あいう'.findMatches('ア').length, 1);
+      });
+      test('アイ equal あい', () {
+        expect('あいう'.findMatches('アイ').length, 1);
+      });
+    });
+    group('find ひらがな in カタカナ', () {
+      test('あ equal ア', () {
+        expect('アイウ'.findMatches('あ').length, 1);
+      });
+      test('あい equal アイ', () {
+        expect('アイウ'.findMatches('アイ').length, 1);
+      });
+    });
+    group('mix ひらがな and カタカナ', () {
+      test('アいウ equal アイウ', () {
+        expect('アイウ'.findMatches('アいウ').length, 1);
+      });
+      test('アイウ equal アいウ', () {
+        expect('アいウ'.findMatches('アイウ').length, 1);
+      });
+    });
+    test('mix UPPER CASE, lower case, ひらがな and カタカナ', () {
+      expect('AbCアいウ'.findMatches('アイウ').length, 1);
+      expect('AbCアいウ'.findMatches('Bc').length, 1);
+    });
   });
 }
