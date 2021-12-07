@@ -36,8 +36,8 @@ class ZefyrController extends ChangeNotifier {
 
   String searchQuery = '';
   int searchFocusIndex = -1;
-  final onChangeSearchFocus = StreamController<Match>();
-  final onChangeSearchQuery = StreamController<String>();
+  final onChangeSearchFocus = StreamController<Match>.broadcast();
+  final onChangeSearchQuery = StreamController<String>.broadcast();
 
   /// Returns style of specified text range.
   ///

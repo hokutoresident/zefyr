@@ -922,6 +922,8 @@ class RawEditorState extends EditorState
     _selectionOverlay = null;
     widget.controller.removeListener(_didChangeTextEditingValue);
     widget.focusNode.removeListener(_handleFocusChanged);
+    widget.controller.onChangeSearchFocus.close();
+    widget.controller.onChangeSearchQuery.close();
     _focusAttachment.detach();
     _cursorController.dispose();
     _clipboardStatus?.removeListener(_onChangedClipboardStatus);
