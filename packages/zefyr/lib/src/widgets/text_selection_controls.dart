@@ -23,7 +23,7 @@ class ZefyrCupertinoTextSelectionControls extends CupertinoTextSelectionControls
       delegate.hideToolbar();
       return;
     }
-    // super.handleCut(delegate, clipboardStatus);
+    super.handleCut(delegate, clipboardStatus);
   }
 
   @override
@@ -37,7 +37,7 @@ class ZefyrCupertinoTextSelectionControls extends CupertinoTextSelectionControls
       delegate.hideToolbar();
       return;
     }
-    // super.handleCopy(delegate, clipboardStatus);
+    super.handleCopy(delegate, clipboardStatus);
   }
 }
 
