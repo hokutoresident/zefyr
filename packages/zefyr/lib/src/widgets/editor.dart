@@ -262,7 +262,7 @@ class _ZefyrEditorState extends State<ZefyrEditor>
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         final cupertinoTheme = CupertinoTheme.of(context);
-        textSelectionControls = CupertinoTextSelectionControls();
+        textSelectionControls = cupertinoTextSelectionControls;
         paintCursorAboveText = true;
         cursorOpacityAnimates = true;
         cursorColor ??=
@@ -280,7 +280,7 @@ class _ZefyrEditorState extends State<ZefyrEditor>
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        textSelectionControls = MaterialTextSelectionControls();
+        textSelectionControls = materialTextSelectionControls;
         paintCursorAboveText = false;
         cursorOpacityAnimates = false;
         cursorColor ??= selectionTheme.cursorColor ?? theme.colorScheme.primary;
