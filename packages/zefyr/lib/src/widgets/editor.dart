@@ -1272,6 +1272,27 @@ class RawEditorState extends EditorState
     final indentValue = node.style.get(NotusAttribute.indent)?.value ?? 0.0;
     return theme.indentWidth * indentValue;
   }
+
+  @override
+  void copySelection(SelectionChangedCause cause) {
+    // TODO: implement copySelection
+  }
+
+  @override
+  void cutSelection(SelectionChangedCause cause) {
+    // TODO: implement cutSelection
+  }
+
+  @override
+  Future<void> pasteText(SelectionChangedCause cause) {
+    // TODO: implement pasteText
+    throw UnimplementedError();
+  }
+
+  @override
+  void selectAll(SelectionChangedCause cause) {
+    // TODO: implement selectAll
+  }
 }
 
 class _Editor extends MultiChildRenderObjectWidget {

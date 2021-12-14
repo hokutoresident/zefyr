@@ -22,7 +22,7 @@ mixin RawEditorStateSelectionDelegateMixin on EditorState
   @override
   void userUpdateTextEditingValue(
       TextEditingValue value, SelectionChangedCause cause) async {
-        if(cause == SelectionChangedCause.toolBar){
+        if(cause == SelectionChangedCause.toolbar){
           final selection = widget.controller.selection;
           final compare = value.selection.start - selection.start; // よくわからんがこれでcut or pasteの検証できる
 

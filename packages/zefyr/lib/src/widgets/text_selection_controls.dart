@@ -12,7 +12,7 @@ class ZefyrCupertinoTextSelectionControls extends CupertinoTextSelectionControls
   final ZefyrController controller;
 
   @override
-  void handleCut(TextSelectionDelegate delegate) {
+  void handleCut(TextSelectionDelegate delegate, ClipboardStatusNotifier clipboardStatus) {
     final start = delegate.textEditingValue.selection.start;
     final node = controller.document.lookupLine(start).node;
     if (_isImage(node)) {
@@ -23,7 +23,7 @@ class ZefyrCupertinoTextSelectionControls extends CupertinoTextSelectionControls
       delegate.hideToolbar();
       return;
     }
-    super.handleCut(delegate);
+    // super.handleCut(delegate, clipboardStatus);
   }
 
   @override
@@ -37,7 +37,7 @@ class ZefyrCupertinoTextSelectionControls extends CupertinoTextSelectionControls
       delegate.hideToolbar();
       return;
     }
-    super.handleCopy(delegate, clipboardStatus);
+    // super.handleCopy(delegate, clipboardStatus);
   }
 }
 
@@ -46,7 +46,7 @@ class ZefyrMaterialTextSelectionControls extends MaterialTextSelectionControls {
   final ZefyrController controller;
 
   @override
-  void handleCut(TextSelectionDelegate delegate) {
+  void handleCut(TextSelectionDelegate delegate, ClipboardStatusNotifier clipboardStatus) {
     final start = delegate.textEditingValue.selection.start;
     final node = controller.document.lookupLine(start).node;
     if (_isImage(node)) {
@@ -57,7 +57,7 @@ class ZefyrMaterialTextSelectionControls extends MaterialTextSelectionControls {
       delegate.hideToolbar();
       return;
     }
-    super.handleCut(delegate);
+    super.handleCut(delegate, clipboardStatus);
   }
 
   @override
