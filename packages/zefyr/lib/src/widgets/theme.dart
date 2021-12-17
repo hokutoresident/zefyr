@@ -5,7 +5,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:meta/meta.dart';
 
 /// Applies a Zefyr editor theme to descendant widgets.
 ///
@@ -24,12 +23,10 @@ class ZefyrTheme extends InheritedWidget {
   ///
   /// The [data] and [child] arguments must not be null.
   ZefyrTheme({
-    Key key,
-    @required this.data,
-    @required Widget child,
-  })  : assert(data != null),
-        assert(child != null),
-        super(key: key, child: child);
+    Key? key,
+    required this.data,
+    required Widget child,
+  })  : super(key: key, child: child);
 
   @override
   bool updateShouldNotify(ZefyrTheme oldWidget) {
@@ -42,12 +39,12 @@ class ZefyrTheme extends InheritedWidget {
   /// Returns `null` if there is no [ZefyrTheme] in the given build context
   /// and [nullOk] is set to `true`. If [nullOk] is set to `false` (default)
   /// then this method asserts.
-  static ZefyrThemeData of(BuildContext context, {bool nullOk = false}) {
+  static ZefyrThemeData? of(BuildContext context, {bool nullOk = false}) {
     final widget = context.dependOnInheritedWidgetOfExactType<ZefyrTheme>();
     if (widget == null && nullOk) return null;
     assert(widget != null,
         '$ZefyrTheme.of() called with a context that does not contain a ZefyrEditor.');
-    return widget.data;
+    return widget!.data;
   }
 }
 
@@ -114,24 +111,24 @@ class ZefyrThemeData {
   final double indentWidth;
 
   ZefyrThemeData({
-    this.bold,
-    this.italic,
-    this.underline,
-    this.strikethrough,
-    this.textColor,
-    this.marker,
-    this.link,
-    this.paragraph,
-    this.heading1,
-    this.heading2,
-    this.heading3,
-    this.caption,
-    this.lists,
-    this.quote,
-    this.code,
-    this.largeHeading,
-    this.middleHeading,
-    this.indentWidth,
+    required this.bold,
+    required this.italic,
+    required this.underline,
+    required this.strikethrough,
+    required this.textColor,
+    required this.marker,
+    required this.link,
+    required this.paragraph,
+    required this.heading1,
+    required this.heading2,
+    required this.heading3,
+    required this.caption,
+    required this.lists,
+    required this.quote,
+    required this.code,
+    required this.largeHeading,
+    required this.middleHeading,
+    required this.indentWidth,
   });
 
   factory ZefyrThemeData.fallback(BuildContext context) {
@@ -269,21 +266,24 @@ class ZefyrThemeData {
   }
 
   ZefyrThemeData copyWith({
-    TextStyle bold,
-    TextStyle italic,
-    TextStyle underline,
-    TextStyle strikethrough,
-    TextStyle textColor,
-    TextStyle marker,
-    TextStyle link,
-    TextBlockTheme paragraph,
-    TextBlockTheme heading1,
-    TextBlockTheme heading2,
-    TextBlockTheme heading3,
-    TextBlockTheme lists,
-    TextBlockTheme quote,
-    TextBlockTheme code,
-    double indentWidth,
+    TextStyle? bold,
+    TextStyle? italic,
+    TextStyle? underline,
+    TextStyle? strikethrough,
+    TextStyle? textColor,
+    TextStyle? marker,
+    TextStyle? link,
+    TextBlockTheme? paragraph,
+    TextBlockTheme? heading1,
+    TextBlockTheme? heading2,
+    TextBlockTheme? heading3,
+    TextBlockTheme? caption,
+    TextBlockTheme? lists,
+    TextBlockTheme? quote,
+    TextBlockTheme? code,
+    TextBlockTheme? middleHeading,
+    TextBlockTheme? largeHeading,
+    double? indentWidth,
   }) {
     return ZefyrThemeData(
       bold: bold ?? this.bold,
@@ -297,9 +297,12 @@ class ZefyrThemeData {
       heading1: heading1 ?? this.heading1,
       heading2: heading2 ?? this.heading2,
       heading3: heading3 ?? this.heading3,
+      caption: caption ?? this.caption,
       lists: lists ?? this.lists,
       quote: quote ?? this.quote,
       code: code ?? this.code,
+      middleHeading: middleHeading ?? this.middleHeading,
+      largeHeading: largeHeading ?? this.largeHeading,
       indentWidth: indentWidth ?? this.indentWidth,
     );
   }
@@ -342,11 +345,11 @@ class TextBlockTheme {
   ///
   /// Decoration, if present, is painted in the content area, excluding
   /// any [spacing].
-  final BoxDecoration decoration;
+  final BoxDecoration? decoration;
 
   TextBlockTheme({
-    @required this.style,
-    @required this.spacing,
+    required this.style,
+    required this.spacing,
     this.lineSpacing = const VerticalSpacing.zero(),
     this.decoration,
   });

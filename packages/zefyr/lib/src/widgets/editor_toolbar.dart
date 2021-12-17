@@ -11,9 +11,9 @@ class InsertEmbedButton extends StatelessWidget {
   final IconData icon;
 
   const InsertEmbedButton({
-    Key key,
-    @required this.controller,
-    @required this.icon,
+    Key? key,
+    required this.controller,
+    required this.icon,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -39,11 +39,11 @@ class InsertEmbedButton extends StatelessWidget {
 /// Toolbar button for formatting text as a link.
 class LinkStyleButton extends StatefulWidget {
   final ZefyrController controller;
-  final IconData icon;
+  final IconData? icon;
 
   const LinkStyleButton({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
     this.icon,
   }) : super(key: key);
 
@@ -105,14 +105,14 @@ class _LinkStyleButtonState extends State<LinkStyleButton> {
     ).then(_linkSubmitted);
   }
 
-  void _linkSubmitted(String value) {
+  void _linkSubmitted(String? value) {
     if (value == null || value.isEmpty) return;
     widget.controller.formatSelection(NotusAttribute.link.fromString(value));
   }
 }
 
 class _LinkDialog extends StatefulWidget {
-  const _LinkDialog({Key key}) : super(key: key);
+  const _LinkDialog({Key? key}) : super(key: key);
   @override
   _LinkDialogState createState() => _LinkDialogState();
 }
@@ -156,7 +156,7 @@ typedef ToggleStyleButtonBuilder = Widget Function(
   NotusAttribute attribute,
   IconData icon,
   bool isToggled,
-  VoidCallback onPressed,
+  VoidCallback? onPressed,
 );
 
 /// Toolbar button which allows to toggle a style attribute on or off.
@@ -165,7 +165,7 @@ class ToggleStyleButton extends StatefulWidget {
   final NotusAttribute attribute;
 
   /// The fill color of the button
-  final Color fillColor;
+  final Color? fillColor;
 
   /// The icon representing the style [attribute].
   final IconData icon;
@@ -177,16 +177,13 @@ class ToggleStyleButton extends StatefulWidget {
   final ToggleStyleButtonBuilder childBuilder;
 
   ToggleStyleButton({
-    Key key,
-    @required this.attribute,
+    Key? key,
+    required this.attribute,
     this.fillColor,
-    @required this.icon,
-    @required this.controller,
+    required this.icon,
+    required this.controller,
     this.childBuilder = defaultToggleStyleButtonBuilder,
   })  : assert(!attribute.isUnset),
-        assert(icon != null),
-        assert(controller != null),
-        assert(childBuilder != null),
         super(key: key);
 
   @override
@@ -194,7 +191,7 @@ class ToggleStyleButton extends StatefulWidget {
 }
 
 class _ToggleStyleButtonState extends State<ToggleStyleButton> {
-  bool _isToggled;
+  late bool _isToggled;
 
   NotusStyle get _selectionStyle => widget.controller.getSelectionStyle();
 
@@ -257,7 +254,7 @@ Widget defaultToggleStyleButtonBuilder(
   NotusAttribute attribute,
   IconData icon,
   bool isToggled,
-  VoidCallback onPressed,
+  VoidCallback? onPressed,
 ) {
   final theme = Theme.of(context);
   final isEnabled = onPressed != null;
@@ -285,7 +282,7 @@ Widget defaultToggleStyleButtonBuilder(
 class SelectHeadingStyleButton extends StatefulWidget {
   final ZefyrController controller;
 
-  const SelectHeadingStyleButton({Key key, @required this.controller}) 
+  const SelectHeadingStyleButton({Key? key, required this.controller})
       : super(key: key);
 
   @override
@@ -294,7 +291,7 @@ class SelectHeadingStyleButton extends StatefulWidget {
 }
 
 class _SelectHeadingStyleButtonState extends State<SelectHeadingStyleButton> {
-  NotusAttribute _value;
+  NotusAttribute? _value;
 
   NotusStyle get _selectionStyle => widget.controller.getSelectionStyle();
 
@@ -341,7 +338,7 @@ class _SelectHeadingStyleButtonState extends State<SelectHeadingStyleButton> {
 }
 
 Widget _selectHeadingStyleButtonBuilder(BuildContext context,
-    NotusAttribute value, ValueChanged<NotusAttribute> onSelected) {
+    NotusAttribute? value, ValueChanged<NotusAttribute?> onSelected) {
   final style = TextStyle(fontSize: 12);
 
   final valueToText = {
@@ -352,54 +349,54 @@ Widget _selectHeadingStyleButtonBuilder(BuildContext context,
     NotusAttribute.heading.caption: 'caption',
   };
 
-  return ZDropdownButton<NotusAttribute>(
+  return ZDropdownButton<NotusAttribute?>(
     highlightElevation: 0,
     hoverElevation: 0,
     height: 32,
-    child: Text(
-      valueToText[value],
-      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-    ),
     initialValue: value,
     items: [
       PopupMenuItem(
-        child: Text(valueToText[NotusAttribute.heading.unset], style: style),
         value: NotusAttribute.heading.unset,
         height: 32,
+        child: Text(valueToText[NotusAttribute.heading.unset]!, style: style),
       ),
       PopupMenuItem(
-        child: Text(valueToText[NotusAttribute.heading.level1], style: style),
         value: NotusAttribute.heading.level1,
         height: 32,
+        child: Text(valueToText[NotusAttribute.heading.level1]!, style: style),
       ),
       PopupMenuItem(
-        child: Text(valueToText[NotusAttribute.heading.level2], style: style),
         value: NotusAttribute.heading.level2,
         height: 32,
+        child: Text(valueToText[NotusAttribute.heading.level2]!, style: style),
       ),
       PopupMenuItem(
-        child: Text(valueToText[NotusAttribute.heading.level3], style: style),
         value: NotusAttribute.heading.level3,
         height: 32,
+        child: Text(valueToText[NotusAttribute.heading.level3]!, style: style),
       ),
       PopupMenuItem(
-        child: Text(valueToText[NotusAttribute.heading.caption], style: style),
         value: NotusAttribute.heading.caption,
         height: 32,
+        child: Text(valueToText[NotusAttribute.heading.caption]!, style: style),
       ),
     ],
     onSelected: onSelected,
+    child: Text(
+      valueToText[value as NotusAttribute<int>]!,
+      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+    ),
   );
 }
 
 class ZefyrToolbar extends StatefulWidget implements PreferredSizeWidget {
   final List<Widget> children;
 
-  const ZefyrToolbar({Key key, @required this.children}) : super(key: key);
+  const ZefyrToolbar({Key? key, required this.children}) : super(key: key);
 
   factory ZefyrToolbar.basic(
-      {Key key,
-      @required ZefyrController controller,
+      {Key? key,
+      required ZefyrController controller,
       bool hideBoldButton = false,
       bool hideItalicButton = false,
       bool hideUnderLineButton = false,
@@ -576,16 +573,16 @@ class _ZefyrToolbarState extends State<ZefyrToolbar> {
 ///
 /// Named with a "Z" prefix to distinguish from the Flutter's built-in version.
 class ZIconButton extends StatelessWidget {
-  final VoidCallback onPressed;
-  final Widget icon;
+  final VoidCallback? onPressed;
+  final Widget? icon;
   final double size;
-  final Color fillColor;
+  final Color? fillColor;
   final double hoverElevation;
   final double highlightElevation;
 
   const ZIconButton({
-    Key key,
-    @required this.onPressed,
+    Key? key,
+    required this.onPressed,
     this.icon,
     this.size = 40,
     this.fillColor,
@@ -598,7 +595,6 @@ class ZIconButton extends StatelessWidget {
     return ConstrainedBox(
       constraints: BoxConstraints.tightFor(width: size, height: size),
       child: RawMaterialButton(
-        child: icon,
         visualDensity: VisualDensity.compact,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
         padding: EdgeInsets.zero,
@@ -607,6 +603,7 @@ class ZIconButton extends StatelessWidget {
         hoverElevation: hoverElevation,
         highlightElevation: hoverElevation,
         onPressed: onPressed,
+        child: icon,
       ),
     );
   }
@@ -614,7 +611,7 @@ class ZIconButton extends StatelessWidget {
 
 class ZDropdownButton<T> extends StatefulWidget {
   final double height;
-  final Color fillColor;
+  final Color? fillColor;
   final double hoverElevation;
   final double highlightElevation;
   final Widget child;
@@ -623,15 +620,15 @@ class ZDropdownButton<T> extends StatefulWidget {
   final ValueChanged<T> onSelected;
 
   const ZDropdownButton({
-    Key key,
+    Key? key,
     this.height = 40,
     this.fillColor,
     this.hoverElevation = 1,
     this.highlightElevation = 1,
-    @required this.child,
-    @required this.initialValue,
-    @required this.items,
-    @required this.onSelected,
+    required this.child,
+    required this.initialValue,
+    required this.items,
+    required this.onSelected,
   }) : super(key: key);
 
   @override
@@ -660,7 +657,7 @@ class _ZDropdownButtonState<T> extends State<ZDropdownButton<T>> {
   void _showMenu() {
     final popupMenuTheme = PopupMenuTheme.of(context);
     final button = context.findRenderObject() as RenderBox;
-    final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    final overlay = Overlay.of(context)!.context.findRenderObject() as RenderBox;
     final position = RelativeRect.fromRect(
       Rect.fromPoints(
         button.localToGlobal(Offset.zero, ancestor: overlay),
@@ -678,15 +675,13 @@ class _ZDropdownButtonState<T> extends State<ZDropdownButton<T>> {
       shape: popupMenuTheme.shape, // widget.shape ?? popupMenuTheme.shape,
       color: popupMenuTheme.color, // widget.color ?? popupMenuTheme.color,
       // captureInheritedThemes: widget.captureInheritedThemes,
-    ).then((T newValue) {
+    ).then((T? newValue) {
       if (!mounted) return null;
       if (newValue == null) {
         // if (widget.onCanceled != null) widget.onCanceled();
         return null;
       }
-      if (widget.onSelected != null) {
-        widget.onSelected(newValue);
-      }
+      widget.onSelected(newValue);
     });
   }
 
