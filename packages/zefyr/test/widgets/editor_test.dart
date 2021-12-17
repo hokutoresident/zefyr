@@ -11,20 +11,22 @@ import '../testing.dart';
 void main() {
   group('$RawEditor', () {
     testWidgets('allows merging attribute theme data', (tester) async {
-      var delta = Delta()
+      final delta = Delta()
         ..insert(
           'Website',
           NotusAttribute.link.fromString('https://github.com').toJson(),
         )
         ..insert('\n');
-      var doc = NotusDocument.fromDelta(delta);
-      var theme = ZefyrThemeData(link: TextStyle(color: Colors.red));
-      var editor = EditorSandBox(tester: tester, document: doc, theme: theme);
+      final doc = NotusDocument.fromDelta(delta);
+      final BuildContext context = tester.element(find.byType(Container));
+      final theme = ZefyrThemeData.fallback(context)
+          .copyWith(link: TextStyle(color: Colors.red));
+      final editor = EditorSandBox(tester: tester, document: doc, theme: theme);
       await editor.pumpAndTap();
       // await tester.pumpAndSettle();
       final p = tester.widget(find.byType(RichText).first) as RichText;
       final text = p.text as TextSpan;
-      expect(text.children.first.style.color, Colors.red);
+      expect(text.children!.first.style!.color, Colors.red);
     });
 
     // TODO: findRenderObject()でそもそもクラッシュしてる

@@ -8,7 +8,7 @@ import 'package:zefyr/zefyr.dart';
 
 void main() {
   group('$ZefyrController', () {
-    ZefyrController controller;
+    late ZefyrController controller;
 
     setUp(() {
       var doc = NotusDocument();
@@ -216,7 +216,7 @@ void main() {
       controller.replaceText(0, 0, 'words');
       controller.increaseIndentAtSelection();
       final indent = controller.getSelectionStyle().get(NotusAttribute.indent);
-      expect(indent.value, 1);
+      expect(indent!.value, 1);
     });
 
     test('increaseIndent max: 5', () {
@@ -231,7 +231,7 @@ void main() {
       controller.increaseIndentAtSelection();
       controller.increaseIndentAtSelection();
       final indent = controller.getSelectionStyle().get(NotusAttribute.indent);
-      expect(indent.value, 5);
+      expect(indent!.value, 5);
     });
 
     test('decreaseIndent', () {
@@ -239,7 +239,7 @@ void main() {
       controller.formatText(0, 0, NotusAttribute.indent.fromInt(3));
       controller.decreaseIndentAtSelection();
       final indent = controller.getSelectionStyle().get(NotusAttribute.indent);
-      expect(indent.value, 2);
+      expect(indent!.value, 2);
     });
 
     test('decreaseIndent min: null', () {
@@ -259,8 +259,8 @@ void main() {
       final indent = controller.getSelectionStyle().get(NotusAttribute.indent);
       final block = controller.getSelectionStyle().get(NotusAttribute.block);
       print(controller.document.toJson());
-      expect(indent.value, 1);
-      expect(block.value, 'ul');
+      expect(indent!.value, 1);
+      expect(block!.value, 'ul');
     });
 
     test('decreaseIndent Block', () {
@@ -271,7 +271,7 @@ void main() {
       final block = controller.getSelectionStyle().get(NotusAttribute.block);
       print(controller.document.toJson());
       expect(indent?.value, null);
-      expect(block.value, 'ul');
+      expect(block!.value, 'ul');
     });
 
     test('indent middleHeading', () {
