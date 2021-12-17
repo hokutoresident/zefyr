@@ -3,7 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 import 'package:collection/collection.dart';
 import 'package:notus/src/exceptions/unsupported_format.dart';
-import 'package:quiver_hashcode/hashcode.dart';
+import 'package:quiver/core.dart';
 
 /// Scope of a style attribute, defines context in which an attribute can be
 /// applied.
@@ -129,10 +129,10 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
   static NotusAttribute<int> get caption => heading.caption;
 
   static final List<int> _validHeadingValues = [
-    heading.level1.value,
-    heading.level2.value,
-    heading.level3.value,
-    heading.caption.value,
+    heading.level1.value!,
+    heading.level2.value!,
+    heading.level3.value!,
+    heading.caption.value!,
   ];
 
   /// Block attribute
@@ -156,12 +156,12 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
   static NotusAttribute<String> get middleHeading => block.middleHeading;
 
   static final List<String> _validBlockValues = [
-    block.bulletList.value,
-    block.numberList.value,
-    block.quote.value,
-    block.code.value,
-    block.largeHeading.value,
-    block.middleHeading.value,
+    block.bulletList.value!,
+    block.numberList.value!,
+    block.quote.value!,
+    block.code.value!,
+    block.largeHeading.value!,
+    block.middleHeading.value!,
   ];
 
   /// indent attribute
@@ -186,7 +186,7 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
       throw UnsupportedFormatException('NotusAttribute has a unsupported heading value. heading: $value');
     }
 
-    final builder = _registry[key];
+    final builder = _registry[key]!;
     return builder.withValue(value);
   }
 
@@ -208,7 +208,7 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
   ///
   /// See also [unset], [NotusStyle.merge] and [NotusStyle.put]
   /// for details.
-  final T value;
+  final T? value;
 
   /// Returns special "unset" version of this attribute.
   ///
@@ -233,7 +233,7 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! NotusAttribute<T>) return false;
-    NotusAttribute<T> typedOther = other;
+    final typedOther = other;
 
     // NOTE: 色付きスタイルのhexの差は無視する
     if ([NotusAttribute.marker.key, NotusAttribute.textColor.key].contains(key)) {
@@ -261,7 +261,7 @@ class NotusStyle {
 
   final Map<String, NotusAttribute> _data;
 
-  static NotusStyle fromJson(Map<String, dynamic> data) {
+  static NotusStyle fromJson(Map<String, dynamic>? data) {
     if (data == null) return NotusStyle();
 
     final result = data.map((String key, dynamic value) {
@@ -298,21 +298,19 @@ class NotusStyle {
   /// Returns `true` if this set contains attribute with the same value as
   /// [attribute].
   bool containsSame(NotusAttribute attribute) {
-    assert(attribute != null);
     return get<dynamic>(attribute) == attribute;
   }
 
   bool containsAny(List<NotusAttribute> attributes) {
-    assert(attributes != null);
     return attributes.any((attribute) => get<dynamic>(attribute) == attribute);
   }
 
   /// Returns value of specified attribute [key] in this set.
-  T value<T>(NotusAttributeKey<T> key) => get(key).value;
+  T? value<T>(NotusAttributeKey<T> key) => get(key)?.value;
 
   /// Returns [NotusAttribute] from this set by specified [key].
-  NotusAttribute<T> get<T>(NotusAttributeKey<T> key) =>
-      _data[key.key] as NotusAttribute<T>;
+  NotusAttribute<T>? get<T>(NotusAttributeKey<T> key) =>
+      _data[key.key] as NotusAttribute<T>?;
 
   /// Returns collection of all attribute keys in this set.
   Iterable<String> get keys => _data.keys;
@@ -364,7 +362,7 @@ class NotusStyle {
   }
 
   /// Returns JSON-serializable representation of this style.
-  Map<String, dynamic> toJson() => _data.isEmpty
+  Map<String, dynamic>? toJson() => _data.isEmpty
       ? null
       : _data.map<String, dynamic>((String _, NotusAttribute value) =>
           MapEntry<String, dynamic>(value.key, value.value));
@@ -373,9 +371,8 @@ class NotusStyle {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! NotusStyle) return false;
-    NotusStyle typedOther = other;
     final eq = const MapEquality<String, NotusAttribute>();
-    return eq.equals(_data, typedOther._data);
+    return eq.equals(_data, other._data);
   }
 
   @override
