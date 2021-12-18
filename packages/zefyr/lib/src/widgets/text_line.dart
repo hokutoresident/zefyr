@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notus/notus.dart';
@@ -60,15 +59,15 @@ class TextLine extends StatelessWidget {
     );
   }
 
-  TextRange? _textNodeInputtingRange(LookupResult textNodeLookup, TextNode child){
-    return (textNodeLookup.node == child) ? inputtingTextRange : null;
+  TextRange? _textNodeInputtingRange(LookupResult? textNodeLookup, TextNode child){
+    return (textNodeLookup?.node == child) ? inputtingTextRange : null;
   }
 
   TextSpan buildText(BuildContext context, LineNode node) {
     final theme = ZefyrTheme.of(context)!;
     final textNodeLookup = lookupResult != null && lookupResult!.offset <= node.length ? node.lookup(lookupResult!.offset) : null;
     final children = node.children
-        .map((node) => _segmentToTextSpan(node, theme, _textNodeInputtingRange(textNodeLookup!, node as TextNode)!))
+        .map((node) => _segmentToTextSpan(node, theme, _textNodeInputtingRange(textNodeLookup, node as TextNode)))
         .toList(growable: false);
     return TextSpan(
       style: _getParagraphTextStyle(node.style, theme),
@@ -77,7 +76,7 @@ class TextLine extends StatelessWidget {
   }
 
   List<TextSpan> _highlightTextSpans(String source, String query, TextStyle style, Node node) {
-    if (query == null || query.isEmpty || !source.containsMatch(query)) {
+    if (query.isEmpty || !source.containsMatch(query)) {
       return [ TextSpan(text: source) ];
     }
     final matches = source.findMatches(query);
@@ -115,7 +114,7 @@ class TextLine extends StatelessWidget {
     return children;
   }
 
-  TextSpan _segmentToTextSpan(Node node, ZefyrThemeData theme, TextRange textRange) {
+  TextSpan _segmentToTextSpan(Node node, ZefyrThemeData theme, TextRange? textRange) {
     final segment = node as TextNode;
     final attrs = segment.style;
 
