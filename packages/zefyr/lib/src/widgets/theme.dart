@@ -3,7 +3,6 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 /// Applies a Zefyr editor theme to descendant widgets.
@@ -147,7 +146,7 @@ class ZefyrThemeData {
         decorationThickness: 10,
       ),
       link: GoogleFonts.notoSans(
-        color: themeData.accentColor,
+        color: themeData.colorScheme.secondary,
         decoration: TextDecoration.underline,
       ),
       paragraph: TextBlockTheme(

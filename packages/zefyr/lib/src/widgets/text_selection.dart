@@ -371,6 +371,7 @@ class EditorTextSelectionOverlay {
         textPosition = newSelection.extent;
         break;
     }
+    // ignore: deprecated_member_use
     selectionDelegate.textEditingValue =
         _value.copyWith(selection: newSelection, composing: TextRange.empty);
     selectionDelegate.bringIntoView(textPosition);
@@ -420,6 +421,7 @@ class _TextSelectionHandleOverlay extends StatefulWidget {
 class _TextSelectionHandleOverlayState
     extends State<_TextSelectionHandleOverlay>
     with SingleTickerProviderStateMixin {
+  // ignore: unused_field
   Offset _dragPosition;
 
   AnimationController _controller;
@@ -1216,7 +1218,7 @@ class _EditorTextSelectionGestureDetectorState
       gestures[LongPressGestureRecognizer] =
           GestureRecognizerFactoryWithHandlers<LongPressGestureRecognizer>(
         () => LongPressGestureRecognizer(
-            debugOwner: this, kind: PointerDeviceKind.touch),
+            debugOwner: this, supportedDevices: <PointerDeviceKind>{PointerDeviceKind.touch}),
         (LongPressGestureRecognizer instance) {
           instance
             ..onLongPressStart = _handleLongPressStart
@@ -1234,7 +1236,7 @@ class _EditorTextSelectionGestureDetectorState
       gestures[HorizontalDragGestureRecognizer] =
           GestureRecognizerFactoryWithHandlers<HorizontalDragGestureRecognizer>(
         () => HorizontalDragGestureRecognizer(
-            debugOwner: this, kind: PointerDeviceKind.mouse),
+            debugOwner: this, supportedDevices: <PointerDeviceKind>{PointerDeviceKind.mouse}),
         (HorizontalDragGestureRecognizer instance) {
           instance
             // Text selection should start from the position of the first pointer

@@ -4,24 +4,17 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
-import 'package:notus/notus.dart';
 import 'package:zefyr/src/widgets/baseline_proxy.dart';
 
 import '../../zefyr.dart';
-import '../rendering/editor.dart';
 import '../services/keyboard.dart' as zefyr;
-import 'controller.dart';
-import 'cursor.dart';
 import 'editable_text_block.dart';
 import 'editable_text_line.dart';
 import 'editor_input_client_mixin.dart';
 import 'editor_keyboard_mixin.dart';
 import 'editor_selection_delegate_mixin.dart';
-import 'text_line.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'text_selection.dart';
-import 'theme.dart';
 
 /// Builder function for embeddable objects in [ZefyrEditor].
 typedef ZefyrEmbedBuilder = Widget Function(
@@ -693,6 +686,7 @@ class RawEditorState extends EditorState
 
   // Cursors
   late CursorController _cursorController;
+  // ignore: unused_field
   FloatingCursorController? _floatingCursorController;
 
   // Keyboard
@@ -723,8 +717,6 @@ class RawEditorState extends EditorState
 
   TextDirection get _textDirection {
     final result = Directionality.of(context);
-    assert(result != null,
-        '$runtimeType created without a textDirection and with no ambient Directionality.');
     return result;
   }
 
@@ -1098,7 +1090,6 @@ class RawEditorState extends EditorState
 //            onPaste: _semanticsOnPaste(controls),
         child: _Editor(
           key: _editorKey,
-          children: _buildChildren(context),
           document: widget.controller.document,
           selection: widget.controller.selection,
           hasFocus: _hasFocus,
@@ -1107,6 +1098,7 @@ class RawEditorState extends EditorState
           endHandleLayerLink: _endHandleLayerLink,
           onSelectionChanged: _handleSelectionChanged,
           padding: widget.padding,
+          children: _buildChildren(context),
         ),
       ),
     );

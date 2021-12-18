@@ -1,5 +1,4 @@
 import 'package:flutter/rendering.dart';
-import 'package:meta/meta.dart';
 
 class RenderBaselineProxy extends RenderProxyBox {
   RenderBaselineProxy({

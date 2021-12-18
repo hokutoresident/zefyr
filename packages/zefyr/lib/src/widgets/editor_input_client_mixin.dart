@@ -149,7 +149,8 @@ mixin RawEditorStateTextInputClientMixin on EditorState
     //   return;
     // }
 
-    if (value.composing != null) _inputtingTextEditingValue = value; // 副作用みがすごい
+     _inputtingTextEditingValue = value;
+    // 副作用みがすごい
 
     if (_lastKnownRemoteTextEditingValue == value) {
       // There is no difference between this value and the last known value.

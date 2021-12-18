@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'controller.dart';
@@ -217,11 +216,11 @@ class _ZefyrFieldState extends State<ZefyrField> {
         children: [
           child,
           Visibility(
-            child: widget.toolbar!,
             visible: _focused,
             maintainSize: true,
             maintainAnimation: true,
             maintainState: true,
+            child: widget.toolbar!,
           ),
         ],
       );

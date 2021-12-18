@@ -129,7 +129,7 @@ class _LinkDialogState extends State<_LinkDialog> {
         onChanged: _linkChanged,
       ),
       actions: [
-        FlatButton(
+        TextButton(
           onPressed: _link.isNotEmpty ? _applyLink : null,
           child: Text('Apply'),
         ),
@@ -641,7 +641,6 @@ class _ZDropdownButtonState<T> extends State<ZDropdownButton<T>> {
     return ConstrainedBox(
       constraints: BoxConstraints.tightFor(height: widget.height),
       child: RawMaterialButton(
-        child: _buildContent(context),
         visualDensity: VisualDensity.compact,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
         padding: EdgeInsets.zero,
@@ -650,6 +649,7 @@ class _ZDropdownButtonState<T> extends State<ZDropdownButton<T>> {
         hoverElevation: widget.hoverElevation,
         highlightElevation: widget.hoverElevation,
         onPressed: _showMenu,
+        child: _buildContent(context),
       ),
     );
   }
