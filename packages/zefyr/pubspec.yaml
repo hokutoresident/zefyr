@@ -20,7 +20,7 @@ dependencies:
       ref: feature/nnbd-notus
       path: packages/notus
 #  meta: ^1.1.0
-  quiver_hashcode: ^2.0.0
+  quiver_hashcode: ^3.0.0+1
   characters: ^1.0.0
   google_fonts: ^2.1.0
   validators: ^3.0.0
