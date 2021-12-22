@@ -334,7 +334,7 @@ class _ZefyrEditorSelectionGestureDetectorBuilder
   void onForcePressStart(ForcePressDetails details) {
     super.onForcePressStart(details);
     if (delegate.selectionEnabled && shouldShowSelectionToolbar) {
-      editor.showToolbar();
+      editor?.showToolbar();
     }
   }
 
@@ -349,7 +349,7 @@ class _ZefyrEditorSelectionGestureDetectorBuilder
       switch (Theme.of(_state.context).platform) {
         case TargetPlatform.iOS:
         case TargetPlatform.macOS:
-          renderEditor.selectPositionAt(
+          renderEditor?.selectPositionAt(
             from: details.globalPosition,
             cause: SelectionChangedCause.longPress,
           );
@@ -358,7 +358,7 @@ class _ZefyrEditorSelectionGestureDetectorBuilder
         case TargetPlatform.fuchsia:
         case TargetPlatform.linux:
         case TargetPlatform.windows:
-          renderEditor.selectWordsInRange(
+          renderEditor?.selectWordsInRange(
             from: details.globalPosition - details.offsetFromOrigin,
             to: details.globalPosition,
             cause: SelectionChangedCause.longPress,
@@ -369,26 +369,26 @@ class _ZefyrEditorSelectionGestureDetectorBuilder
   }
 
   void _launchUrlIfNeeded(TapUpDetails details) {
-    final pos = renderEditor.getPositionForOffset(details.globalPosition);
-    final result = editor.widget.controller.document.lookupLine(pos.offset);
-    if (result.node == null) return;
-    final line = result.node as LineNode;
+    final pos = renderEditor?.getPositionForOffset(details.globalPosition);
+    final result = editor?.widget.controller.document.lookupLine(pos!.offset);
+    if (result?.node == null) return;
+    final line = result!.node as LineNode;
     if (line.hasEmbed) {
       final embed = line.children.single as EmbedNode;
-      editor.widget.onTapEmbedObject?.call(embed.value, readOnly: _state.widget.readOnly);
+      editor?.widget.onTapEmbedObject?.call(embed.value, readOnly: _state.widget.readOnly);
     }
     final segmentResult = line.lookup(result.offset);
     if (segmentResult.node == null) return;
     final segment = segmentResult.node as LeafNode;
     if (segment.style.contains(NotusAttribute.link) &&
-        editor.widget.onLaunchUrl != null) {
-      editor.widget.onLaunchUrl!(segment.style.get(NotusAttribute.link)!.value!);
+        editor?.widget.onLaunchUrl != null) {
+      editor?.widget.onLaunchUrl!(segment.style.get(NotusAttribute.link)!.value!);
     }
   }
 
   @override
   void onSingleTapUp(TapUpDetails details) {
-    editor.hideToolbar();
+    editor?.hideToolbar();
 
     // TODO: Explore if we can forward tap up events to the TextSpan gesture detector
     _launchUrlIfNeeded(details);
@@ -402,13 +402,13 @@ class _ZefyrEditorSelectionGestureDetectorBuilder
             case PointerDeviceKind.stylus:
             case PointerDeviceKind.invertedStylus:
               // Precise devices should place the cursor at a precise position.
-              renderEditor.selectPosition(cause: SelectionChangedCause.tap);
+              renderEditor?.selectPosition(cause: SelectionChangedCause.tap);
               break;
             case PointerDeviceKind.touch:
             case PointerDeviceKind.unknown:
               // On macOS/iOS/iPadOS a touch tap places the cursor at the edge
               // of the word.
-              renderEditor.selectWordEdge(cause: SelectionChangedCause.tap);
+              renderEditor?.selectWordEdge(cause: SelectionChangedCause.tap);
               break;
           }
           break;
@@ -416,14 +416,14 @@ class _ZefyrEditorSelectionGestureDetectorBuilder
         case TargetPlatform.fuchsia:
         case TargetPlatform.linux:
         case TargetPlatform.windows:
-          renderEditor.selectPosition(cause: SelectionChangedCause.tap);
+          renderEditor?.selectPosition(cause: SelectionChangedCause.tap);
           break;
       }
     }
     _state._requestKeyboard();
     // 遅延実行しないと動かない
     Future.delayed(const Duration(milliseconds: 100)).whenComplete(() {
-      editor.showCaretOnScreen();
+      editor?.showCaretOnScreen();
     });
     // if (_state.widget.onTap != null)
     //   _state.widget.onTap();
@@ -435,13 +435,13 @@ class _ZefyrEditorSelectionGestureDetectorBuilder
       switch (Theme.of(_state.context).platform) {
         case TargetPlatform.iOS:
         case TargetPlatform.macOS:
-          renderEditor.selectWord(cause: SelectionChangedCause.longPress);
+          renderEditor?.selectWord(cause: SelectionChangedCause.longPress);
           break;
         case TargetPlatform.android:
         case TargetPlatform.fuchsia:
         case TargetPlatform.linux:
         case TargetPlatform.windows:
-          renderEditor.selectWord(cause: SelectionChangedCause.longPress);
+          renderEditor?.selectWord(cause: SelectionChangedCause.longPress);
           Feedback.forLongPress(_state.context);
           break;
       }
