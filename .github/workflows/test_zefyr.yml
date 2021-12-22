@@ -30,7 +30,7 @@ jobs:
         run: |
           cd packages/zefyr/
           flutter pub get
-          flutter test --no-sound-null-safety
+          flutter test
 
       - name: Send Slack Notification on Success
         if: success()
