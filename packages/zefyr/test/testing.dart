@@ -72,7 +72,7 @@ class EditorSandBox {
   }
 
   Future<void> tap() async {
-    await tester.tap(find.byType(TextLine).first);
+    await tester.tap(find.byType(TextLine).first, warnIfMissed: false);
     await tester.pumpAndSettle();
     expect(focusNode.hasFocus, isTrue);
   }
