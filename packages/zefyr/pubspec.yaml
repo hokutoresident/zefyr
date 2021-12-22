@@ -17,9 +17,8 @@ dependencies:
   notus:
     git:
       url: https://github.com/hokutoresident/zefyr
-      ref: feature/nnbd-notus
+      ref: feature/nnbd-zefyr
       path: packages/notus
-#  meta: ^1.1.0
   quiver_hashcode: ^3.0.0+1
   characters: ^1.0.0
   google_fonts: ^2.1.0
