@@ -258,7 +258,6 @@ void main() {
       controller.increaseIndentAtSelection();
       final indent = controller.getSelectionStyle().get(NotusAttribute.indent);
       final block = controller.getSelectionStyle().get(NotusAttribute.block);
-      print(controller.document.toJson());
       expect(indent!.value, 1);
       expect(block!.value, 'ul');
     });
@@ -269,7 +268,6 @@ void main() {
       controller.decreaseIndentAtSelection();
       final indent = controller.getSelectionStyle().get(NotusAttribute.indent);
       final block = controller.getSelectionStyle().get(NotusAttribute.block);
-      print(controller.document.toJson());
       expect(indent?.value, null);
       expect(block!.value, 'ul');
     });

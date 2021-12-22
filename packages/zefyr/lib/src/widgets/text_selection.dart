@@ -1041,7 +1041,7 @@ class _EditorTextSelectionGestureDetectorState
   @override
   void dispose() {
     _doubleTapTimer?.cancel();
-    _dragUpdateThrottleTimer!.cancel();
+    _dragUpdateThrottleTimer?.cancel();
     super.dispose();
   }
 

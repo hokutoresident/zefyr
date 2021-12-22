@@ -796,7 +796,7 @@ class RawEditorState extends EditorState
 
     // Cursor
     _cursorController = CursorController(
-      showCursor: ValueNotifier<bool>(widget.showCursor ?? false),
+      showCursor: ValueNotifier<bool>(widget.showCursor),
       style: widget.cursorStyle ??
           CursorStyle(
             // TODO: fallback to current theme's accent color
