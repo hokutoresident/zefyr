@@ -7,8 +7,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:notus/notus.dart';
+import 'package:validators/validators.dart';
 import 'package:zefyr/src/widgets/baseline_proxy.dart';
-import 'package:zefyr/src/widgets/text_selection_controls.dart';
 
 import '../../zefyr.dart';
 import '../rendering/editor.dart';
@@ -262,7 +262,7 @@ class _ZefyrEditorState extends State<ZefyrEditor>
       case TargetPlatform.iOS:
       case TargetPlatform.macOS:
         final cupertinoTheme = CupertinoTheme.of(context);
-        textSelectionControls = ZefyrCupertinoTextSelectionControls(widget.controller);
+        textSelectionControls = cupertinoTextSelectionControls;
         paintCursorAboveText = true;
         cursorOpacityAnimates = true;
         cursorColor ??=
@@ -280,7 +280,7 @@ class _ZefyrEditorState extends State<ZefyrEditor>
       case TargetPlatform.fuchsia:
       case TargetPlatform.linux:
       case TargetPlatform.windows:
-        textSelectionControls = ZefyrMaterialTextSelectionControls(widget.controller);
+        textSelectionControls = materialTextSelectionControls;
         paintCursorAboveText = false;
         cursorOpacityAnimates = false;
         cursorColor ??= selectionTheme.cursorColor ?? theme.colorScheme.primary;
@@ -1272,6 +1272,7 @@ class RawEditorState extends EditorState
     final indentValue = node.style.get(NotusAttribute.indent)?.value ?? 0.0;
     return theme.indentWidth * indentValue;
   }
+
 }
 
 class _Editor extends MultiChildRenderObjectWidget {

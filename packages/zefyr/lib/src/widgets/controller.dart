@@ -39,6 +39,8 @@ class ZefyrController extends ChangeNotifier {
   final onChangeSearchFocus = StreamController<Match>.broadcast();
   final onChangeSearchQuery = StreamController<String>.broadcast();
 
+  String get selectingText => document.toPlainText().substring(selection.baseOffset, selection.extentOffset);
+
   /// Returns style of specified text range.
   ///
   /// If nothing is selected but we've toggled an attribute,
