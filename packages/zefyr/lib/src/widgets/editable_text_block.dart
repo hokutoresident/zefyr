@@ -18,40 +18,38 @@ class EditableTextBlock extends StatelessWidget {
   final Color selectionColor;
   final bool enableInteractiveSelection;
   final bool hasFocus;
-  final EdgeInsets contentPadding;
+  final EdgeInsets? contentPadding;
   final ZefyrEmbedBuilder embedBuilder;
-  final TextRange Function(Node node) inputtingTextRange;
-  final LookupResult lookupResult;
+  final TextRange? Function(Node node)? inputtingTextRange;
+  final LookupResult? lookupResult;
   final Map<int, int> indentLevelCounts;
   final String searchQuery;
-  final Match searchFocus;
+  final Match? searchFocus;
 
   EditableTextBlock({
-    Key key,
-    @required this.node,
-    @required this.textDirection,
-    @required this.spacing,
-    @required this.cursorController,
-    @required this.selection,
-    @required this.selectionColor,
-    @required this.enableInteractiveSelection,
-    @required this.hasFocus,
+    Key? key,
+    required this.node,
+    required this.textDirection,
+    required this.spacing,
+    required this.cursorController,
+    required this.selection,
+    required this.selectionColor,
+    required this.enableInteractiveSelection,
+    required this.hasFocus,
+    required this.embedBuilder,
+    this.inputtingTextRange,
+    this.lookupResult,
+    required this.indentLevelCounts,
+    required this.searchQuery,
     this.contentPadding,
-    @required this.embedBuilder,
-    @required this.inputtingTextRange,
-    @required this.lookupResult,
-    @required this.indentLevelCounts,
-    @required this.searchQuery,
     this.searchFocus,
-  })  : assert(hasFocus != null),
-        assert(embedBuilder != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasMediaQuery(context));
 
-    final theme = ZefyrTheme.of(context);
+    final theme = ZefyrTheme.of(context)!;
     return _EditableBlock(
       node: node,
       textDirection: textDirection,
@@ -63,14 +61,14 @@ class EditableTextBlock extends StatelessWidget {
   }
 
   List<Widget> _buildChildren(BuildContext context, Map<int, int> indentLevelCounts) {
-    final theme = ZefyrTheme.of(context);
+    final theme = ZefyrTheme.of(context)!;
     final count = node.children.length;
     final children = <Widget>[];
     var index = 0;
     for (final line in node.children) {
       index++;
       children.add(EditableTextLine(
-        node: line,
+        node: line as LineNode,
         textDirection: textDirection,
         spacing: _getSpacingForLine(line, index, count, theme),
         leading: _buildLeading(context, line, index, count, indentLevelCounts),
@@ -81,7 +79,7 @@ class EditableTextBlock extends StatelessWidget {
           node: line,
           textDirection: textDirection,
           embedBuilder: embedBuilder,
-          inputtingTextRange: inputtingTextRange(line),
+          inputtingTextRange: inputtingTextRange!(line),
           lookupResult: lookupResult,
           searchQuery: searchQuery,
           searchFocus: searchFocus,
@@ -96,9 +94,9 @@ class EditableTextBlock extends StatelessWidget {
     return children.toList(growable: false);
   }
 
-  Widget _buildLeading(
+  Widget? _buildLeading(
       BuildContext context, LineNode node, int index, int count, Map<int, int> indentLevelCounts) {
-    final theme = ZefyrTheme.of(context);
+    final theme = ZefyrTheme.of(context)!;
     final block = node.style.get(NotusAttribute.block);
     final indent = node.style.get(NotusAttribute.indent)?.value ?? 0;
 
@@ -132,12 +130,12 @@ class EditableTextBlock extends StatelessWidget {
     }
   }
 
-  Widget _buildBottom(BuildContext context, LineNode node) {
-    final theme = ZefyrTheme.of(context);
+  Widget? _buildBottom(BuildContext context, LineNode node) {
+    final theme = ZefyrTheme.of(context)!;
     final block = node.style.get(NotusAttribute.block);
     if (block == NotusAttribute.middleHeading) {
       return Divider(
-        height: theme.paragraph.style.fontSize * theme.paragraph.style.height,
+        height: (theme.paragraph.style.fontSize ?? 0.0) * (theme.paragraph.style.height ?? 0.0),
         thickness: 1,
         color: Color(0xFF0099DD),
       );
@@ -146,7 +144,7 @@ class EditableTextBlock extends StatelessWidget {
   }
 
   double _userIndentWidth(BuildContext context, LineNode node) {
-    final theme = ZefyrTheme.of(context);
+    final theme = ZefyrTheme.of(context)!;
     final block = node.style.get(NotusAttribute.block);
     if (block == NotusAttribute.block.bulletList || block == NotusAttribute.block.numberList) {
       final indentValue = node.style.get(NotusAttribute.indent)?.value ?? 0.0;
@@ -177,8 +175,8 @@ class EditableTextBlock extends StatelessWidget {
       LineNode node, int index, int count, ZefyrThemeData theme) {
     final heading = node.style.get(NotusAttribute.heading);
 
-    var top = 0.0;
-    var bottom = 0.0;
+    double? top;
+    double? bottom;
 
     if (heading == NotusAttribute.heading.level1) {
       top = theme.heading1.spacing.top;
@@ -222,10 +220,10 @@ class EditableTextBlock extends StatelessWidget {
       bottom = 0.0;
     }
 
-    return VerticalSpacing(top: top, bottom: bottom);
+    return VerticalSpacing(top: top ?? 0, bottom: bottom ?? 0);
   }
 
-  BoxDecoration _getDecorationForBlock(BlockNode node, ZefyrThemeData theme) {
+  BoxDecoration? _getDecorationForBlock(BlockNode node, ZefyrThemeData theme) {
     final style = node.style.get(NotusAttribute.block);
     if (style == NotusAttribute.block.quote) {
       return theme.quote.decoration;
@@ -243,16 +241,16 @@ class _EditableBlock extends MultiChildRenderObjectWidget {
   final TextDirection textDirection;
   final VerticalSpacing padding;
   final Decoration decoration;
-  final EdgeInsets contentPadding;
+  final EdgeInsets? contentPadding;
 
   _EditableBlock({
-    Key key,
-    @required this.node,
-    @required this.textDirection,
+    Key? key,
+    required this.node,
+    required this.textDirection,
     this.padding = const VerticalSpacing(),
     this.contentPadding,
-    @required this.decoration,
-    @required List<Widget> children,
+    required this.decoration,
+    required List<Widget> children,
   }) : super(key: key, children: children);
 
   EdgeInsets get _padding =>
@@ -292,12 +290,12 @@ class _NumberPoint extends StatelessWidget {
   final Map<int, int> indentLevelCounts;
 
   const _NumberPoint({
-    Key key,
-    @required this.index,
-    @required this.indent,
-    @required this.style,
-    @required this.width,
-    @required this.indentLevelCounts,
+    Key? key,
+    required this.index,
+    required this.indent,
+    required this.style,
+    required this.width,
+    required this.indentLevelCounts,
     this.withDot = true,
     this.padding = 0.0,
   }) : super(key: key);
@@ -381,10 +379,10 @@ class _BulletPoint extends StatelessWidget {
   final int indent;
 
   const _BulletPoint({
-    Key key,
-    @required this.style,
-    @required this.width,
-    @required this.indent,
+    Key? key,
+    required this.style,
+    required this.width,
+    required this.indent,
   }) : super(key: key);
 
   @override
