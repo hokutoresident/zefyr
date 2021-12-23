@@ -4,10 +4,10 @@ import 'package:zefyr/zefyr.dart';
 class HistoryButton extends StatelessWidget {
 
   const HistoryButton({
-    @required this.icon,
-    @required this.controller,
-    @required this.isEnabled,
-    @required this.isRedo,
+    required this.icon,
+    required this.controller,
+    required this.isEnabled,
+    required this.isRedo,
   });
 
   final IconData icon;

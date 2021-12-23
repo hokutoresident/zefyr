@@ -1,9 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:validators/validators.dart';
 import 'package:zefyr/zefyr.dart';
-
-import 'editor.dart';
 
 mixin RawEditorStateSelectionDelegateMixin on EditorState
     implements TextSelectionDelegate {
@@ -40,7 +37,7 @@ mixin RawEditorStateSelectionDelegateMixin on EditorState
   @override
   Future<void> pasteText(SelectionChangedCause cause) async {
     final data = await Clipboard.getData(Clipboard.kTextPlain);
-    if (data == null) {
+    if (data?.text == null) {
       hideToolbar();
       return;
     }
@@ -48,9 +45,9 @@ mixin RawEditorStateSelectionDelegateMixin on EditorState
     widget.controller.replaceText(
       widget.controller.selection.start,
       length,
-      data.text,
+      data!.text!,
       selection: TextSelection.collapsed(
-          offset: widget.controller.selection.start + data.text.length),
+          offset: widget.controller.selection.start + data.text!.length),
     );
 
     if (isURL(data.text)) {

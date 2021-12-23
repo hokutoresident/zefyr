@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notus/notus.dart';
@@ -17,25 +16,23 @@ import 'theme.dart';
 class TextLine extends StatelessWidget {
   /// Line of text represented by this widget.
   final LineNode node;
-  final TextDirection textDirection;
+  final TextDirection? textDirection;
   final ZefyrEmbedBuilder embedBuilder;
-  final TextRange inputtingTextRange;
-  final LookupResult lookupResult;
+  final TextRange? inputtingTextRange;
+  final LookupResult? lookupResult;
   final String searchQuery;
-  final Match searchFocus;
+  final Match? searchFocus;
 
   const TextLine({
-    Key key,
-    @required this.node,
+    Key? key,
+    required this.node,
+    required this.embedBuilder,
     this.textDirection,
-    @required this.embedBuilder,
     this.inputtingTextRange,
     this.lookupResult,
-    this.searchQuery,
+    required this.searchQuery,
     this.searchFocus,
-  })  : assert(node != null),
-        assert(embedBuilder != null),
-        super(key: key);
+  })  : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +44,9 @@ class TextLine extends StatelessWidget {
     }
     final text = buildText(context, node);
     final strutStyle =
-        StrutStyle.fromTextStyle(text.style, forceStrutHeight: true);
+        StrutStyle.fromTextStyle(text.style!, forceStrutHeight: true);
     return RichTextProxy(
-      textStyle: text.style,
+      textStyle: text.style!,
       textDirection: textDirection,
       strutStyle: strutStyle,
       locale: Localizations.localeOf(context),
@@ -62,15 +59,15 @@ class TextLine extends StatelessWidget {
     );
   }
 
-  TextRange _textNodeInputtingRange(LookupResult textNodeLookup, TextNode child){
-    return  (textNodeLookup != null && textNodeLookup.node == child) ? inputtingTextRange : null;
+  TextRange? _textNodeInputtingRange(LookupResult? textNodeLookup, TextNode child){
+    return (textNodeLookup?.node == child) ? inputtingTextRange : null;
   }
 
   TextSpan buildText(BuildContext context, LineNode node) {
-    final theme = ZefyrTheme.of(context);
-    final textNodeLookup = lookupResult != null && lookupResult.offset <= node.length ? node.lookup(lookupResult.offset) : null;
+    final theme = ZefyrTheme.of(context)!;
+    final textNodeLookup = lookupResult != null && lookupResult!.offset <= node.length ? node.lookup(lookupResult!.offset) : null;
     final children = node.children
-        .map((node) => _segmentToTextSpan(node, theme, _textNodeInputtingRange(textNodeLookup, node)))
+        .map((node) => _segmentToTextSpan(node, theme, _textNodeInputtingRange(textNodeLookup, node as TextNode)))
         .toList(growable: false);
     return TextSpan(
       style: _getParagraphTextStyle(node.style, theme),
@@ -79,7 +76,7 @@ class TextLine extends StatelessWidget {
   }
 
   List<TextSpan> _highlightTextSpans(String source, String query, TextStyle style, Node node) {
-    if (query == null || query.isEmpty || !source.containsMatch(query)) {
+    if (query.isEmpty || !source.containsMatch(query)) {
       return [ TextSpan(text: source) ];
     }
     final matches = source.findMatches(query);
@@ -117,8 +114,8 @@ class TextLine extends StatelessWidget {
     return children;
   }
 
-  TextSpan _segmentToTextSpan(Node node, ZefyrThemeData theme, TextRange textRange) {
-    final TextNode segment = node;
+  TextSpan _segmentToTextSpan(Node node, ZefyrThemeData theme, TextRange? textRange) {
+    final segment = node as TextNode;
     final attrs = segment.style;
 
     try {
@@ -192,7 +189,7 @@ class TextLine extends StatelessWidget {
     }
 
     return textStyle.merge(TextStyle(
-      fontFamilyFallback: [GoogleFonts.workSans().fontFamily],
+      fontFamilyFallback: [GoogleFonts.workSans().fontFamily!],
     ));
   }
 
@@ -223,13 +220,13 @@ class TextLine extends StatelessWidget {
     return result;
   }
 
-  TextStyle _mergeTextStyleWithDecoration(TextStyle a, TextStyle b) {
+  TextStyle _mergeTextStyleWithDecoration(TextStyle a, TextStyle? b) {
     var decorations = <TextDecoration>[];
     if (a.decoration != null) {
-      decorations.add(a.decoration);
+      decorations.add(a.decoration!);
     }
-    if (b.decoration != null) {
-      decorations.add(b.decoration);
+    if (b?.decoration != null) {
+      decorations.add(b!.decoration!);
     }
     return a.merge(b).apply(decoration: TextDecoration.combine(decorations));
   }

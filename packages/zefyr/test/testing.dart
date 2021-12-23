@@ -17,10 +17,10 @@ class EditorSandBox {
   final Widget widget;
 
   factory EditorSandBox({
-    @required WidgetTester tester,
-    FocusNode focusNode,
-    NotusDocument document,
-    ZefyrThemeData theme,
+    required WidgetTester tester,
+    FocusNode? focusNode,
+    NotusDocument? document,
+    ZefyrThemeData? theme,
     bool autofocus = false,
   }) {
     focusNode ??= FocusNode();
@@ -53,7 +53,7 @@ class EditorSandBox {
     return tester.pumpAndSettle();
   }
 
-  Future<void> updateSelection({int base, int extent}) {
+  Future<void> updateSelection({required int base, required int extent}) {
     controller.updateSelection(
       TextSelection(baseOffset: base, extentOffset: extent),
     );
@@ -72,7 +72,7 @@ class EditorSandBox {
   }
 
   Future<void> tap() async {
-    await tester.tap(find.byType(TextLine).first);
+    await tester.tap(find.byType(TextLine).first, warnIfMissed: false);
     await tester.pumpAndSettle();
     expect(focusNode.hasFocus, isTrue);
   }
@@ -111,9 +111,9 @@ class EditorSandBox {
 
 class _ZefyrSandbox extends StatefulWidget {
   const _ZefyrSandbox({
-    Key key,
-    @required this.controller,
-    @required this.focusNode,
+    Key? key,
+    required this.controller,
+    required this.focusNode,
     this.autofocus = false,
   }) : super(key: key);
   final ZefyrController controller;

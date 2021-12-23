@@ -1,9 +1,6 @@
-import 'dart:collection';
-
 import 'package:collection/collection.dart';
-import 'package:meta/meta.dart';
 import 'package:notus/src/exceptions/unsupported_format.dart';
-import 'package:quiver_hashcode/hashcode.dart';
+import 'package:quiver/core.dart';
 
 const _dataEquality = DeepCollectionEquality();
 
@@ -22,11 +19,9 @@ class EmbeddableObject {
 
   EmbeddableObject(
     this.type, {
-    @required this.inline,
+    required this.inline,
     Map<String, dynamic> data = const {},
-  })  : assert(type != null),
-        assert(inline != null),
-        assert(!data.containsKey(kTypeKey),
+  })  : assert(!data.containsKey(kTypeKey),
             'The "$kTypeKey" key is reserved in $EmbeddableObject data and cannot be used.'),
         assert(!data.containsKey(kInlineKey),
             'The "$kInlineKey" key is reserved in $EmbeddableObject data and cannot be used.'),
@@ -59,10 +54,9 @@ class EmbeddableObject {
   bool operator ==(dynamic other) {
     if (identical(this, other)) return true;
     if (other is! EmbeddableObject) return false;
-    final typedOther = other as EmbeddableObject;
-    return typedOther.type == type &&
-        typedOther.inline == inline &&
-        _dataEquality.equals(typedOther._data, _data);
+    return other.type == type &&
+        other.inline == inline &&
+        _dataEquality.equals(other._data, _data);
   }
 
   @override
@@ -121,13 +115,16 @@ class BlockEmbed extends EmbeddableObject {
 
   static final BlockEmbed horizontalRule = BlockEmbed('hr');
 
-  static BlockEmbed image({String source, String ref}) {
-    assert((source != null || ref != null));
+  static BlockEmbed image({required String source, required String ref}) {
     return EmbedImage('image', source: source, ref: ref);
   }
 
-  static BlockEmbed pdf({String source, String ref, String name, int size}) {
-    assert((source != null || ref != null));
+  static BlockEmbed pdf({
+    required String source,
+    required String ref,
+    required String name,
+    required int size,
+  }) {
     return EmbedPdf(
       'pdf',
       ref: ref,
@@ -137,7 +134,7 @@ class BlockEmbed extends EmbeddableObject {
     );
   }
 
-  static BlockEmbed table({String style, List<Map<String, dynamic>> contents}) {
+  static BlockEmbed table({required String style, required List<Map<String, dynamic>> contents}) {
     return BlockEmbed(
       'table',
       data: {
@@ -150,7 +147,7 @@ class BlockEmbed extends EmbeddableObject {
 
 
 class EmbedImage extends BlockEmbed {
-  EmbedImage(String type, {this.source, this.ref}) 
+  EmbedImage(String type, {required this.source, required this.ref})
     : super(type, data: {'source': source, 'ref': ref});
   
   final String source;
@@ -168,10 +165,10 @@ class EmbedImage extends BlockEmbed {
 class EmbedPdf extends BlockEmbed {
   EmbedPdf(
     String type, {
-      this.source, 
-      this.ref, 
-      @required this.name,
-      @required this.size,
+      required this.source,
+      required this.ref,
+      required this.name,
+      required this.size,
     }) : super(
         type,
         data: {
@@ -199,7 +196,7 @@ class EmbedPdf extends BlockEmbed {
 }
 
 class EmbedTable extends BlockEmbed {
-  EmbedTable(String type, {this.style, this.contents}) 
+  EmbedTable(String type, {required this.style, required this.contents})
     : super(
       type,
       data: {

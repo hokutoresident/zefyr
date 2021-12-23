@@ -5,10 +5,6 @@
 import 'package:notus/notus.dart';
 import 'package:quill_delta/quill_delta.dart';
 
-import 'heuristics/delete_rules.dart';
-import 'heuristics/format_rules.dart';
-import 'heuristics/insert_rules.dart';
-
 /// Registry for insert, format and delete heuristic rules used by
 /// [NotusDocument] documents.
 class NotusHeuristics {
@@ -48,9 +44,9 @@ class NotusHeuristics {
   );
 
   const NotusHeuristics({
-    this.formatRules,
-    this.insertRules,
-    this.deleteRules,
+    required this.formatRules,
+    required this.insertRules,
+    required this.deleteRules,
   });
 
   /// List of format rules in this registry.
