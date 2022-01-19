@@ -165,10 +165,10 @@ class _RenderEditableTextLineElement extends RenderObjectElement {
         renderObject.leading = child as RenderBox?;
         break;
       case TextLineSlot.body:
-        renderObject.body = child as RenderContentProxyBox;
+        renderObject.body = child as RenderContentProxyBox?;
         break;
       case TextLineSlot.bottom:
-        renderObject.bottom = child as RenderBox;
+        renderObject.bottom = child as RenderBox?;
         break;
       case null:
         break;
