@@ -39,6 +39,8 @@ class ZefyrController extends ChangeNotifier {
   final onChangeSearchFocus = StreamController<Match>.broadcast();
   final onChangeSearchQuery = StreamController<String>.broadcast();
 
+  final uiExceptionStream = StreamController<Object>.broadcast();
+
   String get selectingText => document.toPlainText().substring(selection.baseOffset, selection.extentOffset);
 
   /// Returns style of specified text range.
@@ -230,6 +232,8 @@ class ZefyrController extends ChangeNotifier {
   void dispose() {
     document.close();
     onChangeSearchFocus.close();
+    onChangeSearchQuery.close();
+    uiExceptionStream.close();
     super.dispose();
   }
 

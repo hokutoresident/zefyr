@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:notus/notus.dart';
@@ -26,6 +28,8 @@ class EditableTextBlock extends StatelessWidget {
   final String searchQuery;
   final Match? searchFocus;
 
+  final StreamSink<Object> uiExceptionStreamSink;
+
   EditableTextBlock({
     Key? key,
     required this.node,
@@ -43,6 +47,7 @@ class EditableTextBlock extends StatelessWidget {
     required this.searchQuery,
     this.contentPadding,
     this.searchFocus,
+    required this.uiExceptionStreamSink,
   }) : super(key: key);
 
   @override
@@ -75,6 +80,7 @@ class EditableTextBlock extends StatelessWidget {
         bottom: _buildBottom(context, line),
         indentWidth: _styleIndentWidth() + _userIndentWidth(context, line),
         devicePixelRatio: MediaQuery.of(context).devicePixelRatio,
+        uiExceptionStreamSink: uiExceptionStreamSink,
         body: TextLine(
           node: line,
           textDirection: textDirection,
