@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:notus/notus.dart';
 import 'package:zefyr/src/rendering/editable_box.dart';
@@ -37,6 +39,8 @@ class EditableTextLine extends RenderObjectWidget {
   final bool hasFocus;
   final double devicePixelRatio;
 
+  final StreamSink<Object> uiExceptionStreamSink;
+
   /// Creates an editable line of text.
   EditableTextLine({
     Key? key,
@@ -53,6 +57,7 @@ class EditableTextLine extends RenderObjectWidget {
     this.leading,
     this.indentWidth = 0.0,
     this.spacing = const VerticalSpacing(),
+    required this.uiExceptionStreamSink,
   }) : super(key: key);
 
   EdgeInsetsGeometry get _padding => EdgeInsetsDirectional.only(
@@ -133,10 +138,14 @@ class _RenderEditableTextLineElement extends RenderObjectElement {
 
   @override
   void mount(Element? parent, dynamic newSlot) {
-    super.mount(parent, newSlot);
-    _mountChild(widget.bottom, TextLineSlot.bottom);
-    _mountChild(widget.leading, TextLineSlot.leading);
-    _mountChild(widget.body, TextLineSlot.body);
+    try {
+      super.mount(parent, newSlot);
+      _mountChild(widget.bottom, TextLineSlot.bottom);
+      _mountChild(widget.leading, TextLineSlot.leading);
+      _mountChild(widget.body, TextLineSlot.body);
+    } catch (e) {
+      widget.uiExceptionStreamSink.add(e);
+    }
   }
 
   void _updateChild(Widget? widget, TextLineSlot slot) {

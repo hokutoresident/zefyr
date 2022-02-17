@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -1190,6 +1192,7 @@ class RawEditorState extends EditorState
           ),
           hasFocus: _hasFocus,
           devicePixelRatio: MediaQuery.of(context).devicePixelRatio,
+          uiExceptionStreamSink: widget.controller.uiExceptionStream.sink,
         ));
       } else if (node is BlockNode) {
         final block = node.style.get(NotusAttribute.block);
@@ -1210,6 +1213,7 @@ class RawEditorState extends EditorState
           indentLevelCounts: indentLevelCounts,
           searchQuery: _searchQuery,
           searchFocus: _searchFocus,
+          uiExceptionStreamSink: widget.controller.uiExceptionStream.sink,
         ));
       } else {
         throw StateError('Unreachable.');
