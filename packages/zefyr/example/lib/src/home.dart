@@ -200,7 +200,9 @@ class _HomePageState extends State<HomePage> {
                   index,
                   length,
                   BlockEmbed.image(
-                      source: 'https://firebasestorage.googleapis.com/v0/b/hokutoapp-jp.appspot.com/o/admin%2Fsample-notes%2Fintroduce%2F2.png?alt=media&token=5c054a6a-fb45-43ff-9a83-87f2dec7a568', ref: ''));
+                      source:
+                          'https://firebasestorage.googleapis.com/v0/b/hokutoapp-jp.appspot.com/o/admin%2Fsample-notes%2Fintroduce%2F2.png?alt=media&token=5c054a6a-fb45-43ff-9a83-87f2dec7a568',
+                      ref: ''));
             },
           ),
           ZIconButton(
@@ -236,13 +238,12 @@ class _HomePageState extends State<HomePage> {
           ).children
         ]),
         Divider(height: 1, thickness: 1, color: Colors.grey.shade200),
-
         _isContainsUnsupportedFormat
             ? Expanded(
-              child: Center(
+                child: Center(
                   child: Text('This document has unsupported format.'),
                 ),
-            )
+              )
             : Expanded(
                 child: Container(
                   color: Colors.white,
@@ -254,8 +255,8 @@ class _HomePageState extends State<HomePage> {
                     embedBuilder: (context, node) {
                       if (node.value.type == 'hr') {
                         final theme = ZefyrTheme.of(context);
-                        assert(
-                        theme.paragraph != null, 'Paragraph theme must be set');
+                        assert(theme.paragraph != null,
+                            'Paragraph theme must be set');
                         return Divider(
                           height: theme.paragraph.style.fontSize *
                               theme.paragraph.style.height,
@@ -268,12 +269,13 @@ class _HomePageState extends State<HomePage> {
                         return Image.network(
                           image.source,
                           fit: BoxFit.fitWidth,
-                          loadingBuilder: (context, widget, event) => event == null
-                              ? widget
-                              : SizedBox(
-                            width: 200,
-                            height: 200,
-                          ),
+                          loadingBuilder: (context, widget, event) =>
+                              event == null
+                                  ? widget
+                                  : SizedBox(
+                                      width: 200,
+                                      height: 200,
+                                    ),
                         );
                       }
                       if (node.value.type == 'pdf') {
@@ -299,7 +301,8 @@ class _HomePageState extends State<HomePage> {
                               Row(
                                 children: [
                                   Text(contents[0]['0']['text']),
-                                  Container(color: Colors.grey, width: 1, height: 15),
+                                  Container(
+                                      color: Colors.grey, width: 1, height: 15),
                                   Text(contents[0]['1']['text']),
                                 ],
                               ),
@@ -307,7 +310,8 @@ class _HomePageState extends State<HomePage> {
                               Row(
                                 children: [
                                   Text(contents[1]['0']['text']),
-                                  Container(color: Colors.grey, width: 1, height: 15),
+                                  Container(
+                                      color: Colors.grey, width: 1, height: 15),
                                   Text(contents[1]['1']['text']),
                                 ],
                               ),
@@ -317,23 +321,25 @@ class _HomePageState extends State<HomePage> {
                       }
                       throw UnimplementedError(
                           'Embeddable type "${node.value.type}" is not supported by default embed '
-                              'builder of ZefyrEditor. You must pass your own builder function to '
-                              'embedBuilder property of ZefyrEditor or ZefyrField widgets.');
+                          'builder of ZefyrEditor. You must pass your own builder function to '
+                          'embedBuilder property of ZefyrEditor or ZefyrField widgets.');
                     },
                     // readOnly: true,
                     // padding: EdgeInsets.only(left: 16, right: 16),
                     onLaunchUrl: _launchUrl,
                   ),
                 ),
-        ),
+              ),
       ],
     );
   }
 
   void _launchUrl(String url) async {
-    final result = await canLaunch(url);
+    final uri = Uri.tryParse(url);
+    if (uri == null) return;
+    final result = await canLaunchUrl(uri);
     if (result) {
-      await launch(url);
+      await launchUrl(uri);
     }
   }
 
@@ -408,7 +414,13 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Text(
-              (_controller.searchFocusIndex == 0 && _controller.searchQuery.isEmpty ? 0 : _controller.searchFocusIndex + 1).toString() + ' / ' + _controller.findSearchMatch().length.toString(),
+              (_controller.searchFocusIndex == 0 &&
+                              _controller.searchQuery.isEmpty
+                          ? 0
+                          : _controller.searchFocusIndex + 1)
+                      .toString() +
+                  ' / ' +
+                  _controller.findSearchMatch().length.toString(),
             ),
             IconButton(
               icon: Icon(Icons.arrow_downward),

@@ -366,8 +366,10 @@ class EditorTextSelectionOverlay {
         break;
     }
     // ignore: deprecated_member_use
-    selectionDelegate!.textEditingValue =
-        _value.copyWith(selection: newSelection, composing: TextRange.empty);
+    selectionDelegate!.userUpdateTextEditingValue(
+      _value.copyWith(selection: newSelection, composing: TextRange.empty),
+      SelectionChangedCause.keyboard,
+    );
     selectionDelegate!.bringIntoView(textPosition);
   }
 }

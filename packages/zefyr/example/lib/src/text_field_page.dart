@@ -68,9 +68,11 @@ class _TextFieldScreenState extends State<TextFieldScreen> {
   }
 
   void _launchUrl(String url) async {
-    final result = await canLaunch(url);
+    final uri = Uri.tryParse(url);
+    if (uri == null) return;
+    final result = await canLaunchUrl(uri);
     if (result) {
-      await launch(url);
+      await launchUrl(uri);
     }
   }
 }
