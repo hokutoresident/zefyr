@@ -17,7 +17,7 @@ dependencies:
   notus:
     git:
       url: https://github.com/hokutoresident/zefyr
-      ref: feature/flutter-3.0.1
+      ref: hokuto
       path: packages/notus
   quiver_hashcode: ^3.0.0+1
   characters: ^1.0.0
