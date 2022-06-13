@@ -108,8 +108,9 @@ class BlockEmbed extends EmbeddableObject {
     String type, {
     Map<String, dynamic> data = const {},
   }) : super(type, inline: false, data: data) {
-    if (!['hr', 'image', 'pdf', 'table'].contains(type)) {
-      throw UnsupportedFormatException('BlockEmbed has a unsupported type. type: $type');
+    if (!['hr', 'image', 'video', 'pdf', 'table'].contains(type)) {
+      throw UnsupportedFormatException(
+          'BlockEmbed has a unsupported type. type: $type');
     }
   }
 
@@ -117,6 +118,10 @@ class BlockEmbed extends EmbeddableObject {
 
   static BlockEmbed image({required String source, required String ref}) {
     return EmbedImage('image', source: source, ref: ref);
+  }
+
+  static BlockEmbed video({required String source, required String ref}) {
+    return EmbedVideo('video', source: source, ref: ref);
   }
 
   static BlockEmbed pdf({
@@ -134,22 +139,19 @@ class BlockEmbed extends EmbeddableObject {
     );
   }
 
-  static BlockEmbed table({required String style, required List<Map<String, dynamic>> contents}) {
-    return BlockEmbed(
-      'table',
-      data: {
-        'style': style,
-        'contents': contents,
-      }
-    );
+  static BlockEmbed table(
+      {required String style, required List<Map<String, dynamic>> contents}) {
+    return BlockEmbed('table', data: {
+      'style': style,
+      'contents': contents,
+    });
   }
 }
 
-
 class EmbedImage extends BlockEmbed {
   EmbedImage(String type, {required this.source, required this.ref})
-    : super(type, data: {'source': source, 'ref': ref});
-  
+      : super(type, data: {'source': source, 'ref': ref});
+
   final String source;
   final String ref;
 
@@ -162,23 +164,31 @@ class EmbedImage extends BlockEmbed {
   }
 }
 
+class EmbedVideo extends BlockEmbed {
+  EmbedVideo(String type, {required this.source, required this.ref})
+      : super(type, data: {'source': source, 'ref': ref});
+
+  final String source;
+  final String ref;
+}
+
 class EmbedPdf extends BlockEmbed {
   EmbedPdf(
     String type, {
-      required this.source,
-      required this.ref,
-      required this.name,
-      required this.size,
-    }) : super(
-        type,
-        data: {
-          'source': source,
-          'name': name,
-          'size': size,
-          'ref': ref,
-        },
-      );
-  
+    required this.source,
+    required this.ref,
+    required this.name,
+    required this.size,
+  }) : super(
+          type,
+          data: {
+            'source': source,
+            'name': name,
+            'size': size,
+            'ref': ref,
+          },
+        );
+
   final String source;
   final String ref;
   final String name;
@@ -197,15 +207,15 @@ class EmbedPdf extends BlockEmbed {
 
 class EmbedTable extends BlockEmbed {
   EmbedTable(String type, {required this.style, required this.contents})
-    : super(
-      type,
-      data: {
-        'style': style,
-        'contents': contents,
-      },
-    );
-  
-  final String style; 
+      : super(
+          type,
+          data: {
+            'style': style,
+            'contents': contents,
+          },
+        );
+
+  final String style;
   final List<Map<String, dynamic>> contents;
 
   factory EmbedTable.fromEmbedObj(EmbeddableObject obj) {
@@ -213,8 +223,8 @@ class EmbedTable extends BlockEmbed {
       obj.type,
       style: obj.data['style'],
       contents: (obj.data['contents'] as List<dynamic>)
-        .map((e) => e as Map<String, dynamic>)
-        .toList(),
+          .map((e) => e as Map<String, dynamic>)
+          .toList(),
     );
   }
 }
