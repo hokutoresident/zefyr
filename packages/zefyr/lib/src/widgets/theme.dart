@@ -2,8 +2,17 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
+
+final TextStyle baseStyle = TextStyle(
+  fontFamily: Platform.isIOS ? 'Hiragino Kaku Gothic ProN' : 'Noto Sans JP'
+);
+
+// final TextStyle baseStyle = GoogleFonts.notoSans();
+
 
 /// Applies a Zefyr editor theme to descendant widgets.
 ///
@@ -132,25 +141,25 @@ class ZefyrThemeData {
 
   factory ZefyrThemeData.fallback(BuildContext context) {
     final themeData = Theme.of(context);
-    final defaultStyle = DefaultTextStyle.of(context);
+    // final defaultStyle = DefaultTextStyle.of(context);
 
     return ZefyrThemeData(
-      bold: GoogleFonts.notoSans(fontWeight: FontWeight.bold),
-      italic: GoogleFonts.notoSans(fontStyle: FontStyle.italic),
-      underline: GoogleFonts.notoSans(decoration: TextDecoration.underline),
-      strikethrough: GoogleFonts.notoSans(decoration: TextDecoration.lineThrough),
-      textColor: GoogleFonts.notoSans(color: Color(0xffFF5555)),
-      marker: GoogleFonts.notoSans(
+      bold: baseStyle.copyWith(fontWeight: FontWeight.bold),
+      italic: baseStyle.copyWith(fontStyle: FontStyle.italic),
+      underline: baseStyle.copyWith(decoration: TextDecoration.underline),
+      strikethrough: baseStyle.copyWith(decoration: TextDecoration.lineThrough),
+      textColor: baseStyle.copyWith(color: Color(0xffFF5555)),
+      marker: baseStyle.copyWith(
         decoration: TextDecoration.underline,
         decorationColor: Color(0xff0099DD).withOpacity(0.15),
         decorationThickness: 10,
       ),
-      link: GoogleFonts.notoSans(
+      link:  baseStyle.copyWith(
         color: themeData.colorScheme.secondary,
         decoration: TextDecoration.underline,
       ),
       paragraph: TextBlockTheme(
-        style: GoogleFonts.notoSans(
+        style:  baseStyle.copyWith(
           fontSize: 16.0,
           color: Colors.black,
           height: 1.5,
@@ -160,7 +169,7 @@ class ZefyrThemeData {
         // lineSpacing is not relevant for paragraphs since they consist of one line
       ),
       heading1: TextBlockTheme(
-        style: defaultStyle.style.copyWith(
+        style: baseStyle.copyWith(
           fontSize: 24.0,
           color: Colors.black,
           height: 1.15,
@@ -169,7 +178,7 @@ class ZefyrThemeData {
         spacing: VerticalSpacing(top: 40.0, bottom: 0.0),
       ),
       heading2: TextBlockTheme(
-        style: GoogleFonts.notoSans(
+        style:  baseStyle.copyWith(
           fontSize: 20.0,
           color: Colors.black,
           height: 1.15,
@@ -178,7 +187,7 @@ class ZefyrThemeData {
         spacing: VerticalSpacing(top: 32.0, bottom: 0.0),
       ),
       heading3: TextBlockTheme(
-        style: GoogleFonts.notoSans(
+        style:  baseStyle.copyWith(
           fontSize: 18.0,
           color: Colors.black,
           height: 1.25,
@@ -187,7 +196,7 @@ class ZefyrThemeData {
         spacing: VerticalSpacing(top: 24.0, bottom: 0.0),
       ),
       caption: TextBlockTheme(
-        style: GoogleFonts.notoSans(
+        style:  baseStyle.copyWith(
           fontSize: 12.0,
           color: Color(0xFF999999),
           height: 1.25,
@@ -195,7 +204,7 @@ class ZefyrThemeData {
         spacing: VerticalSpacing(top: 4.0, bottom: 0.0),
       ),
       lists: TextBlockTheme(
-        style: GoogleFonts.notoSans(
+        style:  baseStyle.copyWith(
           fontSize: 16.0,
           color: Colors.black,
           height: 1.5,
@@ -205,7 +214,7 @@ class ZefyrThemeData {
         lineSpacing: VerticalSpacing(bottom: 8),
       ),
       quote: TextBlockTheme(
-        style: GoogleFonts.notoSans(
+        style:  baseStyle.copyWith(
           fontWeight: FontWeight.w400,
           fontSize: 16.0,
           color: Color(0xff999999),
@@ -222,7 +231,7 @@ class ZefyrThemeData {
         ),
       ),
       code: TextBlockTheme(
-        style: GoogleFonts.notoSans(
+        style:  baseStyle.copyWith(
           color: Colors.black,
           fontWeight: FontWeight.w400,
           fontSize: 16.0,
@@ -238,7 +247,7 @@ class ZefyrThemeData {
         ),
       ),
       largeHeading: TextBlockTheme(
-        style: GoogleFonts.notoSans(
+        style:  baseStyle.copyWith(
           color: Colors.black,
           fontWeight: FontWeight.w700,
           fontSize: 20.0,
@@ -251,7 +260,7 @@ class ZefyrThemeData {
         ),
       ),
       middleHeading: TextBlockTheme(
-        style: GoogleFonts.notoSans(
+        style:  baseStyle.copyWith(
           color: Colors.black,
           fontWeight: FontWeight.w700,
           fontSize: 18.0,

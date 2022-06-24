@@ -29,3 +29,13 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   pedantic: ^1.0.0
+
+flutter:
+  fonts:
+    - family: Noto Sans JP
+      fonts:
+        - asset: lib/fonts/NotoSansJP-Regular.otf
+          weight: 400
+        - asset: lib/fonts/NotoSansJP-Bold.otf
+          weight: 700
+
