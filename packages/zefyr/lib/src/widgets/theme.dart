@@ -5,7 +5,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-// import 'package:google_fonts/google_fonts.dart';
 
 final TextStyle baseStyle = TextStyle(
   fontFamily: Platform.isIOS ? 'Hiragino Kaku Gothic ProN' : 'Noto Sans JP'
