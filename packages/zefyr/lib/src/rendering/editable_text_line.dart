@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
@@ -14,6 +15,9 @@ import 'editable_box.dart';
 const double _kCursorHeightOffset = 2.0; // pixels
 
 enum TextLineSlot { leading, body, bottom }
+
+// For iOS: Hiragino / Android: Noto Sans JP
+final double _largeHeadingYOffset = Platform.isIOS ? -7 : -4;
 
 class RenderEditableTextLine extends RenderEditableBox {
   /// Creates new editable paragraph render box.
@@ -666,7 +670,7 @@ class RenderEditableTextLine extends RenderEditableBox {
         _paintCursor(context, effectiveOffset);
       }
       if (node.style.get(NotusAttribute.block) == NotusAttribute.largeHeading) {
-        context.paintChild(body!, effectiveOffset + Offset(0, -4));
+        context.paintChild(body!, effectiveOffset + Offset(0, _largeHeadingYOffset));
       } else {
         context.paintChild(body!, effectiveOffset);
       }

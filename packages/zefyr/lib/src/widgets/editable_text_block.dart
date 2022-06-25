@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:notus/notus.dart';
 
 import '../rendering/editable_text_block.dart';
@@ -326,7 +325,7 @@ class _NumberPoint extends StatelessWidget {
         child: Text(
           withDot ? '$index.' : '$index',
           textAlign: TextAlign.right,
-          style: GoogleFonts.notoSans(
+          style: baseStyle.copyWith(
             color: style.color,
             fontSize: style.fontSize,
           ),
@@ -352,7 +351,7 @@ class _NumberPoint extends StatelessWidget {
       child: Text(
         _createNumberText(withDot, indent, count),
         textAlign: TextAlign.right,
-        style: GoogleFonts.notoSans(
+        style: baseStyle.copyWith(
           color: style.color,
           fontSize: style.fontSize,
         ),
