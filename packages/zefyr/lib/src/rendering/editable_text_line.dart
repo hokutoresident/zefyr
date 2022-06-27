@@ -18,6 +18,8 @@ enum TextLineSlot { leading, body, bottom }
 
 // For iOS: Hiragino / Android: Noto Sans JP
 final double _largeHeadingYOffset = Platform.isIOS ? -7 : -4;
+final double _quoteYOffset = Platform.isIOS ? -3 : 0;
+final double _blockYOffset = Platform.isIOS ? -2 : 0;
 
 class RenderEditableTextLine extends RenderEditableBox {
   /// Creates new editable paragraph render box.
@@ -669,10 +671,13 @@ class RenderEditableTextLine extends RenderEditableBox {
           !_cursorController.style.paintAboveText) {
         _paintCursor(context, effectiveOffset);
       }
-      if (node.style.get(NotusAttribute.block) == NotusAttribute.largeHeading) {
+      final blockStyle = node.style.get(NotusAttribute.block);
+      if (blockStyle == NotusAttribute.largeHeading) {
         context.paintChild(body!, effectiveOffset + Offset(0, _largeHeadingYOffset));
+      } else if (blockStyle == NotusAttribute.bq) {
+        context.paintChild(body!, effectiveOffset + Offset(0, _quoteYOffset));
       } else {
-        context.paintChild(body!, effectiveOffset);
+        context.paintChild(body!, effectiveOffset + Offset(0, _blockYOffset));
       }
       if (hasFocus &&
           _cursorController.showCursor.value &&
