@@ -1,4 +1,6 @@
 {
+  "dart.flutterSdkPath": ".fvm/flutter_sdk",
+  "dart.sdkPath": ".fvm/flutter_sdk/bin/dart",
   "editor.formatOnSave": false,
   "dart.allowAnalytics": false,
   "dart.enableSdkFormatter": false,
