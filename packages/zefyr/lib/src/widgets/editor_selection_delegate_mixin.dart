@@ -11,8 +11,9 @@ mixin RawEditorStateSelectionDelegateMixin on EditorState
 
   @override
   set textEditingValue(TextEditingValue value) {
-    widget.controller
-        .updateSelection(value.selection, source: ChangeSource.local);
+    // NOTE: Flutter 3 から TextSelectionDelegate から
+    // textEditingValue の setter がなくなったので、中身はuserUpdateTextEditingValueで実装する
+    userUpdateTextEditingValue(value, SelectionChangedCause.drag);
   }
 
   @override
@@ -78,7 +79,9 @@ mixin RawEditorStateSelectionDelegateMixin on EditorState
 
   @override
   void userUpdateTextEditingValue(TextEditingValue value, SelectionChangedCause cause) async {
-    // NOTE: もはやここは呼ばれないがないと怒られるので
+    // NOTE: causeは今のところ使っていない
+    widget.controller
+        .updateSelection(value.selection, source: ChangeSource.local);
   }
 
   @override
