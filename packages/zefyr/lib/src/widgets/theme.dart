@@ -5,9 +5,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 final TextStyle baseStyle = TextStyle(
-  fontFamily: Platform.isIOS ? 'Hiragino Kaku Gothic ProN' : 'Noto Sans JP'
+  fontFamily: Platform.isIOS ? 'Hiragino Kaku Gothic ProN' : 'Noto Sans JP',
+  fontFamilyFallback: [
+    GoogleFonts.notoSans().fontFamily!,
+    ...(GoogleFonts.notoSans().fontFamilyFallback ?? []),
+    GoogleFonts.workSans().fontFamily!,
+    GoogleFonts.inter().fontFamily!,
+  ],
 );
 
 // final TextStyle baseStyle = GoogleFonts.notoSans();
