@@ -54,6 +54,13 @@ flutter:
   assets:
     - assets/
     - images/breeze.jpg
+  fonts:
+    - family: Noto Sans JP
+      fonts:
+        - asset: packages/zefyr/fonts/NotoSansJP-Regular.otf
+          weight: 400
+        - asset: packages/zefyr/fonts/NotoSansJP-Bold.otf
+          weight: 700
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

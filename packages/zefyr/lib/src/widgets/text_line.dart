@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:notus/notus.dart';
 import 'package:zefyr/util.dart';
 
@@ -188,9 +187,7 @@ class TextLine extends StatelessWidget {
       textStyle = textStyle.merge(theme.lists.style);
     }
 
-    return textStyle.merge(TextStyle(
-      fontFamilyFallback: [GoogleFonts.workSans().fontFamily!],
-    ));
+    return textStyle;
   }
 
   TextStyle _getInlineTextStyle(NotusStyle style, ZefyrThemeData theme) {
