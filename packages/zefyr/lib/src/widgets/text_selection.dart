@@ -356,21 +356,29 @@ class EditorTextSelectionOverlay {
 
   void _handleSelectionHandleChanged(
       TextSelection newSelection, _TextSelectionHandlePosition position) {
-    late TextPosition textPosition;
-    switch (position) {
-      case _TextSelectionHandlePosition.start:
-        textPosition = newSelection.base;
-        break;
-      case _TextSelectionHandlePosition.end:
-        textPosition = newSelection.extent;
-        break;
-    }
-    // ignore: deprecated_member_use
+
+    // bringIntoView がいまのところ実装されていないためコメントアウト
+    // late TextPosition textPosition;
+    // switch (position) {
+    //   case _TextSelectionHandlePosition.start:
+    //     textPosition = newSelection.base;
+    //     break;
+    //   case _TextSelectionHandlePosition.end:
+    //     textPosition = newSelection.extent;
+    //     break;
+    // }
+
+    // 長さが0になる場合に挙動が不安定なので、最低1は確保するようにする
+    final selection = newSelection.baseOffset == newSelection.extentOffset ?
+    newSelection.copyWith(extentOffset: newSelection.extentOffset + 1) : newSelection;
+
     selectionDelegate!.userUpdateTextEditingValue(
-      _value.copyWith(selection: newSelection, composing: TextRange.empty),
+      _value.copyWith(selection: selection, composing: TextRange.empty),
       SelectionChangedCause.keyboard,
     );
-    selectionDelegate!.bringIntoView(textPosition);
+
+    // bringIntoView はいまのところ実装されていない
+    // selectionDelegate!.bringIntoView(textPosition);
   }
 }
 
