@@ -6,6 +6,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:zefyr/src/widgets/baseline_proxy.dart';
 
 import '../../zefyr.dart';
@@ -1265,6 +1266,22 @@ class RawEditorState extends EditorState
   @override
   void removeTextPlaceholder() {
     // TODO: implement removeTextPlaceholder
+  }
+
+  @override
+  void didChangeInputControl(
+      TextInputControl? oldControl, TextInputControl? newControl) {
+    /*
+    The framework calls this method to notify that the text input control has been changed.
+    The TextInputClient may switch to the new text input control by hiding the old and showing the new input control.
+    */
+  }
+
+  @override
+  void performSelector(String selectorName) {
+    /*
+    Performs the specified MacOS-specific selector from the NSStandardKeyBindingResponding protocol or user-specified selector from DefaultKeyBinding.Dict.
+    */
   }
 }
 
