@@ -23,6 +23,9 @@ import 'text_selection.dart';
 typedef ZefyrEmbedBuilder = Widget Function(
     BuildContext context, EmbedNode node);
 
+typedef DragSelectionUpdateCallback = void Function(
+    DragStartDetails startDetails, DragUpdateDetails updateDetails);
+
 /// Default implementation of a builder function for embeddable objects in
 /// Zefyr.
 ///
@@ -31,7 +34,8 @@ Widget defaultZefyrEmbedBuilder(BuildContext context, EmbedNode node) {
   if (node.value.type == 'hr') {
     final theme = ZefyrTheme.of(context)!;
     return Divider(
-      height: (theme.paragraph.style.fontSize ?? 0.0) * (theme.paragraph.style.height ?? 0.0),
+      height: (theme.paragraph.style.fontSize ?? 0.0) *
+          (theme.paragraph.style.height ?? 0.0),
       thickness: 2,
       color: Colors.grey.shade200,
     );
@@ -171,7 +175,8 @@ class ZefyrEditor extends StatefulWidget {
   /// Callback to invoke when user wants to launch a URL.
   final ValueChanged<String>? onLaunchUrl;
 
-  final void Function(EmbeddableObject, {required bool readOnly})? onTapEmbedObject;
+  final void Function(EmbeddableObject, {required bool readOnly})?
+      onTapEmbedObject;
 
   /// Builder function for embeddable objects.
   ///
@@ -219,7 +224,8 @@ class _ZefyrEditorState extends State<ZefyrEditor>
   @override
   bool get selectionEnabled => widget.enableInteractiveSelection;
 
-  late EditorTextSelectionGestureDetectorBuilder _selectionGestureDetectorBuilder;
+  late EditorTextSelectionGestureDetectorBuilder
+      _selectionGestureDetectorBuilder;
 
   void _requestKeyboard() {
     _editorKey.currentState?.requestKeyboard();
@@ -378,14 +384,16 @@ class _ZefyrEditorSelectionGestureDetectorBuilder
     final line = result!.node as LineNode;
     if (line.hasEmbed) {
       final embed = line.children.single as EmbedNode;
-      editor?.widget.onTapEmbedObject?.call(embed.value, readOnly: _state.widget.readOnly);
+      editor?.widget.onTapEmbedObject
+          ?.call(embed.value, readOnly: _state.widget.readOnly);
     }
     final segmentResult = line.lookup(result.offset);
     if (segmentResult.node == null) return;
     final segment = segmentResult.node as LeafNode;
     if (segment.style.contains(NotusAttribute.link) &&
         editor?.widget.onLaunchUrl != null) {
-      editor?.widget.onLaunchUrl!(segment.style.get(NotusAttribute.link)!.value!);
+      editor
+          ?.widget.onLaunchUrl!(segment.style.get(NotusAttribute.link)!.value!);
     }
   }
 
@@ -408,6 +416,7 @@ class _ZefyrEditorSelectionGestureDetectorBuilder
               renderEditor?.selectPosition(cause: SelectionChangedCause.tap);
               break;
             case PointerDeviceKind.touch:
+            case PointerDeviceKind.trackpad:
             case PointerDeviceKind.unknown:
               // On macOS/iOS/iPadOS a touch tap places the cursor at the edge
               // of the word.
@@ -521,7 +530,8 @@ class RawEditor extends StatefulWidget {
   /// a link in the document.
   final ValueChanged<String>? onLaunchUrl;
 
-  final void Function(EmbeddableObject, {required bool readOnly})? onTapEmbedObject;
+  final void Function(EmbeddableObject, {required bool readOnly})?
+      onTapEmbedObject;
 
   /// Configuration of toolbar options.
   ///
@@ -727,7 +737,8 @@ class RawEditorState extends EditorState
   ///
   /// This property is typically used to notify the renderer of input gestures.
   @override
-  RenderEditor get renderEditor => _editorKey.currentContext!.findRenderObject() as RenderEditor;
+  RenderEditor get renderEditor =>
+      _editorKey.currentContext!.findRenderObject() as RenderEditor;
 
   /// Express interest in interacting with the keyboard.
   ///
@@ -1057,13 +1068,15 @@ class RawEditorState extends EditorState
     await Future.delayed(const Duration(milliseconds: 100));
     final viewport = RenderAbstractViewport.of(renderEditor);
     if (viewport == null || _searchFocus == null) return;
-    final editorOffset = renderEditor.localToGlobal(Offset(0.0, 0.0), ancestor: viewport);
+    final editorOffset =
+        renderEditor.localToGlobal(Offset(0.0, 0.0), ancestor: viewport);
     final offsetInViewport = _scrollController!.offset + editorOffset.dy;
     final offset = renderEditor.getSelectionOffset(
       _scrollController!.position.viewportDimension,
       _scrollController!.offset,
       offsetInViewport,
-      TextSelection(baseOffset: _searchFocus!.end, extentOffset: _searchFocus!.end),
+      TextSelection(
+          baseOffset: _searchFocus!.end, extentOffset: _searchFocus!.end),
     );
     if (offset == null) return;
     await _scrollController!.animateTo(
@@ -1282,6 +1295,11 @@ class RawEditorState extends EditorState
     /*
     Performs the specified MacOS-specific selector from the NSStandardKeyBindingResponding protocol or user-specified selector from DefaultKeyBinding.Dict.
     */
+  }
+
+  @override
+  void insertContent(KeyboardInsertedContent content) {
+    // TODO: implement insertContent
   }
 }
 
