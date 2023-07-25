@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:zefyr/zefyr.dart';
 
 class TextFieldScreen extends StatefulWidget {
-  TextFieldScreen({Key key, this.title}) : super(key: key);
+  TextFieldScreen({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -14,7 +14,7 @@ class TextFieldScreen extends StatefulWidget {
 }
 
 class _TextFieldScreenState extends State<TextFieldScreen> {
-  ZefyrController _controller;
+  late ZefyrController _controller;
   final FocusNode _focusNode = FocusNode();
 
   @override
@@ -67,7 +67,8 @@ class _TextFieldScreenState extends State<TextFieldScreen> {
     );
   }
 
-  void _launchUrl(String url) async {
+  void _launchUrl(String? url) async {
+    if (url == null) return;
     final uri = Uri.tryParse(url);
     if (uri == null) return;
     final result = await canLaunchUrl(uri);
