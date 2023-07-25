@@ -53,12 +53,18 @@ class ZefyrTheme extends InheritedWidget {
   /// Returns `null` if there is no [ZefyrTheme] in the given build context
   /// and [nullOk] is set to `true`. If [nullOk] is set to `false` (default)
   /// then this method asserts.
-  static ZefyrThemeData? of(BuildContext context, {bool nullOk = false}) {
+  static ZefyrThemeData? maybeOf(BuildContext context) {
     final widget = context.dependOnInheritedWidgetOfExactType<ZefyrTheme>();
-    if (widget == null && nullOk) return null;
-    assert(widget != null,
-        '$ZefyrTheme.of() called with a context that does not contain a ZefyrEditor.');
-    return widget!.data;
+    return widget?.data;
+  }
+
+  static ZefyrThemeData of(BuildContext context) {
+    final widget = context.dependOnInheritedWidgetOfExactType<ZefyrTheme>();
+    if (widget == null) {
+      
+      throw AssertionError('$ZefyrTheme.of() called with a context that does not contain a ZefyrEditor.');
+    }
+    return widget.data;
   }
 }
 

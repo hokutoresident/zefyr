@@ -837,7 +837,7 @@ class RawEditorState extends EditorState
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final parentTheme = ZefyrTheme.of(context, nullOk: true);
+    final parentTheme = ZefyrTheme.maybeOf(context);
     final fallbackTheme = ZefyrThemeData.fallback(context);
     _themeData = (parentTheme != null)
         ? fallbackTheme.merge(parentTheme)
