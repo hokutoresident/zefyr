@@ -11,7 +11,7 @@ class Settings {
   /// application can be saved back to the assets folder.
   final String assetsPath;
 
-  Settings({this.assetsPath});
+  Settings({required this.assetsPath});
 
   static Future<Settings> load() async {
     if (kIsWeb) {
@@ -32,7 +32,7 @@ class Settings {
   static Settings of(BuildContext context) {
     final widget =
         context.dependOnInheritedWidgetOfExactType<SettingsProvider>();
-    return widget.settings;
+    return widget!.settings;
   }
 
   Future<void> save() async {
@@ -47,7 +47,7 @@ class Settings {
   }
 }
 
-Future<Settings> showSettingsDialog(BuildContext context, Settings settings) {
+Future<Settings?> showSettingsDialog(BuildContext context, Settings settings) {
   return showDialog<Settings>(
       context: context, builder: (ctx) => SettingsDialog(settings: settings));
 }
@@ -55,7 +55,7 @@ Future<Settings> showSettingsDialog(BuildContext context, Settings settings) {
 class SettingsDialog extends StatefulWidget {
   final Settings settings;
 
-  const SettingsDialog({Key key, @required this.settings}) : super(key: key);
+  const SettingsDialog({Key? key, required this.settings}) : super(key: key);
 
   @override
   _SettingsDialogState createState() => _SettingsDialogState();
@@ -63,7 +63,7 @@ class SettingsDialog extends StatefulWidget {
 
 class _SettingsDialogState extends State<SettingsDialog> {
   String _assetsPath = '';
-  TextEditingController _assetsPathController;
+  late TextEditingController _assetsPathController;
 
   @override
   void initState() {
@@ -111,7 +111,7 @@ class _SettingsDialogState extends State<SettingsDialog> {
 class SettingsProvider extends InheritedWidget {
   final Settings settings;
 
-  SettingsProvider({Key key, this.settings, Widget child})
+  SettingsProvider({Key? key, required this.settings, required Widget child})
       : super(key: key, child: child);
 
   @override

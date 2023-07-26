@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:example/src/loading.dart';
 import 'package:example/src/read_only_view.dart';
 import 'package:file/local.dart';
 import 'package:flutter/material.dart';
@@ -20,10 +21,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  ZefyrController _controller;
+  ZefyrController? _controller;
   final FocusNode _focusNode = FocusNode();
 
-  Settings _settings;
+  Settings? _settings;
   var _isContainsUnsupportedFormat = false;
 
   void _handleSettingsLoaded(Settings value) {
@@ -61,21 +62,23 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> _save() async {
+  Future<void> _save({required Settings settings, required ZefyrController controller}) async {
     final fs = LocalFileSystem();
-    final file = fs.directory(_settings.assetsPath).childFile('welcome.note');
-    final data = jsonEncode(_controller.document);
+    final file = fs.directory(settings.assetsPath).childFile('welcome.note');
+    final data = jsonEncode(controller.document);
     await file.writeAsString(data);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_settings == null || _controller == null) {
-      return Scaffold(body: Center(child: Text('Loading...')));
+    final settings = _settings;
+    final controller = _controller; 
+    if (settings == null || controller == null) {
+      return Loading();
     }
 
     return SettingsProvider(
-      settings: _settings,
+      settings: settings,
       child: PageLayout(
         appBar: AppBar(
           backgroundColor: Colors.grey.shade800,
@@ -88,26 +91,26 @@ class _HomePageState extends State<HomePage> {
           actions: [
             IconButton(
               icon: Icon(Icons.settings, size: 16),
-              onPressed: _showSettings,
+              onPressed: () => _showSettings(settings: settings),
             ),
-            if (_settings.assetsPath.isNotEmpty)
+            if (settings.assetsPath.isNotEmpty)
               IconButton(
                 icon: Icon(Icons.save, size: 16),
-                onPressed: _save,
+                onPressed: () => _save(settings: settings, controller: controller),
               )
           ],
         ),
         menuBar: Material(
           color: Colors.grey.shade800,
-          child: _buildMenuBar(context),
+          child: _buildMenuBar(context, settings),
         ),
-        body: _buildWelcomeEditor(context),
+        body: _buildWelcomeEditor(context, controller),
       ),
     );
   }
 
-  void _showSettings() async {
-    final result = await showSettingsDialog(context, _settings);
+  void _showSettings({required Settings settings}) async {
+    final result = await showSettingsDialog(context, settings);
     if (mounted && result != null) {
       setState(() {
         _settings = result;
@@ -115,7 +118,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Widget _buildMenuBar(BuildContext context) {
+  Widget _buildMenuBar(BuildContext context, Settings settings) {
     final headerStyle = TextStyle(
         fontSize: 11, color: Colors.grey.shade500, fontWeight: FontWeight.bold);
     final itemStyle = TextStyle(color: Colors.white);
@@ -130,7 +133,7 @@ class _HomePageState extends State<HomePage> {
           title: Text('¶   Read only view', style: itemStyle),
           dense: true,
           visualDensity: VisualDensity.compact,
-          onTap: _readOnlyView,
+          onTap: () => _readOnlyView(settings: settings),
         ),
         ListTile(
           title: Text('LAYOUT EXAMPLES', style: headerStyle),
@@ -141,13 +144,13 @@ class _HomePageState extends State<HomePage> {
           title: Text('¶   Expandable', style: itemStyle),
           dense: true,
           visualDensity: VisualDensity.compact,
-          onTap: _expanded,
+          onTap: () => _expanded(settings: settings),
         ),
         ListTile(
           title: Text('¶   Custom scrollable', style: itemStyle),
           dense: true,
           visualDensity: VisualDensity.compact,
-          onTap: _scrollable,
+          onTap: () => _scrollable(settings: settings),
         ),
         ListTile(
           title: Text('FORMS AND FIELDS EXAMPLES', style: headerStyle),
@@ -158,16 +161,16 @@ class _HomePageState extends State<HomePage> {
           title: Text('¶   Decorated field', style: itemStyle),
           dense: true,
           visualDensity: VisualDensity.compact,
-          onTap: _decoratedField,
+          onTap: () => _decoratedField(settings: settings),
         ),
       ],
     );
   }
 
-  Widget _buildWelcomeEditor(BuildContext context) {
+  Widget _buildWelcomeEditor(BuildContext context, ZefyrController controller) {
     return Column(
       children: [
-        _buildSearchBar(context),
+        _buildSearchBar(context, controller),
         ZefyrToolbar(children: [
           ZIconButton(
             highlightElevation: 0,
@@ -194,9 +197,9 @@ class _HomePageState extends State<HomePage> {
             ),
             fillColor: Theme.of(context).canvasColor,
             onPressed: () {
-              final index = _controller.selection.baseOffset;
-              final length = _controller.selection.extentOffset - index;
-              _controller.replaceText(
+              final index = controller.selection.baseOffset;
+              final length = controller.selection.extentOffset - index;
+              controller.replaceText(
                   index,
                   length,
                   BlockEmbed.image(
@@ -216,7 +219,7 @@ class _HomePageState extends State<HomePage> {
             ),
             fillColor: Theme.of(context).canvasColor,
             onPressed: () {
-              _controller.increaseIndentAtSelection();
+              controller.increaseIndentAtSelection();
             },
           ),
           ZIconButton(
@@ -230,11 +233,11 @@ class _HomePageState extends State<HomePage> {
             ),
             fillColor: Theme.of(context).canvasColor,
             onPressed: () {
-              _controller.decreaseIndentAtSelection();
+              controller.decreaseIndentAtSelection();
             },
           ),
           ...ZefyrToolbar.basic(
-            controller: _controller,
+            controller: controller,
           ).children
         ]),
         Divider(height: 1, thickness: 1, color: Colors.grey.shade200),
@@ -249,17 +252,18 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.white,
                   padding: const EdgeInsets.only(left: 16.0, right: 16.0),
                   child: ZefyrEditor(
-                    controller: _controller,
+                    controller: controller,
                     focusNode: _focusNode,
                     autofocus: true,
                     embedBuilder: (context, node) {
                       if (node.value.type == 'hr') {
                         final theme = ZefyrTheme.of(context);
-                        assert(theme.paragraph != null,
-                            'Paragraph theme must be set');
+                        assert(theme.paragraph.style.fontSize != null && 
+                            theme.paragraph.style.height != null,
+                          'fontSize and height must be set');
                         return Divider(
-                          height: theme.paragraph.style.fontSize *
-                              theme.paragraph.style.height,
+                          height: theme.paragraph.style.fontSize! *
+                              theme.paragraph.style.height!,
                           thickness: 2,
                           color: Colors.grey.shade200,
                         );
@@ -343,55 +347,55 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void _expanded() {
+  void _expanded({required Settings settings}) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (BuildContext context) => SettingsProvider(
-          settings: _settings,
+          settings: settings,
           child: ExpandedLayout(),
         ),
       ),
     );
   }
 
-  void _readOnlyView() {
+  void _readOnlyView({required Settings settings}) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (BuildContext context) => SettingsProvider(
-          settings: _settings,
+          settings: settings,
           child: ReadOnlyView(),
         ),
       ),
     );
   }
 
-  void _scrollable() {
+  void _scrollable({required Settings settings}) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (BuildContext context) => SettingsProvider(
-          settings: _settings,
+          settings: settings,
           child: ScrollableLayout(),
         ),
       ),
     );
   }
 
-  void _decoratedField() {
+  void _decoratedField({required Settings settings}) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (BuildContext context) => SettingsProvider(
-          settings: _settings,
+          settings: settings,
           child: DecoratedFieldDemo(),
         ),
       ),
     );
   }
 
-  Widget _buildSearchBar(BuildContext context) {
+  Widget _buildSearchBar(BuildContext context, ZefyrController controller) {
     return SizedBox(
       height: 40,
       child: Padding(
@@ -400,39 +404,39 @@ class _HomePageState extends State<HomePage> {
           children: [
             Expanded(
               child: TextFormField(
-                initialValue: _controller.searchQuery,
+                initialValue: controller.searchQuery,
                 decoration: const InputDecoration(
                   hintText: '検索',
                 ),
                 onFieldSubmitted: (_) {
-                  _controller.selectNextSearchHit();
+                  controller.selectNextSearchHit();
                 },
                 onChanged: (query) {
-                  _controller.search(query);
+                  controller.search(query);
                   setState(() {});
                 },
               ),
             ),
             Text(
-              (_controller.searchFocusIndex == 0 &&
-                              _controller.searchQuery.isEmpty
+              (controller.searchFocusIndex == 0 &&
+                              controller.searchQuery.isEmpty
                           ? 0
-                          : _controller.searchFocusIndex + 1)
+                          : controller.searchFocusIndex + 1)
                       .toString() +
                   ' / ' +
-                  _controller.findSearchMatch().length.toString(),
+                  controller.findSearchMatch().length.toString(),
             ),
             IconButton(
               icon: Icon(Icons.arrow_downward),
               onPressed: () {
-                _controller.selectNextSearchHit();
+                controller.selectNextSearchHit();
                 setState(() {});
               },
             ),
             IconButton(
               icon: Icon(Icons.arrow_upward),
               onPressed: () {
-                _controller.selectPreviousSearchHit();
+                controller.selectPreviousSearchHit();
                 setState(() {});
               },
             ),

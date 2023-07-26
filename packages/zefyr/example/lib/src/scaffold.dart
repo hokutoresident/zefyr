@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:example/src/loading.dart';
 import 'package:file/local.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,14 +16,14 @@ class DemoScaffold extends StatefulWidget {
   /// Filename of the document to load into the editor.
   final String documentFilename;
   final DemoContentBuilder builder;
-  final List<Widget> actions;
-  final Widget floatingActionButton;
+  final List<Widget>? actions;
+  final Widget? floatingActionButton;
   final bool showToolbar;
 
   const DemoScaffold({
-    Key key,
-    @required this.documentFilename,
-    @required this.builder,
+    Key? key,
+    required this.documentFilename,
+    required this.builder,
     this.actions,
     this.showToolbar = true,
     this.floatingActionButton,
@@ -34,7 +35,7 @@ class DemoScaffold extends StatefulWidget {
 
 class _DemoScaffoldState extends State<DemoScaffold> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  ZefyrController _controller;
+  ZefyrController? _controller;
 
   bool _loading = false;
   bool _canSave = false;
@@ -105,13 +106,16 @@ class _DemoScaffoldState extends State<DemoScaffold> {
     final file = fs
         .directory(settings.assetsPath)
         .childFile('${widget.documentFilename}');
-    final data = jsonEncode(_controller.document);
+    final data = jsonEncode(_controller!.document);
     await file.writeAsString(data);
-    ScaffoldMessenger.of(_scaffoldKey.currentState.context).showSnackBar(SnackBar(content: Text('Saved.')));
+    ScaffoldMessenger.of(_scaffoldKey.currentState!.context).showSnackBar(SnackBar(content: Text('Saved.')));
   }
 
   @override
   Widget build(BuildContext context) {
+    final controller = _controller;
+    if (controller == null) return Loading();
+
     final actions = widget.actions ?? <Widget>[];
     if (_canSave) {
       actions.add(IconButton(
@@ -123,6 +127,7 @@ class _DemoScaffoldState extends State<DemoScaffold> {
         ),
       ));
     }
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -138,15 +143,13 @@ class _DemoScaffoldState extends State<DemoScaffold> {
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        title: _loading || widget.showToolbar == false
+        title: widget.showToolbar == false
             ? null
-            : ZefyrToolbar.basic(controller: _controller),
+            : ZefyrToolbar.basic(controller: controller),
         actions: actions,
       ),
       floatingActionButton: widget.floatingActionButton,
-      body: _loading
-          ? Center(child: Text('Loading...'))
-          : widget.builder(context, _controller),
+      body: widget.builder(context, controller),
     );
   }
 }
