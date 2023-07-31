@@ -1190,7 +1190,7 @@ class RawEditorState extends EditorState
           node: node,
           textDirection: _textDirection,
           indentWidth: _indentWidth(node, _themeData),
-          spacing: _getSpacingForLine(node, _themeData),
+          spacing: _getSpacingForLine(node, _themeData, result.isEmpty),
           cursorController: _cursorController,
           selection: widget.controller.selection,
           selectionColor: widget.selectionColor,
@@ -1213,7 +1213,7 @@ class RawEditorState extends EditorState
         result.add(EditableTextBlock(
           node: node,
           textDirection: _textDirection,
-          spacing: _getSpacingForBlock(node, _themeData),
+          spacing: _getSpacingForBlock(node, _themeData, result.isEmpty),
           cursorController: _cursorController,
           selection: widget.controller.selection,
           selectionColor: widget.selectionColor,
@@ -1236,7 +1236,10 @@ class RawEditorState extends EditorState
     return result;
   }
 
-  VerticalSpacing _getSpacingForLine(LineNode node, ZefyrThemeData theme) {
+  VerticalSpacing _getSpacingForLine(LineNode node, ZefyrThemeData theme, bool useDefault) {
+    if (useDefault) {
+      return theme.paragraph.spacing;
+    }
     final style = node.style.get(NotusAttribute.heading);
     if (style == NotusAttribute.heading.level1) {
       return theme.heading1.spacing;
@@ -1251,7 +1254,10 @@ class RawEditorState extends EditorState
     }
   }
 
-  VerticalSpacing _getSpacingForBlock(BlockNode node, ZefyrThemeData theme) {
+  VerticalSpacing _getSpacingForBlock(BlockNode node, ZefyrThemeData theme, bool useDefault) {
+    if (useDefault) {
+      return theme.paragraph.spacing;
+    }
     final style = node.style.get(NotusAttribute.block);
     if (style == NotusAttribute.block.code) {
       return theme.code.spacing;
