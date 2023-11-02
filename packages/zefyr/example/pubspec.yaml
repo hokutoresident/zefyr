@@ -25,7 +25,7 @@ dependencies:
   image_picker: ^1.0.1
   url_launcher: ^6.0.9
   adaptive_breakpoints: ^0.0.3
-  google_fonts: ^4.0.3
+  google_fonts: 4.0.3
   file: ^6.1.2
   path_provider: ^2.0.2
   zefyr:
