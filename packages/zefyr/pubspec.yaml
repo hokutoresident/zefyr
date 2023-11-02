@@ -21,7 +21,7 @@ dependencies:
       path: packages/notus
   quiver_hashcode: ^3.0.0+1
   characters: ^1.0.0
-  google_fonts: 4.0.3
+  google_fonts: ^6.1.0
   validators: ^3.0.0
   kana_kit: ^2.0.0
 
