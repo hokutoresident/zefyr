@@ -53,7 +53,7 @@ class EditableTextBlock extends StatelessWidget {
   Widget build(BuildContext context) {
     assert(debugCheckHasMediaQuery(context));
 
-    final theme = ZefyrTheme.of(context)!;
+    final theme = ZefyrTheme.of(context);
     return _EditableBlock(
       node: node,
       textDirection: textDirection,
@@ -64,8 +64,9 @@ class EditableTextBlock extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildChildren(BuildContext context, Map<int, int> indentLevelCounts) {
-    final theme = ZefyrTheme.of(context)!;
+  List<Widget> _buildChildren(
+      BuildContext context, Map<int, int> indentLevelCounts) {
+    final theme = ZefyrTheme.of(context);
     final count = node.children.length;
     final children = <Widget>[];
     var index = 0;
@@ -99,9 +100,9 @@ class EditableTextBlock extends StatelessWidget {
     return children.toList(growable: false);
   }
 
-  Widget? _buildLeading(
-      BuildContext context, LineNode node, int index, int count, Map<int, int> indentLevelCounts) {
-    final theme = ZefyrTheme.of(context)!;
+  Widget? _buildLeading(BuildContext context, LineNode node, int index,
+      int count, Map<int, int> indentLevelCounts) {
+    final theme = ZefyrTheme.of(context);
     final block = node.style.get(NotusAttribute.block);
     final indent = node.style.get(NotusAttribute.indent)?.value ?? 0;
 
@@ -136,11 +137,12 @@ class EditableTextBlock extends StatelessWidget {
   }
 
   Widget? _buildBottom(BuildContext context, LineNode node) {
-    final theme = ZefyrTheme.of(context)!;
+    final theme = ZefyrTheme.of(context);
     final block = node.style.get(NotusAttribute.block);
     if (block == NotusAttribute.middleHeading) {
       return Divider(
-        height: (theme.paragraph.style.fontSize ?? 0.0) * (theme.paragraph.style.height ?? 0.0),
+        height: (theme.paragraph.style.fontSize ?? 0.0) *
+            (theme.paragraph.style.height ?? 0.0),
         thickness: 1,
         color: Color(0xFF0099DD),
       );
@@ -149,9 +151,10 @@ class EditableTextBlock extends StatelessWidget {
   }
 
   double _userIndentWidth(BuildContext context, LineNode node) {
-    final theme = ZefyrTheme.of(context)!;
+    final theme = ZefyrTheme.of(context);
     final block = node.style.get(NotusAttribute.block);
-    if (block == NotusAttribute.block.bulletList || block == NotusAttribute.block.numberList) {
+    if (block == NotusAttribute.block.bulletList ||
+        block == NotusAttribute.block.numberList) {
       final indentValue = node.style.get(NotusAttribute.indent)?.value ?? 0.0;
       return theme.indentWidth * indentValue;
     } else {
@@ -367,7 +370,58 @@ class _NumberPoint extends StatelessWidget {
       return '$count )';
     }
     if ([2, 5].contains(indent)) {
-      const nums = ['①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⑩', '⑪', '⑫', '⑬', '⑭', '⑮', '⑯', '⑰', '⑱', '⑲', '⑳', '㉑', '㉒', '㉓', '㉔', '㉕', '㉖', '㉗', '㉘', '㉙', '㉚', '㉛', '㉜', '㉝', '㉞', '㉟', '㊱', '㊲', '㊳', '㊴', '㊵', '㊶', '㊷', '㊸', '㊹', '㊺', '㊻',' ㊼', '㊽', '㊾', '㊿'];
+      const nums = [
+        '①',
+        '②',
+        '③',
+        '④',
+        '⑤',
+        '⑥',
+        '⑦',
+        '⑧',
+        '⑨',
+        '⑩',
+        '⑪',
+        '⑫',
+        '⑬',
+        '⑭',
+        '⑮',
+        '⑯',
+        '⑰',
+        '⑱',
+        '⑲',
+        '⑳',
+        '㉑',
+        '㉒',
+        '㉓',
+        '㉔',
+        '㉕',
+        '㉖',
+        '㉗',
+        '㉘',
+        '㉙',
+        '㉚',
+        '㉛',
+        '㉜',
+        '㉝',
+        '㉞',
+        '㉟',
+        '㊱',
+        '㊲',
+        '㊳',
+        '㊴',
+        '㊵',
+        '㊶',
+        '㊷',
+        '㊸',
+        '㊹',
+        '㊺',
+        '㊻',
+        ' ㊼',
+        '㊽',
+        '㊾',
+        '㊿'
+      ];
       if (count <= nums.length) {
         return '${nums[count - 1]}';
       } else {
@@ -393,13 +447,51 @@ class _BulletPoint extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 10, right: 10),
-      alignment: AlignmentDirectional.topEnd,
-      width: width,
-      child: Builder(
-        builder: (context) {
-          // ●
-          if ([0, 3].contains(indent)) {
+        padding: EdgeInsets.only(top: 10, right: 10),
+        alignment: AlignmentDirectional.topEnd,
+        width: width,
+        child: Builder(
+          builder: (context) {
+            // ●
+            if ([0, 3].contains(indent)) {
+              return Container(
+                height: 6,
+                width: 6,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.black,
+                ),
+              );
+            }
+
+            // -
+            if ([1, 4].contains(indent)) {
+              return Container(
+                // 視覚補正
+                margin: EdgeInsets.only(top: 2),
+                height: 2,
+                width: 8,
+                color: Colors.black,
+              );
+            }
+
+            // ○
+            if ([2, 5].contains(indent)) {
+              return Container(
+                height: 6,
+                width: 6,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  border: Border.all(
+                    color: Colors.black,
+                    width: 1,
+                  ),
+                ),
+              );
+            }
+
+            // ●
             return Container(
               height: 6,
               width: 6,
@@ -408,46 +500,7 @@ class _BulletPoint extends StatelessWidget {
                 color: Colors.black,
               ),
             );
-          }
-
-          // -
-          if ([1, 4].contains(indent)) {
-            return Container(
-              // 視覚補正
-              margin: EdgeInsets.only(top: 2),
-              height: 2,
-              width: 8,
-              color: Colors.black,
-            );
-          }
-
-          // ○
-          if ([2, 5].contains(indent)) {
-            return Container(
-              height: 6,
-              width: 6,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-                border: Border.all(
-                  color: Colors.black,
-                  width: 1,
-                ),
-              ),
-            );
-          }
-
-          // ●
-          return Container(
-            height: 6,
-            width: 6,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.black,
-            ),
-          );
-        },
-      )
-    );
+          },
+        ));
   }
 }

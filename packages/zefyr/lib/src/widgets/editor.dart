@@ -32,7 +32,7 @@ typedef DragSelectionUpdateCallback = void Function(
 /// Only supports "horizontal rule" embeds.
 Widget defaultZefyrEmbedBuilder(BuildContext context, EmbedNode node) {
   if (node.value.type == 'hr') {
-    final theme = ZefyrTheme.of(context)!;
+    final theme = ZefyrTheme.of(context);
     return Divider(
       height: (theme.paragraph.style.fontSize ?? 0.0) *
           (theme.paragraph.style.height ?? 0.0),
@@ -945,7 +945,7 @@ class RawEditorState extends EditorState
     // a new RenderEditableBox child. If we try to update selection overlay
     // immediately it'll not be able to find the new child since it hasn't been
     // built yet.
-    SchedulerBinding.instance!.addPostFrameCallback(
+    SchedulerBinding.instance.addPostFrameCallback(
         (Duration _) => _updateOrDisposeSelectionOverlayIfNeeded());
 //    _textChangedSinceLastCaretUpdate = true;
 
@@ -970,7 +970,7 @@ class RawEditorState extends EditorState
     _updateOrDisposeSelectionOverlayIfNeeded();
     if (_hasFocus) {
       // Listen for changing viewInsets, which indicates keyboard showing up.
-      WidgetsBinding.instance!.addObserver(this);
+      WidgetsBinding.instance.addObserver(this);
       showCaretOnScreen();
 //      _lastBottomViewInset = WidgetsBinding.instance.window.viewInsets.bottom;
 //      if (!_value.selection.isValid) {
@@ -978,7 +978,7 @@ class RawEditorState extends EditorState
 //        _handleSelectionChanged(TextSelection.collapsed(offset: _value.text.length), renderEditable, null);
 //      }
     } else {
-      WidgetsBinding.instance!.removeObserver(this);
+      WidgetsBinding.instance.removeObserver(this);
       // TODO: teach editor about state of the toolbar and whether the user is in the middle of applying styles.
       //       this is needed because some buttons in toolbar can steal focus from the editor
       //       but we want to preserve the selection, maybe adjusting its style slightly.
@@ -1043,7 +1043,6 @@ class RawEditorState extends EditorState
       _showCaretOnScreenScheduled = false;
 
       final viewport = RenderAbstractViewport.of(renderEditor);
-      assert(viewport != null);
       final editorOffset =
           renderEditor.localToGlobal(Offset(0.0, 0.0), ancestor: viewport);
       final offsetInViewport = _scrollController!.offset + editorOffset.dy;
@@ -1067,7 +1066,7 @@ class RawEditorState extends EditorState
   void _showSearchFocus() async {
     await Future.delayed(const Duration(milliseconds: 100));
     final viewport = RenderAbstractViewport.of(renderEditor);
-    if (viewport == null || _searchFocus == null) return;
+    if (_searchFocus == null) return;
     final editorOffset =
         renderEditor.localToGlobal(Offset(0.0, 0.0), ancestor: viewport);
     final offsetInViewport = _scrollController!.offset + editorOffset.dy;
@@ -1236,7 +1235,8 @@ class RawEditorState extends EditorState
     return result;
   }
 
-  VerticalSpacing _getSpacingForLine(LineNode node, ZefyrThemeData theme, bool useDefault) {
+  VerticalSpacing _getSpacingForLine(
+      LineNode node, ZefyrThemeData theme, bool useDefault) {
     if (useDefault) {
       return theme.paragraph.spacing;
     }
@@ -1254,7 +1254,8 @@ class RawEditorState extends EditorState
     }
   }
 
-  VerticalSpacing _getSpacingForBlock(BlockNode node, ZefyrThemeData theme, bool useDefault) {
+  VerticalSpacing _getSpacingForBlock(
+      BlockNode node, ZefyrThemeData theme, bool useDefault) {
     if (useDefault) {
       return theme.paragraph.spacing;
     }
@@ -1307,6 +1308,9 @@ class RawEditorState extends EditorState
   void insertContent(KeyboardInsertedContent content) {
     // TODO: implement insertContent
   }
+
+  @override
+  bool get liveTextInputEnabled => false;
 }
 
 class _Editor extends MultiChildRenderObjectWidget {

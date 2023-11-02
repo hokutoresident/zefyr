@@ -31,7 +31,7 @@ class TextLine extends StatelessWidget {
     this.lookupResult,
     required this.searchQuery,
     this.searchFocus,
-  })  : super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -58,15 +58,20 @@ class TextLine extends StatelessWidget {
     );
   }
 
-  TextRange? _textNodeInputtingRange(LookupResult? textNodeLookup, TextNode child){
+  TextRange? _textNodeInputtingRange(
+      LookupResult? textNodeLookup, TextNode child) {
     return (textNodeLookup?.node == child) ? inputtingTextRange : null;
   }
 
   TextSpan buildText(BuildContext context, LineNode node) {
-    final theme = ZefyrTheme.of(context)!;
-    final textNodeLookup = lookupResult != null && lookupResult!.offset <= node.length ? node.lookup(lookupResult!.offset) : null;
+    final theme = ZefyrTheme.of(context);
+    final textNodeLookup =
+        lookupResult != null && lookupResult!.offset <= node.length
+            ? node.lookup(lookupResult!.offset)
+            : null;
     final children = node.children
-        .map((node) => _segmentToTextSpan(node, theme, _textNodeInputtingRange(textNodeLookup, node as TextNode)))
+        .map((node) => _segmentToTextSpan(node, theme,
+            _textNodeInputtingRange(textNodeLookup, node as TextNode)))
         .toList(growable: false);
     return TextSpan(
       style: _getParagraphTextStyle(node.style, theme),
@@ -74,9 +79,10 @@ class TextLine extends StatelessWidget {
     );
   }
 
-  List<TextSpan> _highlightTextSpans(String source, String query, TextStyle style, Node node) {
+  List<TextSpan> _highlightTextSpans(
+      String source, String query, TextStyle style, Node node) {
     if (query.isEmpty || !source.containsMatch(query)) {
-      return [ TextSpan(text: source) ];
+      return [TextSpan(text: source)];
     }
     final matches = source.findMatches(query);
 
@@ -92,14 +98,17 @@ class TextLine extends StatelessWidget {
         ));
       }
 
-      final isInThisMatch = match.start + node.documentOffset == searchFocus?.start &&
-          match.end + node.documentOffset == searchFocus?.end;
+      final isInThisMatch =
+          match.start + node.documentOffset == searchFocus?.start &&
+              match.end + node.documentOffset == searchFocus?.end;
       final isInThisTextLine = node.containsOffset(searchFocus?.start ?? -1);
       final isFocusing = isInThisMatch && isInThisTextLine;
       children.add(TextSpan(
         text: source.substring(match.start, match.end),
         style: style.copyWith(
-            backgroundColor: isFocusing ? Color(0xff0099DD).withOpacity(0.60) : Color(0xff0099DD).withOpacity(0.20)),
+            backgroundColor: isFocusing
+                ? Color(0xff0099DD).withOpacity(0.60)
+                : Color(0xff0099DD).withOpacity(0.20)),
       ));
 
       if (i == matches.length - 1 && match.end != source.length) {
@@ -113,7 +122,8 @@ class TextLine extends StatelessWidget {
     return children;
   }
 
-  TextSpan _segmentToTextSpan(Node node, ZefyrThemeData theme, TextRange? textRange) {
+  TextSpan _segmentToTextSpan(
+      Node node, ZefyrThemeData theme, TextRange? textRange) {
     final segment = node as TextNode;
     final attrs = segment.style;
 
@@ -123,7 +133,8 @@ class TextLine extends StatelessWidget {
         return TextSpan(
           children: [
             TextSpan(
-              children: _highlightTextSpans(segment.value, searchQuery, style, node),
+              children:
+                  _highlightTextSpans(segment.value, searchQuery, style, node),
             ),
           ],
           style: _getInlineTextStyle(attrs, theme),
@@ -137,7 +148,8 @@ class TextLine extends StatelessWidget {
             TextSpan(text: segment.value.substring(0, textRange.start)),
             TextSpan(
                 text: segment.value.substring(textRange.start, textRange.end),
-                style: style.copyWith(backgroundColor: const Color(0x220000FF))),
+                style:
+                    style.copyWith(backgroundColor: const Color(0x220000FF))),
             TextSpan(
                 text: segment.value
                     .substring(textRange.end, segment.value.length)),

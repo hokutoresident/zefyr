@@ -410,15 +410,15 @@ class ZefyrToolbar extends StatefulWidget implements PreferredSizeWidget {
       bool hideHorizontalRule = false}) {
     return ZefyrToolbar(key: key, children: [
       HistoryButton(
-        icon: Icons.redo, 
-        controller: controller, 
-        isEnabled: controller.hasRedo, 
+        icon: Icons.redo,
+        controller: controller,
+        isEnabled: controller.hasRedo,
         isRedo: true,
       ),
       HistoryButton(
-        icon: Icons.undo, 
-        controller: controller, 
-        isEnabled: controller.hasUndo, 
+        icon: Icons.undo,
+        controller: controller,
+        isEnabled: controller.hasUndo,
         isRedo: false,
       ),
       Visibility(
@@ -532,7 +532,8 @@ class ZefyrToolbar extends StatefulWidget implements PreferredSizeWidget {
               indent: 16, endIndent: 16, color: Colors.grey.shade400)),
       Visibility(
           visible: !hideLink, child: LinkStyleButton(controller: controller)),
-      Visibility(visible: !hideLink, child: LinkStyleButton(controller: controller)),
+      Visibility(
+          visible: !hideLink, child: LinkStyleButton(controller: controller)),
       Visibility(
         visible: !hideHorizontalRule,
         child: InsertEmbedButton(
@@ -657,7 +658,7 @@ class _ZDropdownButtonState<T> extends State<ZDropdownButton<T>> {
   void _showMenu() {
     final popupMenuTheme = PopupMenuTheme.of(context);
     final button = context.findRenderObject() as RenderBox;
-    final overlay = Overlay.of(context)!.context.findRenderObject() as RenderBox;
+    final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
     final position = RelativeRect.fromRect(
       Rect.fromPoints(
         button.localToGlobal(Offset.zero, ancestor: overlay),
