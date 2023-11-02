@@ -1,8 +1,6 @@
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: curly_braces_in_flow_control_structures
 
-import 'dart:ui';
-
 import 'package:characters/characters.dart';
 import 'package:flutter/services.dart';
 import 'package:notus/notus.dart';

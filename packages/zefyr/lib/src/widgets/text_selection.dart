@@ -167,9 +167,9 @@ class EditorTextSelectionOverlay {
     _handlesVisible = visible;
     // If we are in build state, it will be too late to update visibility.
     // We will need to schedule the build in next frame.
-    if (SchedulerBinding.instance!.schedulerPhase ==
+    if (SchedulerBinding.instance.schedulerPhase ==
         SchedulerPhase.persistentCallbacks) {
-      SchedulerBinding.instance!.addPostFrameCallback(_markNeedsBuild);
+      SchedulerBinding.instance.addPostFrameCallback(_markNeedsBuild);
     } else {
       _markNeedsBuild();
     }
@@ -187,7 +187,7 @@ class EditorTextSelectionOverlay {
               _buildHandle(context, _TextSelectionHandlePosition.end)),
     ];
 
-    Overlay.of(context, rootOverlay: true, debugRequiredFor: debugRequiredFor)!
+    Overlay.of(context, rootOverlay: true, debugRequiredFor: debugRequiredFor)
         .insertAll(_handles!);
   }
 
@@ -204,7 +204,7 @@ class EditorTextSelectionOverlay {
   void showToolbar() {
     assert(_toolbar == null);
     _toolbar = OverlayEntry(builder: _buildToolbar);
-    Overlay.of(context, rootOverlay: true, debugRequiredFor: debugRequiredFor)!
+    Overlay.of(context, rootOverlay: true, debugRequiredFor: debugRequiredFor)
         .insert(_toolbar!);
     _toolbarController.forward(from: 0.0);
   }
@@ -221,9 +221,9 @@ class EditorTextSelectionOverlay {
   void update(TextEditingValue newValue) {
     if (_value == newValue) return;
     _value = newValue;
-    if (SchedulerBinding.instance!.schedulerPhase ==
+    if (SchedulerBinding.instance.schedulerPhase ==
         SchedulerPhase.persistentCallbacks) {
-      SchedulerBinding.instance!.addPostFrameCallback(_markNeedsBuild);
+      SchedulerBinding.instance.addPostFrameCallback(_markNeedsBuild);
     } else {
       _markNeedsBuild();
     }
@@ -356,7 +356,6 @@ class EditorTextSelectionOverlay {
 
   void _handleSelectionHandleChanged(
       TextSelection newSelection, _TextSelectionHandlePosition position) {
-
     // bringIntoView がいまのところ実装されていないためコメントアウト
     // late TextPosition textPosition;
     // switch (position) {
@@ -369,8 +368,9 @@ class EditorTextSelectionOverlay {
     // }
 
     // 長さが0になる場合に挙動が不安定なので、最低1は確保するようにする
-    final selection = newSelection.baseOffset == newSelection.extentOffset ?
-    newSelection.copyWith(extentOffset: newSelection.extentOffset + 1) : newSelection;
+    final selection = newSelection.baseOffset == newSelection.extentOffset
+        ? newSelection.copyWith(extentOffset: newSelection.extentOffset + 1)
+        : newSelection;
 
     selectionDelegate!.userUpdateTextEditingValue(
       _value.copyWith(selection: selection, composing: TextRange.empty),
@@ -1216,7 +1216,8 @@ class _EditorTextSelectionGestureDetectorState
       gestures[LongPressGestureRecognizer] =
           GestureRecognizerFactoryWithHandlers<LongPressGestureRecognizer>(
         () => LongPressGestureRecognizer(
-            debugOwner: this, supportedDevices: <PointerDeviceKind>{PointerDeviceKind.touch}),
+            debugOwner: this,
+            supportedDevices: <PointerDeviceKind>{PointerDeviceKind.touch}),
         (LongPressGestureRecognizer instance) {
           instance
             ..onLongPressStart = _handleLongPressStart
@@ -1234,7 +1235,8 @@ class _EditorTextSelectionGestureDetectorState
       gestures[HorizontalDragGestureRecognizer] =
           GestureRecognizerFactoryWithHandlers<HorizontalDragGestureRecognizer>(
         () => HorizontalDragGestureRecognizer(
-            debugOwner: this, supportedDevices: <PointerDeviceKind>{PointerDeviceKind.mouse}),
+            debugOwner: this,
+            supportedDevices: <PointerDeviceKind>{PointerDeviceKind.mouse}),
         (HorizontalDragGestureRecognizer instance) {
           instance
             // Text selection should start from the position of the first pointer

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:notus/notus.dart';
 
@@ -43,7 +42,7 @@ class RenderEditableTextBlock extends RenderEditableContainerBox
     _savedPadding = value;
   }
 
-  BoxPainter ? _painter;
+  BoxPainter? _painter;
 
   /// What decoration to paint.
   ///
