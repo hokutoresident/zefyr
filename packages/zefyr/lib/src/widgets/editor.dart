@@ -1189,7 +1189,8 @@ class RawEditorState extends EditorState
           node: node,
           textDirection: _textDirection,
           indentWidth: _indentWidth(node, _themeData),
-          spacing: _getSpacingForLine(node, _themeData, result.isEmpty),
+          spacing:
+              _getSpacingForLine(node, _themeData, firstLine: result.isEmpty),
           cursorController: _cursorController,
           selection: widget.controller.selection,
           selectionColor: widget.selectionColor,
@@ -1212,7 +1213,8 @@ class RawEditorState extends EditorState
         result.add(EditableTextBlock(
           node: node,
           textDirection: _textDirection,
-          spacing: _getSpacingForBlock(node, _themeData, result.isEmpty),
+          spacing:
+              _getSpacingForBlock(node, _themeData, firstLine: result.isEmpty),
           cursorController: _cursorController,
           selection: widget.controller.selection,
           selectionColor: widget.selectionColor,
@@ -1235,42 +1237,52 @@ class RawEditorState extends EditorState
     return result;
   }
 
-  VerticalSpacing _getSpacingForLine(
-      LineNode node, ZefyrThemeData theme, bool useDefault) {
-    if (useDefault) {
-      return theme.paragraph.spacing;
-    }
+  VerticalSpacing _getSpacingForLine(LineNode node, ZefyrThemeData theme,
+      {bool firstLine = false}) {
+    VerticalSpacing spacing;
     final style = node.style.get(NotusAttribute.heading);
     if (style == NotusAttribute.heading.level1) {
-      return theme.heading1.spacing;
+      spacing = theme.heading1.spacing;
     } else if (style == NotusAttribute.heading.level2) {
-      return theme.heading2.spacing;
+      spacing = theme.heading2.spacing;
     } else if (style == NotusAttribute.heading.level3) {
-      return theme.heading3.spacing;
+      spacing = theme.heading3.spacing;
     } else if (style == NotusAttribute.caption) {
-      return theme.caption.spacing;
+      spacing = theme.caption.spacing;
     } else {
-      return theme.paragraph.spacing;
+      spacing = theme.paragraph.spacing;
     }
+    if (firstLine) {
+      spacing = VerticalSpacing(
+        top: theme.paragraph.spacing.top,
+        bottom: spacing.bottom,
+      );
+    }
+    return spacing;
   }
 
-  VerticalSpacing _getSpacingForBlock(
-      BlockNode node, ZefyrThemeData theme, bool useDefault) {
-    if (useDefault) {
-      return theme.paragraph.spacing;
-    }
+  VerticalSpacing _getSpacingForBlock(BlockNode node, ZefyrThemeData theme,
+      {bool firstLine = false}) {
+    VerticalSpacing spacing;
     final style = node.style.get(NotusAttribute.block);
     if (style == NotusAttribute.block.code) {
-      return theme.code.spacing;
+      spacing = theme.code.spacing;
     } else if (style == NotusAttribute.block.quote) {
-      return theme.quote.spacing;
+      spacing = theme.quote.spacing;
     } else if (style == NotusAttribute.largeHeading) {
-      return theme.largeHeading.spacing;
+      spacing = theme.largeHeading.spacing;
     } else if (style == NotusAttribute.middleHeading) {
-      return theme.middleHeading.spacing;
+      spacing = theme.middleHeading.spacing;
     } else {
-      return theme.lists.spacing;
+      spacing = theme.lists.spacing;
     }
+    if (firstLine) {
+      spacing = VerticalSpacing(
+        top: theme.paragraph.spacing.top,
+        bottom: spacing.bottom,
+      );
+    }
+    return spacing;
   }
 
   double _indentWidth(StyledNode node, ZefyrThemeData theme) {
