@@ -358,8 +358,13 @@ class TextBlockTheme {
   final VerticalSpacing spacing;
 
   /// Vertical spacing for individual lines within a text block.
-  ///
   final VerticalSpacing lineSpacing;
+
+  /// Height of an empty line.
+  final double? emptyLineHeight;
+
+  /// Vertical spacing around an empty line block
+  final VerticalSpacing emptyLineSpacing;
 
   /// Decoration of a text block.
   ///
@@ -372,5 +377,8 @@ class TextBlockTheme {
     required this.spacing,
     this.lineSpacing = const VerticalSpacing.zero(),
     this.decoration,
-  });
+    double? emptyLineHeight,
+    VerticalSpacing? emptyLineSpacing,
+  })  : emptyLineHeight = emptyLineHeight ?? style.height,
+        emptyLineSpacing = emptyLineSpacing ?? spacing;
 }

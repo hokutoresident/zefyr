@@ -1237,21 +1237,32 @@ class RawEditorState extends EditorState
     return result;
   }
 
-  VerticalSpacing _getSpacingForLine(LineNode node, ZefyrThemeData theme,
-      {bool firstLine = false}) {
+  VerticalSpacing _getSpacingForLine(LineNode node, ZefyrThemeData theme, {bool firstLine = false}) {
     VerticalSpacing spacing;
+    VerticalSpacing emptyLineSpacing;
     final style = node.style.get(NotusAttribute.heading);
     if (style == NotusAttribute.heading.level1) {
       spacing = theme.heading1.spacing;
+      emptyLineSpacing = theme.heading1.emptyLineSpacing;
     } else if (style == NotusAttribute.heading.level2) {
       spacing = theme.heading2.spacing;
+      emptyLineSpacing = theme.heading2.emptyLineSpacing;
     } else if (style == NotusAttribute.heading.level3) {
       spacing = theme.heading3.spacing;
+      emptyLineSpacing = theme.heading3.emptyLineSpacing;
     } else if (style == NotusAttribute.caption) {
       spacing = theme.caption.spacing;
+      emptyLineSpacing = theme.caption.emptyLineSpacing;
     } else {
       spacing = theme.paragraph.spacing;
+      emptyLineSpacing = theme.paragraph.emptyLineSpacing;
     }
+
+    final isEmptyLine = node.children.isEmpty;
+    if (isEmptyLine) {
+      spacing = emptyLineSpacing;
+    }
+
     if (firstLine) {
       spacing = VerticalSpacing(
         top: theme.paragraph.spacing.top,
