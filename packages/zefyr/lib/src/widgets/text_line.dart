@@ -73,8 +73,9 @@ class TextLine extends StatelessWidget {
         .map((node) => _segmentToTextSpan(node, theme,
             _textNodeInputtingRange(textNodeLookup, node as TextNode)))
         .toList(growable: false);
+    final isEmptyLine = children.isEmpty;
     return TextSpan(
-      style: _getParagraphTextStyle(node.style, theme),
+      style: _getParagraphTextStyle(node.style, theme, isEmptyLine),
       children: children,
     );
   }
@@ -170,33 +171,48 @@ class TextLine extends StatelessWidget {
     );
   }
 
-  TextStyle _getParagraphTextStyle(NotusStyle style, ZefyrThemeData theme) {
+  TextStyle _getParagraphTextStyle(NotusStyle style, ZefyrThemeData theme, bool isEmptyLine) {
     var textStyle = TextStyle();
+    double? emptyLineHeight;
     final heading = node.style.get(NotusAttribute.heading);
     if (heading == NotusAttribute.heading.level1) {
       textStyle = textStyle.merge(theme.heading1.style);
+      emptyLineHeight = theme.heading1.emptyLineHeight;
     } else if (heading == NotusAttribute.heading.level2) {
       textStyle = textStyle.merge(theme.heading2.style);
+      emptyLineHeight = theme.heading2.emptyLineHeight;
     } else if (heading == NotusAttribute.heading.level3) {
       textStyle = textStyle.merge(theme.heading3.style);
+      emptyLineHeight = theme.heading3.emptyLineHeight;
     } else if (heading == NotusAttribute.heading.caption) {
       textStyle = textStyle.merge(theme.caption.style);
+      emptyLineHeight = theme.caption.emptyLineHeight;
     } else {
       textStyle = textStyle.merge(theme.paragraph.style);
+      emptyLineHeight = theme.paragraph.emptyLineHeight;
     }
 
     final block = style.get(NotusAttribute.block);
     if (block == NotusAttribute.block.quote) {
       textStyle = textStyle.merge(theme.quote.style);
+      emptyLineHeight = theme.quote.emptyLineHeight;
     } else if (block == NotusAttribute.block.code) {
       textStyle = textStyle.merge(theme.code.style);
+      emptyLineHeight = theme.code.emptyLineHeight;
     } else if (block == NotusAttribute.largeHeading) {
       textStyle = textStyle.merge(theme.largeHeading.style);
+      emptyLineHeight = theme.largeHeading.emptyLineHeight;
     } else if (block == NotusAttribute.middleHeading) {
       textStyle = textStyle.merge(theme.middleHeading.style);
+      emptyLineHeight = theme.middleHeading.emptyLineHeight;
     } else if (block != null) {
       // lists
       textStyle = textStyle.merge(theme.lists.style);
+      emptyLineHeight = theme.lists.emptyLineHeight;
+    }
+
+    if (isEmptyLine) {
+      textStyle = textStyle.merge(TextStyle(height: emptyLineHeight));
     }
 
     return textStyle;
