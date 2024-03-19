@@ -1334,6 +1334,15 @@ class RawEditorState extends EditorState
 
   @override
   bool get liveTextInputEnabled => false;
+  
+  @override
+  bool get lookUpEnabled => true;
+  
+  @override
+  bool get searchWebEnabled => true;
+  
+  @override
+  bool get shareEnabled => true;
 }
 
 class _Editor extends MultiChildRenderObjectWidget {
