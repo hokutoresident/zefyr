@@ -260,11 +260,20 @@ class RenderEditor extends RenderEditableContainerBox
         offsetInViewport;
     final caretBottom = endpoints.single.point.dy + cursorMargin + offsetInViewport;
     double? dy;
+
     if (caretTop < scrollOffset) {
       dy = caretTop;
     } else if (caretBottom > scrollOffset + viewportHeight) {
       dy = caretBottom - viewportHeight;
     }
+    print('selection       : ${selection.start} - ${selection.end}');
+    print('caretTop        : $caretTop');
+    print('endpoints       : ${endpoints.single.point.dy}');
+    print('child height:   : ${child.preferredLineHeight(childPosition)}');
+    print('offsetInViewport: $offsetInViewport');
+    print('viewportHeight  : $viewportHeight');
+    print('dy              : $dy');
+
     if (dy == null) return null;
     return math.max(dy, 0.0);
   }

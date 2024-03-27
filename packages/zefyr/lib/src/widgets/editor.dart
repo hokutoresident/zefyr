@@ -1066,6 +1066,7 @@ class RawEditorState extends EditorState
   void _showSearchFocus() async {
     await Future.delayed(const Duration(milliseconds: 100));
     final viewport = RenderAbstractViewport.of(renderEditor);
+    
     if (_searchFocus == null) return;
     final editorOffset =
         renderEditor.localToGlobal(Offset(0.0, 0.0), ancestor: viewport);
@@ -1078,6 +1079,12 @@ class RawEditorState extends EditorState
           baseOffset: _searchFocus!.end, extentOffset: _searchFocus!.end),
     );
     if (offset == null) return;
+    print('searchFocus            : ${_searchFocus!.pattern}');
+    print('scrollController offset: ${_scrollController?.offset}');
+    print('offsetInViewport       : $offsetInViewport');
+    print('scrollController offset: ${_scrollController?.offset}');
+    print('editorOffset           : ${editorOffset.dy}');
+    print('offset                 : $offset');
     await _scrollController!.animateTo(
       offset,
       duration: _caretAnimationDuration,
