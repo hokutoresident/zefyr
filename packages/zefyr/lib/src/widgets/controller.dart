@@ -296,8 +296,15 @@ class ZefyrController extends ChangeNotifier {
   // ノート最後尾が改行で終わっているか
   bool isEndNewline() {
     final wholeText = document.toPlainText();
+      if (wholeText.isEmpty) {
+      return false; // 文字列が空の場合、改行で終わらないと判断
+    }
+
     final lastIndex = wholeText.length - 1;
     final lastChar = wholeText[lastIndex];
+    if (wholeText.length == 1) {
+      return lastChar == '\n'; // 文字列が1文字しかない場合、その文字が改行コードかどうかを返す
+    }
     final secondLastChar = wholeText[lastIndex - 1];
     final endsNewLine = lastChar == '\n' && secondLastChar == '\n';
     return endsNewLine;
