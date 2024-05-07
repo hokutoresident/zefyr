@@ -4,10 +4,12 @@
 .vscode/
 .packages
 .dart_tool/
-.fvm/flutter_sdk
 packages
 pubspec.lock
 coverage/
 doc/api/
 test/.test_coverage.dart
 build/
+
+# FVM Version Cache
+.fvm/
