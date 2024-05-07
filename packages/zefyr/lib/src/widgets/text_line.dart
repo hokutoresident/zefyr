@@ -53,7 +53,7 @@ class TextLine extends StatelessWidget {
         text: buildText(context, node),
         textDirection: textDirection,
         strutStyle: strutStyle,
-        textScaleFactor: MediaQuery.textScaleFactorOf(context),
+        textScaler: MediaQuery.textScalerOf(context),
       ),
     );
   }
@@ -171,7 +171,8 @@ class TextLine extends StatelessWidget {
     );
   }
 
-  TextStyle _getParagraphTextStyle(NotusStyle style, ZefyrThemeData theme, bool isEmptyLine) {
+  TextStyle _getParagraphTextStyle(
+      NotusStyle style, ZefyrThemeData theme, bool isEmptyLine) {
     var textStyle = TextStyle();
     double? emptyLineHeight;
     final heading = node.style.get(NotusAttribute.heading);
