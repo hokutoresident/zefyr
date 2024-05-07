@@ -75,24 +75,21 @@ class KeyboardListener {
     required this.onDelete,
   });
 
-  KeyEventResult handleKeyEvent(RawKeyEvent keyEvent) {
+  KeyEventResult handleKeyEvent(KeyEvent keyEvent) {
     if (kIsWeb) {
       // On web platform, we should ignore the key because it's processed already.
       return KeyEventResult.ignored;
     }
 
-    if (keyEvent is! RawKeyDownEvent) return KeyEventResult.ignored;
+    if (keyEvent is! KeyDownEvent) return KeyEventResult.ignored;
 
     final Set<LogicalKeyboardKey> keysPressed =
-        LogicalKeyboardKey.collapseSynonyms(RawKeyboard.instance.keysPressed);
+        LogicalKeyboardKey.collapseSynonyms(
+            HardwareKeyboard.instance.logicalKeysPressed);
     final LogicalKeyboardKey key = keyEvent.logicalKey;
 
-    final bool isMacOS = keyEvent.data is RawKeyEventDataMacOs;
     if (!_nonModifierKeys.contains(key) ||
-        keysPressed
-                .difference(isMacOS ? _macOsModifierKeys : _modifierKeys)
-                .length >
-            1 ||
+        keysPressed.difference(_modifierKeys).length > 1 ||
         keysPressed.difference(_interestingKeys).isNotEmpty) {
       // If the most recently pressed key isn't a non-modifier key, or more than
       // one non-modifier key is down, or keys other than the ones we're interested in
@@ -100,18 +97,13 @@ class KeyboardListener {
       return KeyEventResult.ignored;
     }
 
-    final bool isWordModifierPressed =
-        isMacOS ? keyEvent.isAltPressed : keyEvent.isControlPressed;
-    final bool isLineModifierPressed =
-        isMacOS ? keyEvent.isMetaPressed : keyEvent.isAltPressed;
-    final bool isShortcutModifierPressed =
-        isMacOS ? keyEvent.isMetaPressed : keyEvent.isControlPressed;
     if (_movementKeys.contains(key)) {
       onCursorMovement(key,
-          wordModifier: isWordModifierPressed,
-          lineModifier: isLineModifierPressed,
-          shift: keyEvent.isShiftPressed);
-    } else if (isShortcutModifierPressed && _shortcutKeys.contains(key)) {
+          wordModifier: HardwareKeyboard.instance.isControlPressed,
+          lineModifier: HardwareKeyboard.instance.isAltPressed,
+          shift: HardwareKeyboard.instance.isShiftPressed);
+    } else if (HardwareKeyboard.instance.isControlPressed &&
+        _shortcutKeys.contains(key)) {
       final _keyToShortcut = {
         LogicalKeyboardKey.keyX: InputShortcut.cut,
         LogicalKeyboardKey.keyC: InputShortcut.copy,
