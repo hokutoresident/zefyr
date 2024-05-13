@@ -8,7 +8,7 @@ class RenderParagraphProxy extends RenderProxyBox
     implements RenderContentProxyBox {
   RenderParagraphProxy({
     required TextStyle textStyle,
-    required double textScaleFactor,
+    required TextScaler textScaler,
     required TextWidthBasis textWidthBasis,
     RenderParagraph? child,
     TextDirection? textDirection,
@@ -19,7 +19,7 @@ class RenderParagraphProxy extends RenderProxyBox
             text: TextSpan(text: ' ', style: textStyle),
             textAlign: TextAlign.left,
             textDirection: textDirection,
-            textScaleFactor: textScaleFactor,
+            textScaler: textScaler,
             strutStyle: strutStyle,
             locale: locale,
             textWidthBasis: textWidthBasis,
@@ -40,9 +40,9 @@ class RenderParagraphProxy extends RenderProxyBox
     markNeedsLayout();
   }
 
-  set textScaleFactor(double value) {
-    if (_prototypePainter.textScaleFactor == value) return;
-    _prototypePainter.textScaleFactor = value;
+  set textScaler(TextScaler value) {
+    if (_prototypePainter.textScaler == value) return;
+    _prototypePainter.textScaler = value;
     markNeedsLayout();
   }
 

@@ -19,6 +19,21 @@ import 'editor_selection_delegate_mixin.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'text_selection.dart';
 
+class ToolbarOptions {
+  const ToolbarOptions({
+    this.copy = false,
+    this.cut = false,
+    this.paste = false,
+    this.selectAll = false,
+  });
+
+  static const ToolbarOptions empty = ToolbarOptions();
+  final bool copy;
+  final bool cut;
+  final bool paste;
+  final bool selectAll;
+}
+
 /// Builder function for embeddable objects in [ZefyrEditor].
 typedef ZefyrEmbedBuilder = Widget Function(
     BuildContext context, EmbedNode node);
@@ -830,7 +845,7 @@ class RawEditorState extends EditorState
 
     // Focus
     _focusAttachment = widget.focusNode.attach(context,
-        onKey: (node, event) => _keyboardListener.handleKeyEvent(event));
+        onKeyEvent: (node, event) => _keyboardListener.handleKeyEvent(event));
     widget.focusNode.addListener(_handleFocusChanged);
   }
 
@@ -878,7 +893,7 @@ class RawEditorState extends EditorState
       oldWidget.focusNode.removeListener(_handleFocusChanged);
       _focusAttachment?.detach();
       _focusAttachment = widget.focusNode.attach(context,
-          onKey: (node, event) => _keyboardListener.handleKeyEvent(event));
+          onKeyEvent: (node, event) => _keyboardListener.handleKeyEvent(event));
       widget.focusNode.addListener(_handleFocusChanged);
       updateKeepAlive();
     }
@@ -1237,7 +1252,8 @@ class RawEditorState extends EditorState
     return result;
   }
 
-  VerticalSpacing _getSpacingForLine(LineNode node, ZefyrThemeData theme, {bool firstLine = false}) {
+  VerticalSpacing _getSpacingForLine(LineNode node, ZefyrThemeData theme,
+      {bool firstLine = false}) {
     VerticalSpacing spacing;
     VerticalSpacing emptyLineSpacing;
     final style = node.style.get(NotusAttribute.heading);
