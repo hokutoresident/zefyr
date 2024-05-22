@@ -108,7 +108,7 @@ class BlockEmbed extends EmbeddableObject {
     String type, {
     Map<String, dynamic> data = const {},
   }) : super(type, inline: false, data: data) {
-    if (!['hr', 'image', 'video', 'pdf', 'table'].contains(type)) {
+    if (!['hr', 'image', 'video', 'pdf', 'table', 'X'].contains(type)) {
       throw UnsupportedFormatException(
           'BlockEmbed has a unsupported type. type: $type');
     }
