@@ -38,6 +38,7 @@ class ZefyrController extends ChangeNotifier {
   int searchFocusIndex = -1;
   final onChangeSearchFocus = StreamController<Match>.broadcast();
   final onChangeSearchQuery = StreamController<String>.broadcast();
+  final onChangeSearchFocusTop = StreamController<Match>.broadcast();
 
   final uiExceptionStream = StreamController<Object>.broadcast();
 
@@ -233,6 +234,7 @@ class ZefyrController extends ChangeNotifier {
     document.close();
     onChangeSearchFocus.close();
     onChangeSearchQuery.close();
+    onChangeSearchFocusTop.close();
     uiExceptionStream.close();
     super.dispose();
   }

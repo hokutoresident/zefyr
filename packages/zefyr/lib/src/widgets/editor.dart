@@ -810,6 +810,13 @@ class RawEditorState extends EditorState
       _showSearchFocus();
     });
 
+    widget.controller.onChangeSearchFocusTop.stream.listen((focus) {
+      setState(() {
+        _searchFocus = focus;
+      });
+      _showSearchFocus(isScrollTop: true);
+    });
+
     widget.controller.onChangeSearchQuery.stream.listen((query) {
       setState(() {
         _searchQuery = query;
@@ -933,6 +940,7 @@ class RawEditorState extends EditorState
     widget.focusNode.removeListener(_handleFocusChanged);
     widget.controller.onChangeSearchFocus.close();
     widget.controller.onChangeSearchQuery.close();
+    widget.controller.onChangeSearchFocusTop.close();
     _focusAttachment?.detach();
     _cursorController.dispose();
     _clipboardStatus?.removeListener(_onChangedClipboardStatus);
@@ -1078,7 +1086,7 @@ class RawEditorState extends EditorState
     });
   }
 
-  void _showSearchFocus() async {
+  void _showSearchFocus({bool isScrollTop = false}) async {
     await Future.delayed(const Duration(milliseconds: 100));
     final viewport = RenderAbstractViewport.of(renderEditor);
     if (_searchFocus == null) return;
@@ -1091,6 +1099,7 @@ class RawEditorState extends EditorState
       offsetInViewport,
       TextSelection(
           baseOffset: _searchFocus!.end, extentOffset: _searchFocus!.end),
+      isScrollTop: isScrollTop,
     );
     if (offset == null) return;
     await _scrollController!.animateTo(

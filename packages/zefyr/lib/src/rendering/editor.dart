@@ -248,7 +248,7 @@ class RenderEditor extends RenderEditableContainerBox
     return null;
   }
 
-  double? getSelectionOffset(double viewportHeight, double scrollOffset, double offsetInViewport, TextSelection selection) {
+  double? getSelectionOffset(double viewportHeight, double scrollOffset, double offsetInViewport, TextSelection selection, {bool isScrollTop = false}) {
     const cursorMargin = 100.0;
     final endpoints = getEndpointsForSelection(selection);
     if (endpoints.length != 1) return null;
@@ -258,6 +258,8 @@ class RenderEditor extends RenderEditableContainerBox
         child.preferredLineHeight(childPosition) -
         cursorMargin +
         offsetInViewport;
+    if (isScrollTop) return math.max(caretTop, 0.0);
+
     final caretBottom = endpoints.single.point.dy + cursorMargin + offsetInViewport;
     double? dy;
     if (caretTop < scrollOffset) {
@@ -267,6 +269,7 @@ class RenderEditor extends RenderEditableContainerBox
     }
     if (dy == null) return null;
     return math.max(dy, 0.0);
+
   }
 
   @override
