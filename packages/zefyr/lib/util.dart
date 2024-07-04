@@ -42,10 +42,10 @@ int getPositionDelta(Delta user, Delta actual) {
 }
 
 extension StringEx on String {
-  List<Match> findMatches(String query) {
+  List<Match> findMatches(String query, [int matchOffset = 0]) {
     if (query.isEmpty) return [];
     return query.normalized()
-        .allMatches(normalized())
+        .allMatches(normalized(), matchOffset)
         .toList();
   }
 
