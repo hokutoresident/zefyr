@@ -810,11 +810,14 @@ class RawEditorState extends EditorState
       _showSearchFocus();
     });
 
-    widget.controller.onChangeSearchFocusTop.stream.listen((focus) {
-      setState(() {
-        _searchFocus = focus;
-      });
-      _showSearchFocus(isScrollTop: true);
+    widget.controller.scrollToMatchStream.stream.listen((match) {
+      scrollToSelection(
+        TextSelection(
+          baseOffset: match.end, 
+          extentOffset: match.end
+        ), 
+        isScrollTop: true
+      );
     });
 
     widget.controller.onChangeSearchQuery.stream.listen((query) {
@@ -940,7 +943,7 @@ class RawEditorState extends EditorState
     widget.focusNode.removeListener(_handleFocusChanged);
     widget.controller.onChangeSearchFocus.close();
     widget.controller.onChangeSearchQuery.close();
-    widget.controller.onChangeSearchFocusTop.close();
+    widget.controller.scrollToMatchStream.close();
     _focusAttachment?.detach();
     _cursorController.dispose();
     _clipboardStatus?.removeListener(_onChangedClipboardStatus);
@@ -1086,10 +1089,14 @@ class RawEditorState extends EditorState
     });
   }
 
-  void _showSearchFocus({bool isScrollTop = false}) async {
+  Future<void> scrollToSelection(
+    TextSelection selection, 
+    {
+      bool isScrollTop = false
+    }
+  ) async {
     await Future.delayed(const Duration(milliseconds: 100));
     final viewport = RenderAbstractViewport.of(renderEditor);
-    if (_searchFocus == null) return;
     final editorOffset =
         renderEditor.localToGlobal(Offset(0.0, 0.0), ancestor: viewport);
     final offsetInViewport = _scrollController!.offset + editorOffset.dy;
@@ -1097,8 +1104,7 @@ class RawEditorState extends EditorState
       _scrollController!.position.viewportDimension,
       _scrollController!.offset,
       offsetInViewport,
-      TextSelection(
-          baseOffset: _searchFocus!.end, extentOffset: _searchFocus!.end),
+      selection,
       isScrollTop: isScrollTop,
     );
     if (offset == null) return;
@@ -1107,6 +1113,13 @@ class RawEditorState extends EditorState
       duration: _caretAnimationDuration,
       curve: _caretAnimationCurve,
     );
+  }
+
+  void _showSearchFocus({bool isScrollTop = false}) async {
+    if (_searchFocus == null) return;
+    final selection = TextSelection(
+        baseOffset: _searchFocus!.end, extentOffset: _searchFocus!.end);
+    await scrollToSelection(selection, isScrollTop: isScrollTop);
   }
 
   void _onChangedClipboardStatus() {
