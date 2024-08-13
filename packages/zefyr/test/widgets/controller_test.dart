@@ -196,6 +196,19 @@ void main() {
       );
     });
 
+    test('removeNewlineAtLast - 最後の改行を削除', () {
+      controller.replaceText(0, 0, 'words\n');
+      expect(controller.isEndNewline(), isTrue);
+      controller.removeNewlineAtLast();
+      expect(controller.isEndNewline(), isFalse);
+    });
+
+    test('removeNewlineAtLast - 最後が改行でない場合は何もしない', () {
+      controller.replaceText(0, 0, 'words');
+      expect(controller.isEndNewline(), isFalse);
+      controller.removeNewlineAtLast();
+    });
+
     test('updateSelectionAtLast', () {
       controller.replaceText(0, 0, 'words');
       controller.updateSelectionAtLast();
