@@ -286,6 +286,16 @@ class ZefyrController extends ChangeNotifier {
     );
   }
 
+  // ノート最後尾から改行を削除
+  void removeNewlineAtLast() {
+    if (!isEndNewline()) return;
+    replaceText(
+      document.length - 1,
+      1,
+      '',
+    );
+  }
+
   // ノート最後尾を選択
   void updateSelectionAtLast() {
     final lastIndex = document.length - 1;
