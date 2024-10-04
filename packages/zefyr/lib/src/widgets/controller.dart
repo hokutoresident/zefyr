@@ -288,6 +288,8 @@ class ZefyrController extends ChangeNotifier {
 
   // ノート最後尾から改行を削除
   void removeNewlineAtLast() {
+    final wholeText = document.toPlainText();
+    if (wholeText.isEmpty || wholeText == '\n') return;
     if (!isEndNewline()) return;
     replaceText(
       document.length - 1,
