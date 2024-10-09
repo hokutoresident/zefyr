@@ -202,11 +202,22 @@ void main() {
       controller.removeNewlineAtLast();
       expect(controller.isEndNewline(), isFalse);
     });
-
+    // controller.document.toPlainText()時には自動で改行が入る
     test('removeNewlineAtLast - 最後が改行でない場合は何もしない', () {
       controller.replaceText(0, 0, 'words');
       expect(controller.isEndNewline(), isFalse);
       controller.removeNewlineAtLast();
+      expect(controller.document.toPlainText(), 'words\n');
+    });
+    test('removeNewlineAtLast - 空文字の場合は何もしない', () {
+      controller.replaceText(0, 0, '');
+      controller.removeNewlineAtLast();
+      expect(controller.document.toPlainText(), '\n');
+    });
+      test('removeNewlineAtLast - １改行のみの場合は何もしない', () {
+      controller.replaceText(0, 0, '\n');
+      controller.removeNewlineAtLast();
+      expect(controller.document.toPlainText(), '\n');
     });
 
     test('updateSelectionAtLast', () {
