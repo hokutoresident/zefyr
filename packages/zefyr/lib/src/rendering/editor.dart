@@ -258,7 +258,7 @@ class RenderEditor extends RenderEditableContainerBox
         child.preferredLineHeight(childPosition) -
         cursorMargin +
         offsetInViewport;
-    if (isScrollTop) return math.max(caretTop, 0.0);
+    if (isScrollTop) return math.max(caretTop + offsetInViewport, 0.0);
 
     final caretBottom = endpoints.single.point.dy + cursorMargin + offsetInViewport;
     double? dy;
